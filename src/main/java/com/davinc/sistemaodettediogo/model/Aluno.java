@@ -1,26 +1,36 @@
 package com.davinc.sistemaodettediogo.model;
 
-public class Aluno {
-    String nomeCompleto;
-    Long matricula;
-    String email;
-    String senha;
+import java.util.UUID;
 
-    public Aluno(String nomeCompleto, Long matricula, String email, String senha) {
-        this.nomeCompleto = nomeCompleto;
+public class Aluno {
+    private UUID idAluno;
+    private String nome;
+    private Long matricula;
+    private String email;
+    private String senha;
+
+    public Aluno(UUID idAluno, String nome, Long matricula, String email, String senha) {
+        this.idAluno = idAluno;
+        this.nome = nome;
         this.matricula = matricula;
         this.email = email;
         this.senha = senha;
     }
 
-    public Aluno(){}
-
-    public String getNomeCompleto() {
-        return nomeCompleto;
+    public UUID getIdAluno() {
+        return idAluno;
     }
 
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
+    public void setIdAluno(UUID idAluno) {
+        this.idAluno = idAluno;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public Long getMatricula() {
@@ -47,12 +57,8 @@ public class Aluno {
         this.senha = senha;
     }
 
+    @Override
     public String toString() {
-        return String.format("""
-                Aluno:
-                Nome Completo: %s
-                Matrícula: %d
-                Email: %s
-                Senha: %s""", nomeCompleto, matricula, email, senha);
+        return String.format("ID: %s\nNome: %s\nMatricula: %d\nEmail: %s\nSenha: %s\n", idAluno, nome, matricula, email, senha);
     }
 }
