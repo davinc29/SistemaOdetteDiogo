@@ -1,4 +1,4 @@
-package com.davinc.sistemaodettediogo.model;
+package com.model;
 
 import java.util.UUID;
 
@@ -13,6 +13,15 @@ public class Boletim {
 
     public Boletim(UUID idBoletim, Double nota1, Double nota2, Double media, String observacoes, Integer idAluno, Integer idDisciplina) {
         this.idBoletim = idBoletim;
+        this.nota1 = nota1;
+        this.nota2 = nota2;
+        this.media = media;
+        this.observacoes = observacoes;
+        this.idAluno = idAluno;
+        this.idDisciplina = idDisciplina;
+    }
+
+    public Boletim(Double nota1, Double nota2, Double media, String observacoes, Integer idAluno, Integer idDisciplina) {
         this.nota1 = nota1;
         this.nota2 = nota2;
         this.media = media;

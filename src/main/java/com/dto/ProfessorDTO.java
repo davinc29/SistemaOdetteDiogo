@@ -1,24 +1,26 @@
-package com.davinc.sistemaodettediogo.dto;
+package com.dto;
 
 import java.util.UUID;
 
 public class ProfessorDTO {
-    private UUID idProfessor;
+    private UUID id;
     private String nome;
     private String username;
+    private String email;
 
-    public ProfessorDTO(UUID idProfessor, String nome, String username) {
-        this.idProfessor = idProfessor;
+    public ProfessorDTO(UUID id, String nome, String username, String email) {
+        this.id = id;
         this.nome = nome;
         this.username = username;
+        this.email = email;
     }
 
-    public UUID getIdProfessor() {
-        return idProfessor;
+    public UUID getId() {
+        return id;
     }
 
-    public void setIdProfessor(UUID idProfessor) {
-        this.idProfessor = idProfessor;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -37,12 +39,21 @@ public class ProfessorDTO {
         this.username = username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "ProfessorDTO{" +
-                "idProfessor=" + idProfessor +
+                ", id='" + id + '\'' +
                 ", nome='" + nome + '\'' +
                 ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

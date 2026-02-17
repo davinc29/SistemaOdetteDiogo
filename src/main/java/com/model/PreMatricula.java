@@ -1,4 +1,4 @@
-package com.davinc.sistemaodettediogo.model;
+package com.model;
 
 import java.util.UUID;
 

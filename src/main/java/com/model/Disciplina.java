@@ -1,4 +1,4 @@
-package com.davinc.sistemaodettediogo.model;
+package com.model;
 
 public class Disciplina {
     private Integer idDisciplina;
