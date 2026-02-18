@@ -1,22 +1,34 @@
 package com.dto;
 
+import java.util.UUID;
+
 public class BoletimViewDTO {
+    private UUID id;
     private String matricula;
     private String nomeDisciplina;
     private Double nota1;
     private Double nota2;
     private Double media;
     private String situacao;
-    private String observacoes;
+    private String observacao;
 
-    public BoletimViewDTO(String matricula, String nomeDisciplina, Double nota1, Double nota2, Double media, String situacao, String observacoes) {
+    public BoletimViewDTO(UUID id,String matricula, String nomeDisciplina, Double nota1, Double nota2, Double media, String situacao, String observacoes) {
+        this.id = id;
         this.matricula = matricula;
         this.nomeDisciplina = nomeDisciplina;
         this.nota1 = nota1;
         this.nota2 = nota2;
         this.media = media;
         this.situacao = situacao;
-        this.observacoes = observacoes;
+        this.observacao = observacoes;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getMatricula() {
@@ -67,24 +79,25 @@ public class BoletimViewDTO {
         this.situacao = situacao;
     }
 
-    public String getObservacoes() {
-        return observacoes;
+    public String getObservacao() {
+        return observacao;
     }
 
-    public void setObservacoes(String observacoes) {
-        this.observacoes = observacoes;
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     @Override
     public String toString() {
         return "BoletimViewDTO{" +
-                "matricula='" + matricula + '\'' +
+                "id='" + id + '\'' +
+                ", matricula='" + matricula + '\'' +
                 ", nomeDisciplina='" + nomeDisciplina + '\'' +
                 ", nota1=" + nota1 +
                 ", nota2=" + nota2 +
                 ", media=" + media +
                 ", situacao='" + situacao + '\'' +
-                ", observacoes='" + observacoes + '\'' +
+                ", observacoes='" + observacao + '\'' +
                 '}';
     }
 }

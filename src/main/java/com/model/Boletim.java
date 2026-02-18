@@ -3,7 +3,7 @@ package com.model;
 import java.util.UUID;
 
 public class Boletim {
-    private UUID idBoletim;
+    private UUID id;
     private Double nota1;
     private Double nota2;
     private Double media;
@@ -12,7 +12,7 @@ public class Boletim {
     private Integer idDisciplina;
 
     public Boletim(UUID idBoletim, Double nota1, Double nota2, Double media, String observacoes, Integer idAluno, Integer idDisciplina) {
-        this.idBoletim = idBoletim;
+        this.id = idBoletim;
         this.nota1 = nota1;
         this.nota2 = nota2;
         this.media = media;
@@ -30,12 +30,12 @@ public class Boletim {
         this.idDisciplina = idDisciplina;
     }
 
-    public UUID getIdBoletim() {
-        return idBoletim;
+    public UUID getId() {
+        return id;
     }
 
-    public void setIdBoletim(UUID idBoletim) {
-        this.idBoletim = idBoletim;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public Double getNota1() {
@@ -87,6 +87,6 @@ public class Boletim {
     }
 
     public String toString() {
-        return String.format("ID Boletim: %s\nNota 1: %.2f\n Nota2: %.2f\nMédia: %.2f\nObservações: %s\nID Aluno: %d\nID Disciplina: %d\n", idBoletim, nota1, nota2, media, observacoes, idAluno, idDisciplina);
+        return String.format("ID Boletim: %s\nNota 1: %.2f\n Nota2: %.2f\nMédia: %.2f\nObservações: %s\nID Aluno: %d\nID Disciplina: %d\n", id, nota1, nota2, media, observacoes, idAluno, idDisciplina);
     }
 }
