@@ -2,7 +2,7 @@ package com.dao;
 
 import com.dto.LoginDTO;
 import com.dto.ProfessorDTO;
-import com.dto.SuperAdmDTO;
+//import com.dto.SuperAdmDTO;
 import com.utils.SenhaUtils;
 
 import java.sql.PreparedStatement;
