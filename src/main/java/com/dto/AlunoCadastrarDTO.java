@@ -1,26 +1,26 @@
-package com.davinc.sistemaodettediogo.model;
+package com.dto;
 
-public class Aluno {
-    String nomeCompleto;
-    Long matricula;
-    String email;
-    String senha;
+public class AlunoCadastrarDTO {
+    private String nome;
+    private Long matricula;
+    private String email;
+    private String senha;
 
-    public Aluno(String nomeCompleto, Long matricula, String email, String senha) {
-        this.nomeCompleto = nomeCompleto;
+    public AlunoCadastrarDTO(String nome, Long matricula, String email, String senha) {
+        this.nome = nome;
         this.matricula = matricula;
         this.email = email;
         this.senha = senha;
     }
 
-    public Aluno(){}
+    public AlunoCadastrarDTO() {}
 
-    public String getNomeCompleto() {
-        return nomeCompleto;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public Long getMatricula() {
@@ -47,12 +47,12 @@ public class Aluno {
         this.senha = senha;
     }
 
+    @Override
     public String toString() {
         return String.format("""
-                Aluno:
-                Nome Completo: %s
+                Nome: %s
                 Matrícula: %d
                 Email: %s
-                Senha: %s""", nomeCompleto, matricula, email, senha);
+                """, nome, matricula, email);
     }
 }

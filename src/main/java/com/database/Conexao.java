@@ -1,4 +1,4 @@
-package com.davinc.sistemaodettediogo.database;
+package com.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +13,7 @@ public class Conexao {
     private static final String USER = dotenv.get("DB_USER");
     private static final String PASSWORD = dotenv.get("DB_PASSWORD");
 
-    public static Connection conectar() {
+    public Connection conectar() {
         Connection conn = null;
         try {
             Class.forName("org.postgresql.Driver");
