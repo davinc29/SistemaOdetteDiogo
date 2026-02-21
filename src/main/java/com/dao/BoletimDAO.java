@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.dto.BoletimViewDTO;
+import com.dto.ObservacoesViewDTO;
 import com.model.Boletim;
 
 import java.sql.PreparedStatement;
@@ -47,6 +48,45 @@ public class BoletimDAO extends DAO{
             conn.rollback();
             throw e;
         }
+    }
+
+    public Boletim pesquisarPorId(UUID id) throws SQLException{
+        String sql = """
+                SELECT
+                    * except (id)
+                FROM
+                    boletim
+                WHERE
+                    id = ?
+                """;
+
+        Boletim boletim = null;
+
+        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1,id);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String idBoletimString = String.valueOf(rs.getObject("id"));
+                UUID idBoletim = UUID.fromString(idBoletimString);
+
+                Double nota1 = rs.getDouble("nota1");
+                Double nota2 = rs.getDouble("nota2");
+                Double media = rs.getDouble("media");
+                String observacoes = rs.getString("observacoes");
+                Integer idAluno = rs.getInt("id_aluno");
+                Integer idDisciplina = rs.getInt("id_disciplina");
+
+                boletim = new Boletim(idBoletim, nota1, nota2, media, observacoes, idAluno, idDisciplina);
+            }
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+
+        conn.commit();
+        return boletim;
     }
 
     public List<BoletimViewDTO> listarPorAluno(UUID idAluno) throws SQLException{
@@ -111,6 +151,115 @@ public class BoletimDAO extends DAO{
 
         conn.commit();
         return boletins;
+    }
+
+    public List<BoletimViewDTO> listarPorSala(String turmaAno, String nomeDisciplinaFiltro) throws SQLException{
+
+        String sql = """
+                SELECT DISTINCT
+                    b.id as id_boletim
+                    a.matricula as matricula,
+                    d.nome as nome_disciplina,
+                    b.nota1 as nota1,
+                    b.nota2 as nota2,
+                    b.media as media,
+                    b.observacoes as observacoes
+                FROM
+                    boletim b
+                JOIN
+                    aluno a
+                    ON a.id = b.id_aluno
+                JOIN
+                    disciplina d
+                    ON d.id = b.id_disciplina
+                WHERE
+                    a.turma_ano = ? AND
+                    d.nome = ?
+                """;
+
+        List<BoletimViewDTO> boletins = new ArrayList<>();
+
+        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1,turmaAno);
+            pstmt.setString(2,nomeDisciplinaFiltro);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String idBoletimString = String.valueOf(rs.getObject("id_boletim"));
+                UUID idBoletim = UUID.fromString(idBoletimString);
+
+                String matricula = rs.getString("matricula");
+                String nomeDisciplina = rs.getString("nome_disciplina");
+                Double nota1 = rs.getDouble("nota1");
+                Double nota2 = rs.getDouble("nota2");
+                Double media = rs.getDouble("media");
+                String observacoes = rs.getString("observacoes");
+
+                String situacao;
+                if (media.isNaN()) {
+                    situacao = null;
+                } else if (media >= 7) {
+                    situacao = "Aprovado";
+                }
+                else {
+                    situacao = "Reprovado";
+                }
+
+                BoletimViewDTO boletim = new BoletimViewDTO(idBoletim, matricula, nomeDisciplina, nota1, nota2, media, situacao, observacoes);
+
+                boletins.add(boletim);
+            }
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+
+        conn.commit();
+        return boletins;
+    }
+
+    public List<ObservacoesViewDTO> observacoes(UUID idAluno) throws SQLException{
+        String sql = """
+                SELECT
+                    d.nome as nome_disciplina,
+                    p.nome as nome_professor,
+                    b.observacoes as observacoes
+                FROM
+                    boletim b
+                JOIN
+                    disciplina d
+                    ON d.id = b.id_disciplina
+                JOIN
+                    professor p
+                    ON p.id = d.id_professor
+                WHERE
+                    id = ?
+                """;
+
+        List<ObservacoesViewDTO> listaObservacoes = new ArrayList<>();
+
+        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1,idAluno);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String nomeDisciplina = rs.getString("nome_disciplina");
+                String nomeProfessor = rs.getString("nome_professor");
+                String observacoes = rs.getString("observacoes");
+
+                ObservacoesViewDTO observacoesViewDTO = new ObservacoesViewDTO(nomeDisciplina, nomeProfessor, observacoes);
+
+                listaObservacoes.add(observacoesViewDTO);
+            }
+        } catch (SQLException e ) {
+            conn.rollback();
+            throw e;
+        }
+
+        conn.commit();
+        return listaObservacoes;
     }
 
     public void atualizar(Boletim original, Boletim atualizado) throws SQLException{

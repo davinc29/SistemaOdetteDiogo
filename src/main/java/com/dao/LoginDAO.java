@@ -2,7 +2,6 @@ package com.dao;
 
 import com.dto.LoginDTO;
 import com.dto.ProfessorDTO;
-import com.dto.SuperAdmDTO;
 import com.utils.SenhaUtils;
 
 import java.sql.PreparedStatement;
@@ -24,7 +23,7 @@ public class LoginDAO extends DAO {
                     SELECT
                         id,
                         nome,
-                        username,
+                        usuario,
                         email,
                         senha
                     FROM
@@ -34,7 +33,7 @@ public class LoginDAO extends DAO {
                     
                     """;
 
-        String nome, username, email, senhaHash;
+        String nome, usuario, email, senhaHash;
         ProfessorDTO professor;
         UUID id;
 
@@ -61,9 +60,9 @@ public class LoginDAO extends DAO {
                 id = UUID.fromString(idString);
 
                 nome = rs.getString("nome");
-                username = rs.getString("username");
+                usuario = rs.getString("usuario");
 
-                professor = new ProfessorDTO(id, nome, username, credenciais.getEmail());
+                professor = new ProfessorDTO(id, nome, usuario, credenciais.getEmail());
             }
         }
 

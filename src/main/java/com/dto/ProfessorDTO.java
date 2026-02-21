@@ -5,13 +5,13 @@ import java.util.UUID;
 public class ProfessorDTO {
     private UUID id;
     private String nome;
-    private String username;
+    private String usuario;
     private String email;
 
     public ProfessorDTO(UUID id, String nome, String username, String email) {
         this.id = id;
         this.nome = nome;
-        this.username = username;
+        this.usuario = username;
         this.email = email;
     }
 
@@ -31,12 +31,12 @@ public class ProfessorDTO {
         this.nome = nome;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public String getEmail() {
@@ -52,7 +52,7 @@ public class ProfessorDTO {
         return "ProfessorDTO{" +
                 ", id='" + id + '\'' +
                 ", nome='" + nome + '\'' +
-                ", username='" + username + '\'' +
+                ", username='" + usuario + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

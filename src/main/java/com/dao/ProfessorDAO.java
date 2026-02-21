@@ -21,7 +21,7 @@ public class ProfessorDAO extends DAO{
 //    CREATE
     public void cadastrar(Professor professor) throws SQLException{
         String nome = professor.getNome();
-        String username = professor.getUsername();
+        String usuario = professor.getUsuario();
         String email = professor.getEmail();
 
         String senha = professor.getSenha();
@@ -36,7 +36,7 @@ public class ProfessorDAO extends DAO{
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)){
             pstmt.setString(1,nome);
-            pstmt.setString(2,username);
+            pstmt.setString(2,usuario);
             pstmt.setString(3,email);
             pstmt.setString(4,senhaHash);
 
@@ -77,10 +77,10 @@ public class ProfessorDAO extends DAO{
                 UUID idUuid = UUID.fromString(idString);
 
                 String nome = rs.getString("nome");
-                String username = rs.getString("username");
+                String usuario = rs.getString("usuario");
                 String email = rs.getString("email");
 
-                ProfessorDTO professor = new ProfessorDTO(idUuid, nome, username, email);
+                ProfessorDTO professor = new ProfessorDTO(idUuid, nome, usuario, email);
             }
         }
 
@@ -121,10 +121,10 @@ public class ProfessorDAO extends DAO{
                 UUID idUuid = UUID.fromString(idString);
 
                 String nome = rs.getString("nome");
-                String username = rs.getString("username");
+                String usuario = rs.getString("usuario");
                 String email = rs.getString("email");
 
-                ProfessorDTO professor = new ProfessorDTO(idUuid, nome, username, email);
+                ProfessorDTO professor = new ProfessorDTO(idUuid, nome, usuario, email);
             }
         }
 
@@ -136,7 +136,7 @@ public class ProfessorDAO extends DAO{
         // Dados originais
         UUID id = original.getId();
         String nome = atualizado.getNome();
-        String username = atualizado.getUsername();
+        String usuario = atualizado.getUsuario();
         String email = atualizado.getEmail();
 
         StringBuilder sql = new StringBuilder("UPDATE professor SET");
@@ -146,9 +146,9 @@ public class ProfessorDAO extends DAO{
             sql.append(" nome = ?, ");
             valores.add(nome);
         }
-        if (!Objects.equals(username, original.getUsername())) {
-            sql.append("username = ?, ");
-            valores.add(username);
+        if (!Objects.equals(usuario, original.getUsuario())) {
+            sql.append("usuario = ?, ");
+            valores.add(usuario);
         }
         if (!Objects.equals(email, original.getEmail())) {
             sql.append("email = ?, ");
