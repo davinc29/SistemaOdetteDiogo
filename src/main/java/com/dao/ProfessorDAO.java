@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.dto.ProfessorDTO;
+import com.model.Observacao;
 import com.model.Professor;
 import com.utils.SenhaUtils;
 
@@ -50,88 +51,6 @@ public class ProfessorDAO extends DAO{
         }
     }
 
-    public List<ProfessorDTO> listarPorDisciplina(String nomeDisciplina) throws SQLException{
-        String sql = """
-                SELECT
-                    p.*
-                FROM
-                    professor p
-                JOIN
-                    disciplina d
-                    ON p.id = d.id_professor
-                WHERE
-                    d.nome = ?
-                """;
-
-        List<ProfessorDTO> professores = new ArrayList<>();
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1,nomeDisciplina);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-
-                Object id = rs.getObject("id");
-                String idString = String.valueOf(id);
-                UUID idUuid = UUID.fromString(idString);
-
-                String nome = rs.getString("nome");
-                String usuario = rs.getString("usuario");
-                String email = rs.getString("email");
-
-                ProfessorDTO professor = new ProfessorDTO(idUuid, nome, usuario, email);
-            }
-        }
-
-        conn.commit();
-        return professores;
-    }
-
-    public List<ProfessorDTO> listarPorTurma(String turma, Integer ano) throws SQLException{
-        String sql = """
-                SELECT
-                    DISTINCT
-                    p.*
-                FROM
-                    professor p
-                JOIN
-                    disciplina d
-                    ON p.id = d.id_professor
-                JOIN
-                    boletim b
-                    ON d.id = b.id_disciplina
-                JOIN
-                    aluno a
-                    ON b.id_aluno = a.id
-                WHERE
-                    a.turma_ano = ?
-                """;
-
-        List<ProfessorDTO> professores = new ArrayList<>();
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1,turma+" - "+ano);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                Object id = rs.getObject("id");
-                String idString = String.valueOf(id);
-                UUID idUuid = UUID.fromString(idString);
-
-                String nome = rs.getString("nome");
-                String usuario = rs.getString("usuario");
-                String email = rs.getString("email");
-
-                ProfessorDTO professor = new ProfessorDTO(idUuid, nome, usuario, email);
-            }
-        }
-
-        conn.commit();
-        return professores;
-    }
-
     public void atualizar(ProfessorDTO original, ProfessorDTO atualizado) throws SQLException{
         // Dados originais
         UUID id = original.getId();
@@ -178,6 +97,36 @@ public class ProfessorDAO extends DAO{
         }
     }
 
+    public List<ProfessorDTO> listar() throws SQLException {
+        String sql = """
+                SELECT
+                    * except(senha)
+                FROM
+                    professor
+                """;
+
+        List<ProfessorDTO> professores = new ArrayList<>();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            try(ResultSet rs = pstmt.executeQuery()) {
+                while(rs.next()) {
+                    UUID id = rs.getObject("id", UUID.class);
+                    String nome = rs.getString("nome");
+                    String username = rs.getString("username");
+                    String email = rs.getString("email");
+
+                    ProfessorDTO professor = new ProfessorDTO(id, nome, username, email);
+                    professores.add(professor);
+                }
+
+                conn.commit();
+            }
+        }
+
+        conn.rollback();
+        return professores;
+    }
+
     public void deletar(UUID id) throws SQLException{
         String sql = """
                 DELETE FROM
@@ -196,5 +145,38 @@ public class ProfessorDAO extends DAO{
             conn.rollback();
             throw e;
         }
+    }
+
+    public ProfessorDTO pesquisarPorId(UUID id) throws SQLException{
+        String sql = """
+                SELECT
+                    * except (id, senha)
+                FROM
+                    professor
+                WHERE
+                    id = ?
+                """;
+
+        ProfessorDTO professor = null;
+
+        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1,id);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String nome = rs.getString("nome");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+
+                professor = new ProfessorDTO(id, nome, username, email);
+            }
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+
+        conn.commit();
+        return professor;
     }
 }

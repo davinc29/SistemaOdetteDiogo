@@ -3,27 +3,34 @@ package com.model;
 import java.util.UUID;
 
 public class Professor {
-    private UUID idProfessor;
+    private UUID id;
     private String nome;
     private String username;
     private String email;
     private String senha;
 
     public Professor(UUID id, String nome, String username, String email, String senha) {
-        this.idProfessor = id;
+        this.id = id;
         this.nome = nome;
         this.username = username;
         this.email = email;
         this.senha = senha;
     }
 
-
-    public UUID getIdProfessor() {
-        return idProfessor;
+    public Professor(String nome, String username, String email, String senha) {
+        this.nome = nome;
+        this.username = username;
+        this.email = senha;
+        this.senha = senha;
     }
 
-    public void setIdProfessor(UUID idProfessor) {
-        this.idProfessor = idProfessor;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -59,6 +66,6 @@ public class Professor {
     }
 
     public String toString() {
-        return String.format("ID: %s\nNome: %s\nUsername: %s\nEmail: %s\nSenha: %s\n", idProfessor, nome, username, email, senha);
+        return String.format("ID: %s\nNome: %s\nUsername: %s\nEmail: %s\nSenha: %s\n", id, nome, username, email, senha);
     }
 }
