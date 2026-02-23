@@ -1,0 +1,43 @@
+body{
+    background-image: url(assets/login-waves.svg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.login-container{
+    width: 34%;
+}
+
+.button-text-box{
+    width: 70%;
+}
+
+.text-container{
+    width: 40%;
+}
+
+.image{
+    height: 450px;
+    margin-top: 31px;
+    margin-left: 85px;
+}
+
+.title-box{
+    margin-bottom: 300px;
+}
+
+.title{
+    font-size: 50px;
+    text-align: center;
+}
+
+@media (max-width: 767px) {
+    body {
+        background-image: none;
+        background-color: #FFFFFF;
+    }
+
+    .button-text-box{
+        width: 100%;
+    }
+}

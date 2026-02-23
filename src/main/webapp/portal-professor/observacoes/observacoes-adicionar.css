@@ -1,0 +1,172 @@
+/* body */
+body{
+    background-color: #EBF2F4;
+}
+
+/* sidebar */
+.sidebar{
+    padding: 70px 0 300px 15px;
+    border-radius: 0 30px 30px 0;
+}
+
+ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.can-hover:hover{
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px 0 0 10px;
+}
+
+.page-text{
+    color: white;
+    text-decoration: none;
+}
+
+.page-item{
+    padding: 10px;
+    padding-left: 25px;
+    padding-right: 67px;
+    margin-bottom: 10px;
+}
+
+.active{
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px 0 0 10px;
+    border-right-style: solid;
+    border-color: white;
+}
+
+/* header */
+.icon{
+    width: 25px;
+}
+
+.box-name{
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    justify-items: center;
+}
+
+.box-name p{
+    margin-top: 5px;
+}
+
+/* Filtros */
+.filter-name{
+    width: 33%
+}
+
+.filter-name input{
+    width: 100%;
+    padding: 10px;
+    border-radius: 30px;
+    border-color: #CC2a41;
+}
+
+.filter-button{
+    width: 10%;
+}
+
+.filter-button button{
+    width: 100%;
+    padding: 10px;
+    border-radius: 30px;
+    background-color: #CC2a41;
+    border-style: none;
+    color: white;
+}
+
+.filter-button button:hover{
+    background-color: #e93d57;
+    cursor: pointer;
+}
+
+/* Botão de Adicionar */
+
+.add-button{
+    width: 10%;
+    padding: 10px;
+    border-radius: 30px;
+    background-color: #CC2a41;
+    border-style: none;
+    color: white;
+    text-align: center;
+    align-content: center;
+}
+
+.add-button:hover{
+    background-color: #e93d57;
+    cursor: pointer;
+}
+
+.add-button a{
+    text-decoration: none;
+    color: white;
+}
+
+/* Botão de Voltar */
+.return-button{
+    width: 10%;
+    padding: 10px;
+    border-radius: 30px;
+    background-color: #CC2a41;
+    border-style: none;
+    color: white;
+    text-align: center;
+    align-content: center;
+}
+
+.return-button:hover{
+    background-color: #e93d57;
+    cursor: pointer;
+}
+
+.return-button a{
+    text-decoration: none;
+    color: white;
+}
+
+/* Tabelas */
+.tabela-container{
+    overflow-y: auto;
+    margin-top: 30px;
+    height: 450px;
+    background-color: white;
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 5px 5px 8px #aaaaaa;
+}
+
+.tabela-observacoes{
+    width: 100%;
+    font-size: 20px;
+}
+
+.table-icon{
+    width: 20px;
+    margin-left: 10px;
+}
+
+.tabela-observacoes th{
+    padding-bottom: 20px;
+}
+
+.tabela-observacoes tr{
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-color: #aaaaaa;
+    align-items: center;
+}
+
+.tabela-observacoes tr{
+    overflow-x: auto;
+    width: 10px;
+}
+
+.tabela-observacoes .coluna-observacao{
+    width: 50%;
+}
