@@ -22,7 +22,7 @@ public class AlunoDAO extends DAO {
         AlunoCadastrarDTO aluno = new AlunoCadastrarDTO();
 
         String nome = aluno.getNome();
-        String matricula = String.valueOf(aluno.getMatricula());
+        Integer matricula = aluno.getMatricula();
         String email = aluno.getEmail();
         String senha = aluno.getSenha();
 
@@ -36,7 +36,7 @@ public class AlunoDAO extends DAO {
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, nome);
-            pstmt.setString(2, matricula);
+            pstmt.setInt(2, matricula);
             pstmt.setString(3, senha);
             pstmt.setString(4, email);
 
@@ -170,7 +170,7 @@ public class AlunoDAO extends DAO {
             while (rs.next()) {
                 UUID idAluno = rs.getObject("id", java.util.UUID.class);
                 String nome = rs.getString("nome");
-                String matricula = rs.getString("matricula");
+                Integer matricula = rs.getInt("matricula");
                 String email = rs.getString("email");
                 String turmaAno = rs.getString("turma_ano");
 
@@ -215,7 +215,7 @@ public class AlunoDAO extends DAO {
             if (rs.next()) {
                 UUID id = rs.getObject("id", java.util.UUID.class);
                 String nome = rs.getString("nome");
-                String matricula = rs.getString("matricula");
+                Integer matricula = rs.getInt("matricula");
                 String email = rs.getString("email");
                 String turmaAno = rs.getString("turma_ano");
 
@@ -289,7 +289,7 @@ public class AlunoDAO extends DAO {
             while (rs.next()) {
                 UUID idAluno = rs.getObject("id", java.util.UUID.class);
                 String nome = rs.getString("nome");
-                String matricula = rs.getString("matricula");
+                Integer matricula = rs.getInt("matricula");
                 String email = rs.getString("email");
                 String turmaAnoBanco = rs.getString("turma_ano");
 
@@ -334,7 +334,7 @@ public class AlunoDAO extends DAO {
             while (rs.next()) {
                 UUID idAluno = rs.getObject("id", java.util.UUID.class);
                 String nome = rs.getString("nome");
-                String matricula = rs.getString("matricula");
+                Integer matricula = rs.getInt("matricula");
                 String email = rs.getString("email");
                 String turmaAno = rs.getString("turma_ano");
 
@@ -350,7 +350,4 @@ public class AlunoDAO extends DAO {
             throw new RuntimeException(e);
         }
     }
-
-
-
 }
