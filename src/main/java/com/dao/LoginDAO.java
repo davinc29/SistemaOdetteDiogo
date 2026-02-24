@@ -43,13 +43,13 @@ public class LoginDAO extends DAO {
                 if (!rs.next()) {
 
                     sql = """
-                          SELECT
+                        SELECT
                             senha
                         FROM
                             aluno
                         WHERE
                             email = ?
-                          """;
+                        """;
 
                     try (PreparedStatement pstmt2 = conn.prepareStatement(sql)) {
                         pstmt2.setString(1, credenciais.getEmail());
@@ -145,7 +145,8 @@ public class LoginDAO extends DAO {
                 """;
 
         UUID id;
-        String temp, nome, matricula, turmaAno;
+        String temp, nome, turmaAno;
+        Integer matricula;
         AlunoViewDTO aluno = null;
 
 
@@ -159,7 +160,7 @@ public class LoginDAO extends DAO {
                 id = UUID.fromString(temp);
 
                 nome = rs.getString("nome");
-                matricula = rs.getString("matricula");
+                matricula = rs.getInt("matricula");
                 turmaAno = rs.getString("turma_ano");
 
                 aluno = new AlunoViewDTO(id, nome, matricula, credenciais.getEmail(), turmaAno);

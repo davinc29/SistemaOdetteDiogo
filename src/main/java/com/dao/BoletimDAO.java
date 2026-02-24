@@ -118,7 +118,7 @@ public class BoletimDAO extends DAO{
                 String idBoletimString = String.valueOf(rs.getObject("id_boletim"));
                 UUID idBoletim = UUID.fromString(idBoletimString);
 
-                String matricula = rs.getString("matricula");
+                Integer matricula = rs.getInt("matricula");
                 String nomeDisciplina = rs.getString("nome_disciplina");
                 Double nota1 = rs.getDouble("nota1");
                 Double nota2 = rs.getDouble("nota2");
