@@ -5,11 +5,11 @@ import java.util.UUID;
 public class Aluno {
     private UUID idAluno;
     private String nome;
-    private Long matricula;
+    private Integer matricula;
     private String email;
     private String senha;
 
-    public Aluno(UUID idAluno, String nome, Long matricula, String email, String senha) {
+    public Aluno(UUID idAluno, String nome, Integer matricula, String email, String senha) {
         this.idAluno = idAluno;
         this.nome = nome;
         this.matricula = matricula;
@@ -33,11 +33,11 @@ public class Aluno {
         this.nome = nome;
     }
 
-    public Long getMatricula() {
+    public Integer getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(Long matricula) {
+    public void setMatricula(Integer matricula) {
         this.matricula = matricula;
     }
 

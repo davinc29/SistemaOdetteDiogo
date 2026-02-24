@@ -1,7 +1,6 @@
 package com.dto;
 
 public class AdminDTO {
-    private String nome;
     private String email;
     private String senha;
 
@@ -29,11 +28,11 @@ public class AdminDTO {
         this.senha = senha;
     }
 
-     @Override
-     public String toString() {
-         return "AdminDTO{" +
-                 " email='" + email + '\'' +
-                 ", senha='" + senha + '\'' +
-                 '}';
-     }
+    @Override
+    public String toString() {
+        return "AdminDTO{" +
+                " email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                '}';
+    }
 }
