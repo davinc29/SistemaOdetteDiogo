@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@WebServlet("/boletim-professor")
+@WebServlet("/boletim")
 public class BoletimServlet extends HttpServlet {
 
     private static final String PAGINA_PRINCIPAL_PROFESSOR = "/jsp/portal-professor/notas.jsp";

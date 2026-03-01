@@ -210,4 +210,46 @@ public class BoletimDAO extends DAO{
             throw e;
         }
     }
+
+    public List<String> notasPendentes(UUID idProfessor) throws SQLException{
+        String sql = """
+                SELECT
+                    d.nome as nome_disciplina,
+                    p2.turma_ano as turma_ano
+                FROM
+                    disciplina d
+                JOIN
+                    professor p
+                    ON p.id = d.id_professor
+                JOIN
+                    boletim b
+                    ON b.id_disciplina = d.id
+                JOIN
+                    aluno a
+                    ON a.id = b.id_aluno
+                JOIN
+                    pre_matricula p2
+                    ON p2.matricula = a.matricula
+                WHERE
+                    p.id = ? AND
+                    (b.nota1 is null or b.nota2 is null)
+                """;
+
+        List<String> notasPendentes = new ArrayList<>();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, idProfessor);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String nomeDisciplina = rs.getString("nome_disciplina");
+                    String turmaAno = rs.getString("turma_ano");
+
+                    notasPendentes.add(String.format("%s - Turma: %s", nomeDisciplina, turmaAno));
+                }
+            }
+        }
+
+        return notasPendentes;
+    }
 }
