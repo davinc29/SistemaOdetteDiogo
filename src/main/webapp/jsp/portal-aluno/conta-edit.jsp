@@ -1,5 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<%
+    String email = (String) session.getAttribute("email");
+    String senha = (String) session.getAttribute("senha");
+%>
+
 <!doctype html>
 <html lang="pt-br">
   <head>
@@ -44,7 +49,7 @@
           <div class="lh-1">
             <p class="fs-5 fw-bold">Portal do Estudante</p>
             <p class="fs-5 text-primary">
-              <span class="fw-bold"><%=request.getAttribute("diaSemana")%></span>, <%=request.getAttribute("data")%>
+              <span class="fw-bold"><%=session.getAttribute("diaSemana")%></span>, <%=session.getAttribute("data")%>
             </p>
           </div>
           <div class="d-flex">
@@ -59,37 +64,37 @@
               alt="Mensagens Icon"
             />
             <div class="bg-primary box-name m-3">
-              <p class="fs-4 fw-bold text-secondary"><%=request.getAttribute("nome2L")%></p>
+              <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
             </div>
-            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=request.getAttribute("nome")%></p>
+            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=session.getAttribute("nome")%></p>
           </div>
         </header>
         <main>
           <div class="account-card">
             <div class="informacoes-topo">
-              <h2><%=request.getAttribute("nome")%></h2>
+              <h2><%=session.getAttribute("nome")%></h2>
               <div class="matricula-turma d-flex justify-content-between">
-                <p><span class="fw-bold">Matrícula: </span><%=request.getAttribute("matricula")%></p>
-                <p><span class="fw-bold">Turma: </span><%=request.getAttribute("turma")%></p>
+                <p><span class="fw-bold">Matrícula: </span><%=session.getAttribute("matricula")%></p>
+                <p><span class="fw-bold">Turma: </span><%=session.getAttribute("turma")%></p>
               </div>
             </div>
 
             <div class="campos">
               <div class="email d-flex flex-column mb-4">
-                <label for="email-id">E-mail atual</label>
-                <input type="text" id="email-id" required disabled />
+                <label for="email-id">E-mail atua:l</label>
+                <input type="text" id="email-id" value="<%=session.getAttribute("email")%>" required disabled />
               </div>
               <div class="email d-flex flex-column mb-4">
-                <label for="email-id">Novo e-mail</label>
+                <label for="email-id">Novo e-mail:</label>
                 <input type="text" id="email-id" required />
               </div>
 
               <div class="senha d-flex flex-column mb-4">
-                <label for="senha-id">Senha atual</label>
-                <input type="password" id="senha-id" required disabled />
+                <label for="senha-id">Senha atual:</label>
+                <input type="password" id="senha-id" value="<%=session.getAttribute("senhaView")%>" required disabled />
               </div>
               <div class="senha d-flex flex-column">
-                <label for="senha-id">Nova senha</label>
+                <label for="senha-id">Nova senha:</label>
                 <input type="password" id="senha-id" required />
               </div>
             </div>

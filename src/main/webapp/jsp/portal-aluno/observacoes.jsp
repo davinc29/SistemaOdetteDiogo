@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    AlunoViewDTO aluno = (AlunoViewDTO) request.getAttribute("usuario");
+    AlunoViewDTO aluno = (AlunoViewDTO) session.getAttribute("usuario");
 
     ObservacaoDAO observacaoDAO = new ObservacaoDAO();
     List<ObservacaoViewDTO> observacoes = observacaoDAO.listarPorAluno(aluno.getIdAluno());
@@ -53,7 +53,7 @@
           <div class="lh-1">
             <p class="fs-5 fw-bold">Portal do Professor</p>
             <p class="fs-5 text-primary">
-              <span class="fw-bold"><%=request.getAttribute("diaSemana")%></span>, <%=request.getAttribute("data")%>
+              <span class="fw-bold"><%=session.getAttribute("diaSemana")%></span>, <%=session.getAttribute("data")%>
             </p>
           </div>
           <div class="d-flex">
@@ -68,9 +68,9 @@
               alt="Mensagens Icon"
             />
             <div class="bg-primary box-name m-3">
-              <p class="fs-4 fw-bold text-secondary"><%=request.getAttribute("nome2L")%></p>
+              <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
             </div>
-            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=request.getAttribute("nome")%></p>
+            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=session.getAttribute("nome")%></p>
           </div>
         </header>
         <main>

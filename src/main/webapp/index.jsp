@@ -46,7 +46,7 @@
               <div class="cadastro-box d-flex justify-content-center">
                 <p>
                   Não tem conta?
-                  <a href="${pageContext.request.contextPath}/cadastro-aluno" class="text-decoration-none text-primary fw-bold"
+                  <a href="${pageContext.request.contextPath}/cadastro.html" class="text-decoration-none text-primary fw-bold"
                     >Cadastrar-se</a>
                     <br>
                     <a href="${pageContext.request.contextPath}/recuperar-senha?action=solicitar">

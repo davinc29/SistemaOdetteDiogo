@@ -13,11 +13,19 @@
     // Pegando dados diretos do banco
     AlunoViewDTO aluno = (AlunoViewDTO) session.getAttribute("usuario");
 
+    session.setAttribute("matricula", aluno.getMatricula());
+    session.setAttribute("turma", aluno.getTurma_ano());
+
+    session.setAttribute("usuario", aluno);
+
+    HttpSession sessao = request.getSession();
+    session.setAttribute("usuario", aluno);
+
     String matricula = String.valueOf(aluno.getMatricula());
-    request.setAttribute("matricula", matricula);
+    session.setAttribute("matricula", matricula);
 
     String turma = aluno.getTurma_ano();
-    request.setAttribute("turma", turma);
+    session.setAttribute("turma", turma);
 
     //Nome 2L
     String nome = aluno.getNome();
@@ -27,8 +35,8 @@
 
     String nome2L = "" + letra1nome + letra2nome;
 
-    request.setAttribute("nome2L", nome2L);
-    request.setAttribute("nome", nome);
+    session.setAttribute("nome2L", nome2L);
+    session.setAttribute("nome", nome);
 
 
     //Pegando Observações do Aluno
@@ -58,8 +66,8 @@
     // Data retornada
     String data = String.format("%d %s %d", diaNum, mes, ano);
 
-    request.setAttribute("data", data);
-    request.setAttribute("diaSemana", diaSemana);
+    session.setAttribute("data", data);
+    session.setAttribute("diaSemana", diaSemana);
 
 
 %>
@@ -92,10 +100,10 @@
               <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/boletim.jsp">Boletim</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="${pageContext.request.contextPath}/observacoes.jsp">Observações</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/observacoes.jsp">Observações</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="${pageContext.request.contextPath}/conta.jsp">Conta</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/conta.jsp">Conta</a>
             </li>
           </ul>
         </nav>
@@ -106,7 +114,7 @@
           <div class="lh-1">
             <p class="fs-5 fw-bold">Portal do Estudante</p>
             <p class="fs-5 text-primary">
-                <span class="fw-bold"><%=diaSemana%></span>, <%=data%>
+                <span class="fw-bold"><%=session.getAttribute("diaSemana")%></span>, <%=session.getAttribute("data")%>
             </p>
           </div>
           <div class="d-flex">
@@ -121,15 +129,15 @@
               alt="Mensagens Icon"
             />
             <div class="bg-primary box-name m-3">
-              <p class="fs-4 fw-bold text-secondary"><%=request.getAttribute("nome2L")%></p>
+              <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
             </div>
-            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=request.getAttribute("nome")%></p>
+            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=session.getAttribute("nome")%></p>
           </div>
         </header>
         <main>
           <div class="box-one d-flex justify-content-between mb-5">
             <div class="ms-5">
-              <h1 class="fs-1 fw-bold">Olá, <%=request.getAttribute("nome")%></h1>
+              <h1 class="fs-1 fw-bold">Olá, <%=session.getAttribute("nome")%></h1>
               <p class="fs-3">
                 Pronto para começar seu dia com alguns<br />feedbacks?
               </p>
@@ -199,7 +207,7 @@
                   </div>
                   <div class="d-flex justify-content-end me-4">
                       <a
-                              href="${pageContext.request.contextPath}/observacoes.jsp"
+                              href="${pageContext.request.contextPath}/jsp/portal-aluno/observacoes.jsp"
                               class="text-decoration-none"
                               style="color: black"
                       >

@@ -1,6 +1,18 @@
+<%@ page import="com.dto.AlunoViewDTO" %>
+<%@ page import="com.dao.AlunoDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+    AlunoViewDTO aluno = (AlunoViewDTO) session.getAttribute("usuario");
+    session.setAttribute("email", aluno.getEmail());
+
+    AlunoDAO alunoDAO = new AlunoDAO();
+
+    String senha = (String) session.getAttribute("senha");
+
+    // Transformar a senha em asteriscos
+    String senhaAsteriscos = "*".repeat(senha.length());
+    session.setAttribute("senhaView", senhaAsteriscos);
 
 %>
 
@@ -48,7 +60,7 @@
           <div class="lh-1">
             <p class="fs-5 fw-bold">Portal do Estudante</p>
             <p class="fs-5 text-primary">
-              <span class="fw-bold"><%=request.getAttribute("diaSemana")%></span>, <%=request.getAttribute("data")%>
+              <span class="fw-bold"><%=session.getAttribute("diaSemana")%></span>, <%=session.getAttribute("data")%>
             </p>
           </div>
           <div class="d-flex">
@@ -63,29 +75,29 @@
               alt="Mensagens Icon"
             />
             <div class="bg-primary box-name m-3">
-              <p class="fs-4 fw-bold text-secondary"><%=request.getAttribute("nome2L")%></p>
+              <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
             </div>
-            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=request.getAttribute("nome")%></p>
+            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=session.getAttribute("nome")%></p>
           </div>
         </header>
         <main>
           <div class="account-card">
             <div class="informacoes-topo">
-              <h2>Gustavo Kenzo Shirahata Ota</h2>
+              <h2><%=session.getAttribute("nome")%></h2>
               <div class="matricula-turma d-flex justify-content-between">
-                <p><span class="fw-bold">Matrícula: </span><%=request.getAttribute("matricula")%></p>
-                <p><span class="fw-bold">Turma: </span><%=request.getAttribute("turma")%></p>
+                <p><span class="fw-bold">Matrícula: </span><%=session.getAttribute("matricula")%></p>
+                <p><span class="fw-bold">Turma: </span><%=session.getAttribute("turma")%></p>
               </div>
             </div>
 
             <div class="campos">
               <div class="email d-flex flex-column mb-4">
                 <label for="email-id">E-mail</label>
-                <input type="text" id="email-id" required disabled />
+                <input type="text" id="email-id" value="${email}" required disabled />
               </div>
               <div class="senha d-flex flex-column">
                 <label for="senha-id">Senha</label>
-                <input type="password" id="senha-id" required disabled />
+                <input type="password" id="senha-id" value="${senhaView}" required disabled />
               </div>
             </div>
 
