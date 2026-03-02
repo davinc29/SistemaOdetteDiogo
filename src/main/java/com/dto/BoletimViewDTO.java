@@ -3,15 +3,15 @@ package com.dto;
 import java.util.UUID;
 
 public class BoletimViewDTO {
-    private UUID id;
-    private String matricula;
+    private Integer id;
+    private Integer matricula;
     private String nomeDisciplina;
     private Double nota1;
     private Double nota2;
     private Double media;
     private String situacao;
 
-    public BoletimViewDTO(UUID id,String matricula, String nomeDisciplina, Double nota1, Double nota2, Double media, String situacao) {
+    public BoletimViewDTO(Integer id,Integer matricula, String nomeDisciplina, Double nota1, Double nota2, Double media, String situacao) {
         this.id = id;
         this.matricula = matricula;
         this.nomeDisciplina = nomeDisciplina;
@@ -21,19 +21,19 @@ public class BoletimViewDTO {
         this.situacao = situacao;
     }
 
-    public UUID getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getMatricula() {
+    public Integer getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(String matricula) {
+    public void setMatricula(Integer matricula) {
         this.matricula = matricula;
     }
 

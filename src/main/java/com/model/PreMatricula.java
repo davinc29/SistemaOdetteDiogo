@@ -3,19 +3,19 @@ package com.model;
 import java.util.UUID;
 
 public class PreMatricula {
-    private String matricula;
+    private Integer matricula;
     private String turmaAno;
 
-    public PreMatricula(String matricula, String turmaAno) {
+    public PreMatricula(Integer matricula, String turmaAno) {
         this.matricula = matricula;
         this.turmaAno = turmaAno;
     }
 
-    public String getMatricula() {
+    public Integer getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(String matricula) {
+    public void setMatricula(Integer matricula) {
         this.matricula = matricula;
     }
 

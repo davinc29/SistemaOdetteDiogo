@@ -2,11 +2,11 @@ package com.dto;
 
 public class AlunoCadastrarDTO {
     private String nome;
-    private Long matricula;
+    private Integer matricula;
     private String email;
     private String senha;
 
-    public AlunoCadastrarDTO(String nome, Long matricula, String email, String senha) {
+    public AlunoCadastrarDTO(String nome, Integer matricula, String email, String senha) {
         this.nome = nome;
         this.matricula = matricula;
         this.email = email;
@@ -23,11 +23,11 @@ public class AlunoCadastrarDTO {
         this.nome = nome;
     }
 
-    public Long getMatricula() {
+    public Integer getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(Long matricula) {
+    public void setMatricula(Integer matricula) {
         this.matricula = matricula;
     }
 

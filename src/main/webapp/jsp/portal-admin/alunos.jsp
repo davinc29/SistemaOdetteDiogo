@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Capelus - Professores</title>
+    <title>Capelus - Alunos</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     />
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/portal-admin/professores.css" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/admin/alunos.css" />
     <script src="mobile-navbar.js"></script>
-    <link rel="icon" type="image/x-icon" href="../assets/Capelus-icon.ico">
+    <link rel="icon" type="image/x-icon" href="../../assets/Capelus-icon.ico">
   </head>
   <body>
     <!-- Layout Computer -->
@@ -20,13 +20,13 @@
         <nav class="text-secondary">
           <ul class="">
             <li class="page-item can-hover">
-              <a class="page-text" href="administradores.html">Administradores</a>
-            </li>
-            <li class="page-item can-hover">
-              <a class="page-text" href="alunos.html">Alunos</a>
+              <a class="page-text" href="administradores.jsp">Administradores</a>
             </li>
             <li class="page-item active">
-              <a class="page-text" href="professores.html">Professores</a>
+              <a class="page-text" href="alunos.html">Alunos</a>
+            </li>
+            <li class="page-item can-hover">
+              <a class="page-text" href="professores.jsp">Professores</a>
             </li>
           </ul>
         </nav>
@@ -43,12 +43,12 @@
           <div class="d-flex">
             <img
               class="icon m-3"
-              src="../assets/notificao-icon.svg"
+              src="../../assets/notificao-icon.svg"
               alt="Notificações Icon"
             />
             <img
               class="icon m-3"
-              src="../assets/mensagens-icon.svg"
+              src="../../assets/mensagens-icon.svg"
               alt="Mensagens Icon"
             />
             <div class="bg-primary box-name m-3">
@@ -66,19 +66,19 @@
               <div class="filter-name ms-4">
                 <input
                   type="text"
-                  placeholder="Buscar por disciplina..."
+                  placeholder="Buscar por matrícula..."
                 />
               </div>
               <div class="filter-name ms-4">
                 <input
                   type="text"
-                  placeholder="Buscar por professor..."
+                  placeholder="Buscar por turma..."
                 />
               </div>
             </div>
             <div class="linha-dois d-flex mt-3">
               <div class="filter-name">
-                <input type="text" placeholder="Buscar por usuário..." />
+                <input type="text" placeholder="Buscar por nome..." />
               </div>
               <div class="filter-name ms-4">
                 <input type="text" placeholder="Buscar por email..." />
@@ -96,7 +96,7 @@
 
               <div class="d-flex lado-direito">
                 <div class="add-button">
-                  <a href="professores-adicionar.html">+ Adicionar</a>
+                  <a href="alunos-adicionar.jsp">+ Adicionar</a>
                 </div>
               </div>
             </div>
@@ -106,9 +106,9 @@
             <table class="tabela-notas">
               <tr>
                 <th>Id</th>
-                <th>Disciplina</th>
-                <th>Professor</th>
-                <th>Usuário</th>
+                <th>Matrícula</th>
+                <th>Turma</th>
+                <th>Nome</th>
                 <th>Email</th>
                 <th>Senha</th>
               </tr>
@@ -117,25 +117,25 @@
                   <p>1</p>
                 </td>
                 <td>
-                  <p>Português</p>
+                  <p>123456789</p>
                 </td>
                 <td>
-                  <p>Rahquel Korzh</p>
+                  <p>1ºJ</p>
                 </td>
                 <td>
-                  <p>RahquelDesigner</p>
+                  <p>Gustavo Kenzo</p>
                 </td>
                 <td>
-                  <p>rahquel.emidio@institutojef.org.br</p>
+                  <p>gustavo.ota@institutojef.org.br</p>
                 </td>
                 <td>
                   <p>SenhaSecreta123</p>
                 </td>
                 <td>
-                  <a href="professores-editar.html">
+                  <a href="alunos-editar.jsp">
                     <img
                       class="table-icon"
-                      src="../assets/editar.svg"
+                      src="../../assets/editar.svg"
                       alt="Editar Icon"
                     />
                   </a>
@@ -143,7 +143,7 @@
                     <img
                       class="table-icon"
                       style="margin-left: 30px"
-                      src="../assets/apagar.svg"
+                      src="../../assets/apagar.svg"
                       alt="Deletar Icon"
                     />
                   </a>

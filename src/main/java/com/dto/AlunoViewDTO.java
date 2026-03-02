@@ -5,11 +5,11 @@ import java.util.UUID;
 public class AlunoViewDTO {
     private UUID idAluno;
     private String nome;
-    private String matricula;
+    private Integer matricula;
     private String email;
     private String turma_ano;
 
-    public AlunoViewDTO(UUID idAluno, String nome, String matricula, String email, String turma_ano) {
+    public AlunoViewDTO(UUID idAluno, String nome, Integer matricula, String email, String turma_ano) {
         this.idAluno = idAluno;
         this.nome = nome;
         this.matricula = matricula;
@@ -35,11 +35,11 @@ public class AlunoViewDTO {
         this.nome = nome;
     }
 
-    public String getMatricula() {
+    public Integer getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(String matricula) {
+    public void setMatricula(Integer matricula) {
         this.matricula = matricula;
     }
 
