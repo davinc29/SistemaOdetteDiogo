@@ -64,10 +64,10 @@
         <nav class="text-secondary">
           <ul class="">
             <li class="page-item active">
-              <a class="page-text" href="${pageContext.request.contextPath}/">Home</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-professor/">Home</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="${pageContext.request.contextPath}/alunos-notas">Notas</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-professor/alunos-professor">Notas</a>
             </li>
             <li class="page-item can-hover">
               <a class="page-text" href="${pageContext.request.contextPath}/observacoes">Observações</a>

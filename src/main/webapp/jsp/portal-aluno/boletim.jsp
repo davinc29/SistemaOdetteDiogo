@@ -111,11 +111,11 @@
             <div class="tabela-container">
                 <table class="tabela-notas">
                     <tr>
-                        <th>Disciplina</th>
-                        <th>Primeiro Semestre</th>
-                        <th>Segundo Semestre</th>
-                        <th>Média</th>
-                        <th>Situação</th>
+                        <th style="text-align:left;">Disciplina</th>
+                        <th style="text-align:center;">Primeiro Semestre</th>
+                        <th style="text-align:center;">Segundo Semestre</th>
+                        <th style="text-align:center;">Média</th>
+                        <th style="text-align:center;">Situação</th>
                     </tr>
                     <%
                         if (boletim != null && !boletim.isEmpty()) {
@@ -127,17 +127,29 @@
                         <td>
                             <p><%= b.getNomeDisciplina() %></p>
                         </td>
-                        <td>
-                            <p><%= b.getNota1() %></p>
+
+                        <td style="text-align:center;">
+                            <p style="color:<%= b.getNota1() >= 7 ? "green" : "red" %>; font-weight:bold;">
+                                <%= b.getNota1() %>
+                            </p>
                         </td>
-                        <td>
-                            <p><%= b.getNota2() %></p>
+
+                        <td style="text-align:center;">
+                            <p style="color:<%= b.getNota2() >= 7 ? "green" : "red" %>; font-weight:bold;">
+                                <%= b.getNota2() %>
+                            </p>
                         </td>
-                        <td>
-                            <p><%= b.getMedia() %></p>
+
+                        <td style="text-align:center;">
+                            <p style="color:<%= b.getMedia() >= 7 ? "green" : "red" %>; font-weight:bold;">
+                                <%= b.getMedia() %>
+                            </p>
                         </td>
-                        <td>
-                            <p><%= b.getSituacao() %></p>
+
+                        <td style="text-align:center;">
+                            <p style="color:<%= b.getSituacao().equalsIgnoreCase("Aprovado") ? "green" : "red" %>; font-weight:bold;">
+                                <%= b.getSituacao() %>
+                            </p>
                         </td>
                     </tr>
                     <%

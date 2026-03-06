@@ -238,10 +238,26 @@
                               %>
                               <tr>
                                   <td><p><%= b.getNomeDisciplina() %></p></td>
-                                  <td><p><%= b.getNota1() %></p></td>
-                                  <td><p><%= b.getNota2() %></p></td>
-                                  <td><p><%= b.getMedia() %></p></td>
-                                  <td><p><%= b.getSituacao() %></p></td>
+                                  <td>
+                                      <p style="font-weight:bold; color:<%= b.getNota1() >= 7 ? "green" : "red" %>;">
+                                          <%= b.getNota1() %>
+                                      </p>
+                                  </td>
+                                  <td>
+                                      <p style="font-weight:bold; color:<%= b.getNota2() >= 7 ? "green" : "red" %>;">
+                                          <%= b.getNota2() %>
+                                      </p>
+                                  </td>
+                                  <td>
+                                      <p style="font-weight:bold; color:<%= b.getMedia() >= 7 ? "green" : "red" %>;">
+                                          <%= b.getMedia() %>
+                                      </p>
+                                  </td>
+                                  <td>
+                                      <p style="font-weight:bold; color:<%= b.getSituacao().equalsIgnoreCase("Aprovado") ? "green" : "red" %>;">
+                                          <%= b.getSituacao() %>
+                                      </p>
+                                  </td>
                               </tr>
                               <%
                                   }
@@ -259,7 +275,7 @@
                       </div>
                       <div class="d-flex justify-content-end me-4">
                           <a
-                                  href="boletim.jsp"
+                                  href="${pageContext.request.contextPath}/jsp/portal-aluno/boletim.jsp"
                                   class="text-decoration-none"
                                   style="color: black"
                           >

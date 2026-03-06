@@ -2,6 +2,7 @@ package com.dao;
 
 import com.dto.AlunoCadastrarDTO;
 import com.dto.AlunoViewDTO;
+import com.utils.SenhaUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,22 +19,19 @@ public class AlunoDAO extends DAO {
     }
 
     //Cadastrar aluno
-    public int cadastrarAluno() throws SQLException {
-
-        AlunoCadastrarDTO aluno = new AlunoCadastrarDTO();
+    public int cadastrarAluno(AlunoCadastrarDTO aluno) throws SQLException {
 
         String nome = aluno.getNome();
         Integer matricula = aluno.getMatricula();
         String email = aluno.getEmail();
-        String senha = aluno.getSenha();
-
+        String senha = SenhaUtils.hashear(aluno.getSenha());
 
         String sql = """
-                INSERT INTO
-                    aluno (nome, matricula, senha, email)
-                VALUES
-                    (?,?,?,?,?)
-                """;
+            INSERT INTO
+                aluno (nome, matricula, senha, email)
+            VALUES
+                (?,?,?,?)
+            """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, nome);
@@ -41,18 +39,13 @@ public class AlunoDAO extends DAO {
             pstmt.setString(3, senha);
             pstmt.setString(4, email);
 
-
             int verificacao = pstmt.executeUpdate();
 
             if (verificacao > 0) {
                 conn.commit();
-                // Se a inserção foi bem-sucedida, commit e retorna 1
-
                 return 1;
             } else {
                 conn.rollback();
-                // Se a inserção falhou, rollback e retorna 0
-
                 return 0;
             }
 
@@ -60,22 +53,16 @@ public class AlunoDAO extends DAO {
 
             String state = e.getSQLState();
 
-            if ("23503".equals(state)) {
+            if ("23503".equals(state)) { // FK (ex: matrícula não existe na pré-matrícula)
                 conn.rollback();
-                // Erro 2: Matricula não existe na Pré-matricula
-
                 return 2;
 
-            } else if ("23505".equals(state)) {
+            } else if ("23505".equals(state)) { // unique
                 conn.rollback();
-                // Erro 3: Matricula já existe na tabela Aluno
-
                 return 3;
 
             } else {
                 conn.rollback();
-                // Para outros erros, apenas retorna 0
-
                 return 0;
             }
         }
@@ -154,7 +141,10 @@ public class AlunoDAO extends DAO {
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, novaSenha);
+
+            String senhaHash = SenhaUtils.hashear(novaSenha);
+
+            pstmt.setString(1, senhaHash);
             pstmt.setObject(2, idAluno);
 
             int validadr = pstmt.executeUpdate();

@@ -81,7 +81,7 @@
 
             <div class="campos">
               <div class="email d-flex flex-column mb-4">
-                <label for="email-id">E-mail atua:l</label>
+                <label for="email-id">E-mail atual:</label>
                 <input type="text" id="email-id" value="<%=session.getAttribute("email")%>" required disabled />
               </div>
               <div class="email d-flex flex-column mb-4">

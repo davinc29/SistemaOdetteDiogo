@@ -93,7 +93,7 @@ public class AlunoServlet extends HttpServlet {
         AlunoCadastrarDTO alunoCadastrarDTO = new AlunoCadastrarDTO(nome, null, email, senha);
 
         AlunoDAO alunoDAO = new AlunoDAO();
-        alunoDAO.cadastrarAluno();
+        alunoDAO.cadastrarAluno(alunoCadastrarDTO);
 
         // mesmo destino do original: volta para login
         req.setAttribute("destinoFinal", PAGINA_LOGIN);
@@ -103,33 +103,23 @@ public class AlunoServlet extends HttpServlet {
         // Igual ao seu atualizar: usa session, confere email/senha e atualiza.
         HttpSession session = req.getSession();
 
-        String emailSalvoAluno = (String) session.getAttribute("emailAluno");
         String senhaSalvaAluno = (String) session.getAttribute("senhaAluno");
 
-        String emailDigitadoAluno = req.getParameter("email").trim();
-        String senhaDigitadaAluno = req.getParameter("senha").trim();
-
-        String emailNovoAluno = req.getParameter("email").trim();
-        String senhaNovaAluno = req.getParameter("senha").trim();
+        String senhaNova = req.getParameter("N_senha");
+        String senhaNovaComfirmar = req.getParameter("CN_senha");
 
         UUID idAluno = (UUID) session.getAttribute("idAluno");
 
         AlunoDAO alunoDAO = new AlunoDAO();
 
-        if (emailDigitadoAluno.equals(emailSalvoAluno)) {
-            alunoDAO.atualizarEmailAluno(idAluno, emailNovoAluno);
+        if (senhaNova.equals(senhaNovaComfirmar)) {
+            alunoDAO.atualizarSenhaAluno(idAluno, senhaNova);
         } else {
             throw new RuntimeException("Email ou senha incorretos para atualização.");
         }
 
-        if (senhaDigitadaAluno.equals(senhaSalvaAluno)) {
-            alunoDAO.atualizarSenhaAluno(idAluno, senhaNovaAluno);
-        } else {
-            throw new RuntimeException("Email ou senha incorretos para atualização.");
-        }
-
-        session.setAttribute("emailAluno", emailNovoAluno);
-        session.setAttribute("senhaAluno", senhaNovaAluno);
+        session.removeAttribute("senhaAluno");
+        session.setAttribute("senhaAluno", senhaNova);
 
         // mesmo destino do original: área restrita do aluno
         req.setAttribute("destinoFinal", AREA_RESTRITA_ALUNO);
