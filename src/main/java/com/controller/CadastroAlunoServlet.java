@@ -17,7 +17,7 @@ public class CadastroAlunoServlet extends HttpServlet {
 
     // Ajuste o caminho conforme onde você salvou seu JSP de cadastro
     private static final String PAGINA_CADASTRO = "/cadastro.jsp";
-    private static final String PAGINA_LOGIN = "/index.jsp";
+    private static final String PAGINA_LOGIN = "/home.jsp";
     private static final String PAGINA_ERRO = "/html/erro.html";
 
     @Override

@@ -4,16 +4,9 @@
 
 <%
     AlunoViewDTO aluno = (AlunoViewDTO) session.getAttribute("usuario");
-    session.setAttribute("email", aluno.getEmail());
-
-    AlunoDAO alunoDAO = new AlunoDAO();
-
-    String senha = (String) session.getAttribute("senha");
 
     // Transformar a senha em asteriscos
-    String senhaAsteriscos = "*".repeat(senha.length());
-    session.setAttribute("senhaView", senhaAsteriscos);
-
+    String senhaAsteriscos = "********";
 %>
 
 <!doctype html>
@@ -93,17 +86,17 @@
             <div class="campos">
               <div class="email d-flex flex-column mb-4">
                 <label for="email-id">E-mail</label>
-                <input type="text" id="email-id" value="${email}" required disabled />
+                <input type="text" id="email-id" value="<%=aluno.getEmail()%>" required disabled />
               </div>
               <div class="senha d-flex flex-column">
                 <label for="senha-id">Senha</label>
-                <input type="password" id="senha-id" value="${senhaView}" required disabled />
+                <input type="password" id="senha-id" value="<%=senhaAsteriscos%>" required disabled />
               </div>
             </div>
 
             <div class="edit-container justify-content-between">
               <div class="edit-button">
-                <a href="../../index.jsp">Sair</a>
+                <a href="${pageContext.request.contextPath}/sistema-filter?action=logout">Sair</a>
               </div>
 
               <div class="edit-button">

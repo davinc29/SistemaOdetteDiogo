@@ -17,8 +17,8 @@ import java.util.UUID;
 public class AlunoServlet extends HttpServlet {
 
     // Páginas / destinos
-    private static final String PAGINA_LOGIN = "/jsp/login.jsp";
-    private static final String AREA_RESTRITA_ALUNO = "/portal-aluno/index.jsp";
+    private static final String PAGINA_LOGIN = "/index.jsp";
+    private static final String AREA_RESTRITA_ALUNO = "/portal-aluno/home.jsp";
     private static final String PAGINA_ERRO = "/html/erro.html";
 
     @Override
@@ -103,25 +103,18 @@ public class AlunoServlet extends HttpServlet {
         // Igual ao seu atualizar: usa session, confere email/senha e atualiza.
         HttpSession session = req.getSession();
 
-        String senhaSalvaAluno = (String) session.getAttribute("senhaAluno");
+        String email = req.getParameter("email").trim();
 
-        String senhaNova = req.getParameter("N_senha");
-        String senhaNovaComfirmar = req.getParameter("CN_senha");
+        String senhaAtual = req.getParameter("senha_atual");
+        senhaAtual = (senhaAtual.isBlank() ? null : senhaAtual.trim());
 
-        UUID idAluno = (UUID) session.getAttribute("idAluno");
+        String novaSenha = req.getParameter("nova_senha");
+        novaSenha = (novaSenha.isBlank() ? null : novaSenha.trim());
 
-        AlunoDAO alunoDAO = new AlunoDAO();
-
-        if (senhaNova.equals(senhaNovaComfirmar)) {
-            alunoDAO.atualizarSenhaAluno(idAluno, senhaNova);
-        } else {
-            throw new RuntimeException("Email ou senha incorretos para atualização.");
+        try (AlunoDAO dao = new AlunoDAO()) {
+            dao.atualizarSenhaAlunoAluno(email, senhaAtual, novaSenha);
         }
 
-        session.removeAttribute("senhaAluno");
-        session.setAttribute("senhaAluno", senhaNova);
-
-        // mesmo destino do original: área restrita do aluno
         req.setAttribute("destinoFinal", AREA_RESTRITA_ALUNO);
     }
 }

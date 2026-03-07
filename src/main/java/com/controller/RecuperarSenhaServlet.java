@@ -199,7 +199,7 @@ public class RecuperarSenhaServlet extends HttpServlet {
         }
         else {
             try (ProfessorDAO professorDAO = new ProfessorDAO()) {
-                professorDAO.atualizarSenhaProfessor(email, senhaHash);
+                professorDAO.recuperarSenhaProfessor(email, senhaHash);
             }
         }
 

@@ -1,18 +1,15 @@
 package com.controller;
 
-import com.dao.AlunoDAO;
 import com.dao.ProfessorDAO;
-import com.dto.AlunoViewDTO;
-import com.dto.BoletimViewDTO;
 import com.dto.ProfessorDTO;
 import com.exception.ExcecaoDeJSP;
-import com.model.Observacao;
 import com.model.Professor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,6 +22,7 @@ public class ProfessorServlet extends HttpServlet {
     private static final String PAGINA_PRINCIPAL = "/jsp/admin/professores.jsp";
     private static final String PAGINA_CADASTRO = "/jsp/admin/professores-adicionar.jsp";
     private static final String PAGINA_EDICAO = "/jsp/admin/professores-editar.jsp";
+    private static final String CONTA_PROFESSOR = "/jsp/portal-professor/conta.jsp";
     private static final String PAGINA_ERRO = "/html/erro.html";
 
     @Override
@@ -75,18 +73,24 @@ public class ProfessorServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action").trim();
+        String usuario = req.getParameter("usuario").trim();
 
         String destino = PAGINA_ERRO;
 
         try {
             switch (action) {
                 case "create" -> cadastrar(req);
-                case "update" -> atualizar(req);
+                case "update" -> {
+                    if (usuario.equals("professor")) {
+                        atualizarSenha(req);
+                        destino = CONTA_PROFESSOR;
+                    }
+                }
                 case "delete" -> deletar(req);
                 default -> throw new RuntimeException("valor inválido para o parâmetro 'action': " + action);
             }
 
-            destino = req.getServletPath();
+
 
         }
         // Se houver alguma exceção de JSP, aciona o método doGet
@@ -124,19 +128,19 @@ public class ProfessorServlet extends HttpServlet {
         }
     }
 
-    public void atualizar(HttpServletRequest req) throws SQLException, ClassNotFoundException, ExcecaoDeJSP{
-        String temp = req.getParameter("id").trim();
-        UUID id = UUID.fromString(temp);
-        String nome = req.getParameter("nome").trim();
-        String username = req.getParameter("username").trim();
-        String email = req.getParameter("email");
+    public void atualizarSenha(HttpServletRequest req) throws SQLException, ClassNotFoundException, ExcecaoDeJSP{
+        HttpSession session = req.getSession();
 
-        ProfessorDTO professorAlterado = new ProfessorDTO(id, nome, username, email);
+        String email = req.getParameter("email").trim();
+
+        String senhaAtual = req.getParameter("senha_atual");
+        senhaAtual = (senhaAtual.isBlank() ? null : senhaAtual.trim());
+
+        String novaSenha = req.getParameter("nova_senha");
+        novaSenha = (novaSenha.isBlank() ? null : novaSenha.trim());
 
         try (ProfessorDAO dao = new ProfessorDAO()) {
-            ProfessorDTO professorOriginal = dao.pesquisarPorId(id);
-
-            dao.atualizar(professorOriginal, professorAlterado);
+            dao.atualizarSenhaProfessor(email, senhaAtual, novaSenha);
         }
     }
 

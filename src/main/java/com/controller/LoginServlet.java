@@ -59,7 +59,6 @@ public class LoginServlet extends HttpServlet {
                         case 1 -> {
                             AlunoViewDTO aluno = encontrarAluno(credenciais);
                             session.setAttribute("usuario", aluno);
-                            session.setAttribute("senha", senha);
                             destino = AREA_RESTRITA_ALUNO;
                             erro = false;
                         }
@@ -72,7 +71,6 @@ public class LoginServlet extends HttpServlet {
                             req.setAttribute("observacoes", observacoes);
                             req.setAttribute("notasPendentes", notasPendentes);
                             session.setAttribute("usuario", professor);
-                            session.setAttribute("senha", senha);
 
                             destino = AREA_RESTRITA_PROFESSOR;
                             erro = false;

@@ -68,7 +68,7 @@
         <nav class="text-secondary">
           <ul class="">
             <li class="page-item active">
-              <a class="page-text" href="${pageContext.request.contextPath}/">Home</a>
+              <a class="page-text" href="#">Home</a>
             </li>
             <li class="page-item can-hover">
               <a class="page-text" href="${pageContext.request.contextPath}/alunos-professor?action=notas">Notas</a>
@@ -77,7 +77,7 @@
               <a class="page-text" href="${pageContext.request.contextPath}/alunos-professor?action=observacoes">Observações</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="${pageContext.request.contextPath}">Conta</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-professor/conta.jsp">Conta</a>
             </li>
           </ul>
         </nav>
