@@ -29,7 +29,6 @@ public class AlunoServlet extends HttpServlet {
         String destino = null;
 
         try {
-            // Estrutura padrão (igual seu modelo). Você pode plugar páginas aqui se quiser.
             if (action.equals("read")) {
                 destino = AREA_RESTRITA_ALUNO;
             } else {
@@ -58,12 +57,12 @@ public class AlunoServlet extends HttpServlet {
 
         try {
             switch (action) {
-                case "create" -> cadastrar(req); // era /cadastrar-aluno
-                case "update" -> atualizar(req); // era /atualizar-aluno
+                case "create" -> cadastrar(req);
+                case "update" -> atualizar(req);
                 default -> throw new RuntimeException("valor inválido para o parâmetro 'action': " + action);
             }
 
-            // Mantém a mesma “ideia” do seu modelo: após o POST redireciona
+
             // (cada método define seu destino lógico)
             destino = (String) req.getAttribute("destinoFinal");
 
@@ -79,9 +78,6 @@ public class AlunoServlet extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + destino);
     }
 
-    // =========================
-    // MESMA LÓGICA (SEM MUDAR)
-    // =========================
 
     private void cadastrar(HttpServletRequest req) throws SQLException {
         String nome = req.getParameter("nome");
@@ -89,7 +85,7 @@ public class AlunoServlet extends HttpServlet {
         String senha = req.getParameter("senha");
         String turmaAno = String.valueOf(java.time.Year.now().getValue());
 
-        // Mantive igual ao seu cadastrar: cria DTO, cria DAO e chama cadastrarAluno()
+        // Cria DTO, cria DAO e chama cadastrarAluno()
         AlunoCadastrarDTO alunoCadastrarDTO = new AlunoCadastrarDTO(nome, null, email, senha);
 
         AlunoDAO alunoDAO = new AlunoDAO();
@@ -100,7 +96,7 @@ public class AlunoServlet extends HttpServlet {
     }
 
     private void atualizar(HttpServletRequest req) throws SQLException {
-        // Igual ao seu atualizar: usa session, confere email/senha e atualiza.
+        // Usa session, confere email/senha e atualiza.
         HttpSession session = req.getSession();
 
         String senhaSalvaAluno = (String) session.getAttribute("senhaAluno");
@@ -121,7 +117,7 @@ public class AlunoServlet extends HttpServlet {
         session.removeAttribute("senhaAluno");
         session.setAttribute("senhaAluno", senhaNova);
 
-        // mesmo destino do original: área restrita do aluno
+        // Área restrita do aluno
         req.setAttribute("destinoFinal", AREA_RESTRITA_ALUNO);
     }
 }

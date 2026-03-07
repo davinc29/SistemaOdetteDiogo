@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -38,6 +39,7 @@ public class CadastroAlunoServlet extends HttpServlet {
             switch (action) {
                 case "cadastrar" -> {
                     String nome = req.getParameter("nome");
+                    nome = WordUtils.capitalize(nome);
                     String matriculaStr = req.getParameter("matricula");
                     String email = req.getParameter("email");
                     String senha = req.getParameter("senha");

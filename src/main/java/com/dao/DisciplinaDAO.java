@@ -136,6 +136,26 @@ public class DisciplinaDAO extends DAO{
         }
     }
 
+    public void deletarPorIdProfessor(UUID id_prof) throws SQLException{
+        String sql = """
+                DELETE FROM
+                    disciplina
+                WHERE
+                    id_professor = ?
+                """;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, id_prof);
+
+            pstmt.executeUpdate();
+
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+    }
+
     public Disciplina pesquisarPorId(Integer id) throws SQLException{
         String sql = """
                 SELECT

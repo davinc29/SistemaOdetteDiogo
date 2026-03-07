@@ -45,7 +45,7 @@
   </head>
   <body>
     <!-- Layout Computer -->
-    a<section class="d-sm-flex align-items-center vh-100 d-none home">
+    <section class="d-sm-flex align-items-center vh-100 d-none home">
       <aside class="bg-primary sidebar">
         <nav class="text-secondary">
           <ul class="">

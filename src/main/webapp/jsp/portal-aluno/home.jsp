@@ -94,7 +94,7 @@
         <nav class="text-secondary">
           <ul class="">
             <li class="page-item active">
-              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/home.html">Home</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/home.jsp">Home</a>
             </li>
             <li class="page-item can-hover">
               <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/boletim.jsp">Boletim</a>
