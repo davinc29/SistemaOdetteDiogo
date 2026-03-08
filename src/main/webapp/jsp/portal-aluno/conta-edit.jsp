@@ -1,8 +1,8 @@
+<%@ page import="com.dto.AlunoViewDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    String email = (String) session.getAttribute("email");
-    String senha = (String) session.getAttribute("senha");
+    AlunoViewDTO aluno = (AlunoViewDTO) session.getAttribute("usuario");
 %>
 
 <!doctype html>
@@ -15,10 +15,11 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     />
-    <link rel="stylesheet" href="../../css/style.css" />
-    <link rel="stylesheet" href="../../css/portal-aluno/conta-edit.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-aluno/conta-edit.css" />
     <script src="mobile-navbar.js"></script>
-    <link rel="icon" type="image/x-icon" href="../../assets/Capelus-icon.ico" />
+    <script src="${pageContext.request.contextPath}/javascript/passwordValidation.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/Capelus-icon.ico" />
   </head>
   <body>
     <!-- Layout Computer -->
@@ -55,12 +56,12 @@
           <div class="d-flex">
             <img
               class="icon m-3"
-              src="../../assets/notificao-icon.svg"
+              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
               alt="Notificações Icon"
             />
             <img
               class="icon m-3"
-              src="../../assets/mensagens-icon.svg"
+              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
               alt="Mensagens Icon"
             />
             <div class="bg-primary box-name m-3">
@@ -79,32 +80,36 @@
               </div>
             </div>
 
-            <div class="campos">
-              <div class="email d-flex flex-column mb-4">
-                <label for="email-id">E-mail atua:l</label>
-                <input type="text" id="email-id" value="<%=session.getAttribute("email")%>" required disabled />
-              </div>
-              <div class="email d-flex flex-column mb-4">
-                <label for="email-id">Novo e-mail:</label>
-                <input type="text" id="email-id" required />
-              </div>
+              <form onsubmit="validarSenha(event)" id="atualizarSenha" action="${pageContext.request.contextPath}/aluno?action=update" method="post">
+                  <div class="campos">
+                      <div class="email d-flex flex-column mb-4" style="margin-top: 40px">
+                          <label for="email-id">E-mail atual:</label>
+                          <input type="text" id="email-id" value="<%=aluno.getEmail()%>" disabled />
+                          <input type="hidden" name="email" value="<%=aluno.getEmail()%>">
+                      </div>
+                      <div class="senha d-flex flex-column mb-4">
+                          <label for="senha-id">Senha atual:</label>
+                          <input type="password" id="senhaAtual" class="senha-id" name="senha_atual" required/>
+                      </div>
+                      <div class="senha d-flex flex-column">
+                          <label for="senha-id">Nova senha:</label>
+                          <input type="password" id="novaSenha" class="senha-id" name="nova_senha" required />
+                      </div>
+                      <div class="senha d-flex flex-column" style="margin-top: 20px; margin-bottom: 10px">
+                          <label for="senha-id">Confirmar senha:</label>
+                          <input type="password" id="confirmarSenha" class="senha-id" required />
 
-              <div class="senha d-flex flex-column mb-4">
-                <label for="senha-id">Senha atual:</label>
-                <input type="password" id="senha-id" value="<%=session.getAttribute("senhaView")%>" required disabled />
-              </div>
-              <div class="senha d-flex flex-column">
-                <label for="senha-id">Nova senha:</label>
-                <input type="password" id="senha-id" required />
-              </div>
-            </div>
+                          <p id="erroSenha" style="color: red"></p>
+                      </div>
+                  </div>
 
-            <div class="edit-container">
-              <button class="edit-button">Salvar</button>
-              <div class="edit-button">
-                <a href="conta.jsp">Cancelar</a>
-              </div>
-            </div>
+                  <div class="edit-container">
+                      <button type="submit" class="edit-button">Salvar</button>
+                      <div class="edit-button">
+                          <a href="${pageContext.request.contextPath}/jsp/portal-aluno/conta.jsp">Cancelar</a>
+                      </div>
+                  </div>
+              </form>
           </div>
         </main>
       </div>

@@ -2,6 +2,7 @@ package com.dao;
 
 import com.dto.AlunoCadastrarDTO;
 import com.dto.AlunoViewDTO;
+import com.utils.SenhaUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,22 +19,19 @@ public class AlunoDAO extends DAO {
     }
 
     //Cadastrar aluno
-    public int cadastrarAluno() throws SQLException {
-
-        AlunoCadastrarDTO aluno = new AlunoCadastrarDTO();
+    public int cadastrarAluno(AlunoCadastrarDTO aluno) throws SQLException {
 
         String nome = aluno.getNome();
         Integer matricula = aluno.getMatricula();
         String email = aluno.getEmail();
-        String senha = aluno.getSenha();
-
+        String senha = SenhaUtils.hashear(aluno.getSenha());
 
         String sql = """
-                INSERT INTO
-                    aluno (nome, matricula, senha, email)
-                VALUES
-                    (?,?,?,?,?)
-                """;
+            INSERT INTO
+                aluno (nome, matricula, senha, email)
+            VALUES
+                (?,?,?,?)
+            """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, nome);
@@ -41,18 +39,13 @@ public class AlunoDAO extends DAO {
             pstmt.setString(3, senha);
             pstmt.setString(4, email);
 
-
             int verificacao = pstmt.executeUpdate();
 
             if (verificacao > 0) {
                 conn.commit();
-                // Se a inserção foi bem-sucedida, commit e retorna 1
-
                 return 1;
             } else {
                 conn.rollback();
-                // Se a inserção falhou, rollback e retorna 0
-
                 return 0;
             }
 
@@ -60,22 +53,16 @@ public class AlunoDAO extends DAO {
 
             String state = e.getSQLState();
 
-            if ("23503".equals(state)) {
+            if ("23503".equals(state)) { // FK (ex: matrícula não existe na pré-matrícula)
                 conn.rollback();
-                // Erro 2: Matricula não existe na Pré-matricula
-
                 return 2;
 
-            } else if ("23505".equals(state)) {
+            } else if ("23505".equals(state)) { // unique
                 conn.rollback();
-                // Erro 3: Matricula já existe na tabela Aluno
-
                 return 3;
 
             } else {
                 conn.rollback();
-                // Para outros erros, apenas retorna 0
-
                 return 0;
             }
         }
@@ -154,7 +141,10 @@ public class AlunoDAO extends DAO {
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, novaSenha);
+
+            String senhaHash = SenhaUtils.hashear(novaSenha);
+
+            pstmt.setString(1, senhaHash);
             pstmt.setObject(2, idAluno);
 
             int validadr = pstmt.executeUpdate();
@@ -176,6 +166,44 @@ public class AlunoDAO extends DAO {
         }
     }
 
+    public void atualizarSenhaAlunoAluno(String email, String senhaAtual, String senhaNova) throws SQLException{
+        String sql = """
+                SELECT
+                    senha
+                FROM
+                    aluno
+                WHERE
+                    email = ?
+                """;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String senha = rs.getString("senha");
+
+                if (SenhaUtils.comparar(senhaAtual, senha)) {
+                    String update = "UPDATE aluno SET senha = ? WHERE email = ?";
+                    String senhaHash = SenhaUtils.hashear(senhaNova);
+
+                    try (PreparedStatement pstmt2 = conn.prepareStatement(update)) {
+                        pstmt2.setString(1, senhaHash);
+                        pstmt2.setString(2, email);
+                        pstmt2.executeUpdate();
+                        conn.commit();
+                    } catch (SQLException e) {
+                        conn.rollback();
+                        throw e;
+                    }
+                }
+            }
+        } catch (SQLException err) {
+            conn.rollback();
+            throw err;
+        }
+    }
+
     //Listar Todos os Alunos
     public List<AlunoViewDTO> listarAlunos() throws SQLException {
         String sql = """
@@ -186,7 +214,7 @@ public class AlunoDAO extends DAO {
                     a.email as email,
                     p.turma_ano as turma_ano
                 FROM
-                    aluno
+                    aluno a
                 JOIN
                     pre_matricula p
                     ON p.matricula = a.matricula
@@ -207,6 +235,11 @@ public class AlunoDAO extends DAO {
 
                 AlunoViewDTO aluno = new AlunoViewDTO(idAluno, nome, matricula, email, turmaAno);
                 alunos.add(aluno);
+
+
+
+
+
             }
 
             conn.commit();

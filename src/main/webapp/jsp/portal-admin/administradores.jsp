@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!doctype html>
 <html lang="pt-br">
   <head>
@@ -8,27 +10,26 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     />
-    <link rel="stylesheet" href="../../css/style.css" />
-    <link rel="stylesheet" href="../../css/portal-admin/administradores.css" />
-    <script src="mobile-navbar.js"></script>
-    <link rel="icon" type="image/x-icon" href="../../assets/Capelus-icon.ico" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-admin/administradores.css" />
+    <script src="${pageContext.request.contextPath}/mobile-navbar.js"></script>
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/Capelus-icon.ico" />
   </head>
   <body>
     <!-- Layout Computer -->
-    <section class="d-sm-flex align-items-center vh-100 d-none home">
-      <aside class="bg-primary sidebar">
+    <section class="d-sm-flex align-items-center vh-100 d-none home">      <aside class="bg-primary sidebar">
         <nav class="text-secondary">
           <ul class="">
             <li class="page-item active">
-              <a class="page-text" href="administradores.html"
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-admin/administradores.jsp"
                 >Administradores</a
               >
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="alunos.jsp">Alunos</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-admin/alunos.jsp">Alunos</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="professores.jsp"
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-admin/professores.jsp"
                 >Professores</a
               >
             </li>
@@ -47,12 +48,12 @@
           <div class="d-flex">
             <img
               class="icon m-3"
-              src="../../assets/notificao-icon.svg"
+              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
               alt="Notificações Icon"
             />
             <img
               class="icon m-3"
-              src="../../assets/mensagens-icon.svg"
+              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
               alt="Mensagens Icon"
             />
             <div class="bg-primary box-name m-3">
@@ -137,7 +138,7 @@
                     <input
                       type="hidden"
                       name="id"
-                      value="<%= plano.getId() %>"
+                      value=""
                     />
                     <input type="hidden" name="action" value="update" />
                     <button type="submit" class="action-btn">
@@ -156,7 +157,7 @@
                     <input
                       type="hidden"
                       name="id"
-                      value="<%= plano.getId() %>"
+                      value=""
                     />
                     <input type="hidden" name="action" value="delete" />
                     <button type="submit" class="action-btn">

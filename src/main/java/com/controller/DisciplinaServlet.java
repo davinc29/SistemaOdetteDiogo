@@ -132,7 +132,7 @@ public class DisciplinaServlet extends HttpServlet {
 
         String nome = req.getParameter("nome");
 
-        Disciplina disciplina = new Disciplina(nome, idProfessor);
+        Disciplina disciplina = new Disciplina();
 
         try (DisciplinaDAO dao = new DisciplinaDAO()) {
             dao.cadastrar(disciplina);

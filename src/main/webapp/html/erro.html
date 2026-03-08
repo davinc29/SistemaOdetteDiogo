@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capelus - Erro</title>
+    <link rel="icon" type="image/x-icon" href="../assets/Capelus-icon.ico">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background-color:#EBF2F4;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:30px;
+        }
+
+        .erro-container{
+            width:100%;
+            max-width:900px;
+            background-color:#ffffff;
+            border-radius:28px;
+            box-shadow:5px 5px 12px #b7b7b7;
+            overflow:hidden;
+            display:flex;
+            min-height:480px;
+        }
+
+        .lado-esquerdo{
+            width:34%;
+            background:linear-gradient(180deg,#cc2a41,#e1445a);
+            color:white;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            padding:40px 25px;
+            text-align:center;
+        }
+
+        /* caixa branca do logo */
+        .logo-box{
+            background:white;
+            width:120px;
+            height:120px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            margin-bottom:20px;
+            box-shadow:0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .logo-box img{
+            width:70px;
+        }
+
+        .lado-esquerdo h1{
+            font-size:34px;
+            margin-bottom:10px;
+        }
+
+        .lado-esquerdo p{
+            font-size:16px;
+            opacity:0.95;
+        }
+
+        .lado-direito{
+            width:66%;
+            padding:60px 55px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .status{
+            display:inline-block;
+            width:fit-content;
+            background-color:#fdecef;
+            color:#cc2a41;
+            padding:10px 18px;
+            border-radius:999px;
+            font-size:14px;
+            font-weight:bold;
+            margin-bottom:22px;
+        }
+
+        .lado-direito h2{
+            font-size:42px;
+            color:#1f1f1f;
+            margin-bottom:18px;
+        }
+
+        .lado-direito p{
+            font-size:20px;
+            color:#5b5b5b;
+            line-height:1.6;
+            margin-bottom:14px;
+        }
+
+        .mensagem-secundaria{
+            font-size:17px !important;
+            color:#7a7a7a !important;
+        }
+
+        .botoes{
+            margin-top:28px;
+            display:flex;
+            gap:16px;
+            flex-wrap:wrap;
+        }
+
+        .botao-principal,
+        .botao-secundario{
+            text-decoration:none;
+            padding:14px 28px;
+            border-radius:30px;
+            font-weight:bold;
+            transition:0.2s ease;
+            display:inline-block;
+        }
+
+        .botao-principal{
+            background-color:#cc2a41;
+            color:white;
+        }
+
+        .botao-principal:hover{
+            background-color:#e1445a;
+            transform:scale(1.03);
+        }
+
+        .botao-secundario{
+            background-color:#f4f4f4;
+            color:#333;
+            border:1px solid #d9d9d9;
+        }
+
+        .botao-secundario:hover{
+            background-color:#ececec;
+            transform:scale(1.03);
+        }
+
+        @media (max-width:800px){
+
+            .erro-container{
+                flex-direction:column;
+            }
+
+            .lado-esquerdo,
+            .lado-direito{
+                width:100%;
+            }
+
+            .lado-direito{
+                padding:40px 30px;
+            }
+
+            .lado-direito h2{
+                font-size:34px;
+            }
+
+            .lado-direito p{
+                font-size:18px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="erro-container">
+
+    <div class="lado-esquerdo">
+
+        <div class="logo-box">
+            <img src="../assets/Capelus-icon.ico" alt="Logo Capelus">
+        </div>
+
+        <h1>Capelus</h1>
+        <p>Sistema escolar</p>
+
+    </div>
+
+    <div class="lado-direito">
+
+        <span class="status">Erro no sistema</span>
+
+        <h2 style="font-size: 35px;">Estamos trabalhando nisso</h2>
+
+        <p>
+            Ocorreu um problema ao carregar esta página no momento.
+        </p>
+
+        <p class="mensagem-secundaria">
+            Nossa equipe já está trabalhando para resolver isso o mais rápido possível.
+            Tente novamente em alguns instantes.
+        </p>
+
+        <div class="botoes">
+
+            <a href="javascript:history.back()" class="botao-principal">
+                Voltar
+            </a>
+
+            <a href="../index.jsp" class="botao-secundario">
+                Ir para o início
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

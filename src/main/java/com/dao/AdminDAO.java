@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.dto.AdminDTO;
+import com.utils.SenhaUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,25 +47,40 @@ public class AdminDAO extends DAO {
 
     }
 
-    public boolean logarAdmin(AdminDTO admin) throws Exception {
-        String sql = "SELECT * FROM admin WHERE email = ? AND senha = ?";
+    public boolean logarAdmin(AdminDTO adminDTO) throws Exception {
 
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, admin.getEmail());
-            pstmt.setString(2, admin.getSenha());
+        String sql = """
+        SELECT
+            senha
+        FROM
+            admin
+        WHERE
+            email = ?
+        """;
 
-            ResultSet rs = pstmt.executeQuery();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, adminDTO.getEmail());
 
-            if (rs.next()) {
-                return true; // Login bem-sucedido
-            } else {
-                return false; // Login falhou
+            try (ResultSet rs = pstmt.executeQuery()) {
+
+                if (!rs.next()) {
+                    conn.rollback();
+                    return false;
+                }
+
+                String senhaHash = rs.getString("senha");
+
+                boolean ok = SenhaUtils.comparar(adminDTO.getSenha(), senhaHash);
+
+                if (ok) {
+                    conn.commit();
+                    return true;
+                }
+
+                conn.rollback();
+                return false;
             }
-        } catch (Exception e) {
-            throw e; // Exeção lançada
         }
-
     }
 
 

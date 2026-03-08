@@ -1,14 +1,15 @@
 package com.controller;
 
+import com.dao.AdminDAO;
 import com.dao.BoletimDAO;
 import com.dao.LoginDAO;
 import com.dao.ObservacaoDAO;
+import com.dto.AdminDTO;
 import com.dto.AlunoViewDTO;
 import com.dto.LoginDTO;
 import com.dto.ObservacaoViewDTO;
 import com.dto.ProfessorDTO;
 import com.exception.ExcecaoDeJSP;
-import com.model.Professor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.net.http.HttpRequest;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,6 +26,8 @@ public class LoginServlet extends HttpServlet {
 
     private static final String AREA_RESTRITA_ALUNO = "/jsp/portal-aluno/home.jsp";
     private static final String AREA_RESTRITA_PROFESSOR = "/jsp/portal-professor/home.jsp";
+    private static final String AREA_RESTRITA_ADMIN = "/jsp/portal-admin/alunos.jsp";
+
     private static final String PAGINA_LOGIN = "/index.jsp";
     private static final String PAGINA_ERRO = "/html/erro.html";
 
@@ -54,12 +56,22 @@ public class LoginServlet extends HttpServlet {
                     Integer num = login(credenciais);
 
                     switch (num) {
-                        case 0 -> throw ExcecaoDeJSP.falhaLogin();
+                        case 0 -> {
+                            AdminDTO admin = encontrarAdmin(credenciais);
+
+                            if (admin == null) {
+                                throw ExcecaoDeJSP.falhaLogin();
+                            }
+
+                            session.setAttribute("usuario", admin);
+                            session.setAttribute("senha", senha);
+
+                            destino = "/admin?action=readAlunos";
+                        }
 
                         case 1 -> {
                             AlunoViewDTO aluno = encontrarAluno(credenciais);
                             session.setAttribute("usuario", aluno);
-                            session.setAttribute("senha", senha);
                             destino = AREA_RESTRITA_ALUNO;
                             erro = false;
                         }
@@ -72,7 +84,6 @@ public class LoginServlet extends HttpServlet {
                             req.setAttribute("observacoes", observacoes);
                             req.setAttribute("notasPendentes", notasPendentes);
                             session.setAttribute("usuario", professor);
-                            session.setAttribute("senha", senha);
 
                             destino = AREA_RESTRITA_PROFESSOR;
                             erro = false;
@@ -125,7 +136,7 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    private ProfessorDTO encontrarProfessor(LoginDTO credenciais) throws SQLException{
+    private ProfessorDTO encontrarProfessor(LoginDTO credenciais) throws SQLException {
         try (LoginDAO dao = new LoginDAO()) {
             return dao.encontrarProfessor(credenciais);
         }
@@ -137,15 +148,30 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    public List<String> notasPendentes(ProfessorDTO professor) throws SQLException{
+    public List<String> notasPendentes(ProfessorDTO professor) throws SQLException {
         try (BoletimDAO dao = new BoletimDAO()) {
             return dao.notasPendentes(professor.getId());
         }
     }
 
-    public List<ObservacaoViewDTO> listarPorProfessor(ProfessorDTO professor) throws SQLException{
+    public List<ObservacaoViewDTO> listarPorProfessor(ProfessorDTO professor) throws SQLException {
         try (ObservacaoDAO dao = new ObservacaoDAO()) {
             return dao.listarPorProfessor(professor.getId());
+        }
+    }
+
+    // === ADMIN ===
+    private AdminDTO encontrarAdmin(LoginDTO credenciais) throws Exception {
+        AdminDTO tentativa = new AdminDTO(credenciais.getEmail(), credenciais.getSenha());
+
+        try (AdminDAO adminDAO = new AdminDAO()) {
+            boolean logou = adminDAO.logarAdmin(tentativa);
+
+            if (!logou) {
+                return null;
+            }
+
+            return new AdminDTO(credenciais.getEmail(), null);
         }
     }
 
