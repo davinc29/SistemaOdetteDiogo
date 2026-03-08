@@ -30,7 +30,7 @@
 
               <div class="mb-3 d-flex flex-column gap-3 text-secondary">
                   <div class="d-flex flex-column">
-                      <label for="username" class="form-label">Usuário</label>
+                      <label for="username" class="form-label">Nome</label>
                       <input type="text" class="form-control" id="username" name="nome" required />
                   </div>
 

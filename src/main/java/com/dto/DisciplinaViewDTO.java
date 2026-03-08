@@ -14,6 +14,10 @@ public class DisciplinaViewDTO {
         this.emailProfessor = emailProfessor;
     }
 
+    public int getId() {return id;}
+
+    public  void setId(int id) {this.id = id;}
+
     public String getNomeDisciplina() {
         return nomeDisciplina;
     }

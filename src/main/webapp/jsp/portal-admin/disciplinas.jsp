@@ -2,7 +2,7 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.dto.AlunoViewDTO" %>
+<%@ page import="com.dto.DisciplinaViewDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -22,7 +22,7 @@
     session.setAttribute("data", data);
     session.setAttribute("diaSemana", diaSemana);
 
-    List<AlunoViewDTO> alunos = (List<AlunoViewDTO>) request.getAttribute("alunos");
+    List<DisciplinaViewDTO> disciplinas = (List<DisciplinaViewDTO>) request.getAttribute("disciplinas");
 %>
 
 <!doctype html>
@@ -30,10 +30,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Capelus - Alunos</title>
+    <title>Capelus - Disciplinas</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-admin/alunos.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-admin/disciplinas.css" />
     <script src="${pageContext.request.contextPath}/mobile-navbar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="${pageContext.request.contextPath}/javascript/delete.js" defer></script>
@@ -44,13 +44,13 @@
     <aside class="bg-primary sidebar">
         <nav class="text-secondary">
             <ul>
-                <li class="page-item active">
+                <li class="page-item can-hover">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readAlunos">Alunos</a>
                 </li>
                 <li class="page-item can-hover">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readProfessores">Professores</a>
                 </li>
-                <li class="page-item can-hover">
+                <li class="page-item active">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readDisciplinas">Disciplinas</a>
                 </li>
             </ul>
@@ -77,76 +77,75 @@
         </header>
 
         <main>
-            <div class="filter-box d-flex flex-column">
-                <div class="linha-um d-flex">
-                    <div class="filter-name">
-                        <input type="text" name="id" placeholder="Buscar por id..." />
-                    </div>
-                    <div class="filter-name ms-4">
-                        <input type="text" name="matricula" placeholder="Buscar por matrícula..." />
-                    </div>
-                    <div class="filter-name ms-4">
-                        <input type="text" name="nome" placeholder="Buscar por nome..." />
-                    </div>
-                </div>
+            <form action="${pageContext.request.contextPath}/admin" method="get">
+                <input type="hidden" name="action" value="readDisciplinas" />
 
-                <div class="linha-dois d-flex mt-3">
-                    <div class="filter-name">
-                        <input type="text" name="email" placeholder="Buscar por email..." />
-                    </div>
-                    <div class="filter-name ms-4">
-                        <input type="text" name="turma" placeholder="Buscar por turma..." />
-                    </div>
-                </div>
-
-                <div class="linha-tres d-flex mt-3 justify-content-between">
-                    <div class="d-flex lado-esquerdo">
-                        <div class="filter-button">
-                            <button type="button">Aplicar Filtro</button>
+                <div class="filter-box d-flex flex-column">
+                    <div class="linha-um d-flex">
+                        <div class="filter-name">
+                            <input type="text" name="id" placeholder="Buscar por id..." />
+                        </div>
+                        <div class="filter-name ms-4">
+                            <input type="text" name="nome" placeholder="Buscar por nome..." />
+                        </div>
+                        <div class="filter-name ms-4">
+                            <input type="text" name="professor" placeholder="Buscar por professor..." />
                         </div>
                     </div>
 
-                    <div class="d-flex lado-direito">
-                        <div class="add-button">
-                            <a href="${pageContext.request.contextPath}/admin?action=addAluno">+ Adicionar</a>
+                    <div class="linha-dois d-flex mt-3">
+                        <div class="filter-name">
+                            <input type="text" name="emailProfessor" placeholder="Buscar por email do professor..." />
+                        </div>
+                    </div>
+
+                    <div class="linha-tres d-flex mt-3 justify-content-between">
+                        <div class="d-flex lado-esquerdo">
+                            <div class="filter-button">
+                                <button type="submit">Aplicar Filtro</button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex lado-direito">
+                            <div class="add-button">
+                                <a href="${pageContext.request.contextPath}/admin?action=addDisciplina">+ Adicionar</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
 
             <div class="tabela-container">
                 <table class="tabela-notas">
                     <tr>
                         <th>Id</th>
-                        <th>Matrícula</th>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Senha</th>
+                        <th>Disciplina</th>
+                        <th>Professor</th>
+                        <th>Email Professor</th>
                         <th>Ações</th>
                     </tr>
 
                     <%
-                        if (alunos != null && !alunos.isEmpty()) {
-                            for (AlunoViewDTO aluno : alunos) {
+                        if (disciplinas != null && !disciplinas.isEmpty()) {
+                            for (DisciplinaViewDTO disciplina : disciplinas) {
                     %>
                     <tr>
-                        <td><p><%=aluno.getIdAluno().toString().substring(0,8)%></p></td>
-                        <td><p><%=aluno.getMatricula()%></p></td>
-                        <td><p><%=aluno.getNome()%></p></td>
-                        <td><p><%=aluno.getEmail()%></p></td>
-                        <td><p>********</p></td>
+                        <td><p><%=disciplina.getId()%></p></td>
+                        <td><p><%=disciplina.getNomeDisciplina()%></p></td>
+                        <td><p><%=disciplina.getNomeProfessor()%></p></td>
+                        <td><p><%=disciplina.getEmailProfessor()%></p></td>
                         <td class="action-box">
                             <form action="<%=request.getContextPath()%>/admin" method="get">
-                                <input type="hidden" name="action" value="editAluno" />
-                                <input type="hidden" name="id" value="<%=aluno.getIdAluno()%>" />
+                                <input type="hidden" name="action" value="editDisciplina" />
+                                <input type="hidden" name="id" value="<%=disciplina.getId()%>" />
                                 <button type="submit" class="action-btn">
                                     <img class="table-icon" src="<%=request.getContextPath()%>/assets/editar.svg" alt="Editar Icon" />
                                 </button>
                             </form>
 
                             <form action="<%=request.getContextPath()%>/admin" method="post" onsubmit="confirmarDelete(event)">
-                                <input type="hidden" name="action" value="deleteAluno" />
-                                <input type="hidden" name="id" value="<%=aluno.getIdAluno()%>" />
+                                <input type="hidden" name="action" value="deleteDisciplina" />
+                                <input type="hidden" name="id" value="<%=disciplina.getId()%>" />
                                 <button type="submit" class="action-btn">
                                     <img class="table-icon" src="<%=request.getContextPath()%>/assets/apagar.svg" alt="Deletar Icon" />
                                 </button>
@@ -158,7 +157,7 @@
                     } else {
                     %>
                     <tr>
-                        <td colspan="6"><p>Nenhum aluno encontrado.</p></td>
+                        <td colspan="5"><p>Nenhuma disciplina encontrada.</p></td>
                     </tr>
                     <%
                         }

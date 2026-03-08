@@ -55,6 +55,9 @@
                 <li class="page-item active">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readProfessores">Professores</a>
                 </li>
+                <li class="page-item can-hover">
+                    <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readDisciplinas">Disciplinas</a>
+                </li>
             </ul>
         </nav>
     </aside>

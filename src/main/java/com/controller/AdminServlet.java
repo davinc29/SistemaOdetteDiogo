@@ -5,6 +5,7 @@ import com.dao.DisciplinaDAO;
 import com.dao.ProfessorDAO;
 import com.dto.AlunoCadastrarDTO;
 import com.dto.AlunoViewDTO;
+import com.dto.DisciplinaViewDTO;
 import com.dto.ProfessorDTO;
 import com.model.Disciplina;
 import com.model.Professor;
@@ -31,8 +32,13 @@ public class AdminServlet extends HttpServlet {
     private static final String PROFESSORES_ADD = "/jsp/portal-admin/professores-adicionar.jsp";
     private static final String PROFESSORES_EDIT = "/jsp/portal-admin/professores-editar.jsp";
 
+    private static final String DISCIPLINAS = "/jsp/portal-admin/disciplinas.jsp";
+    private static final String DISCIPLINAS_ADD = "/jsp/portal-admin/disciplinas-adicionar.jsp";
+    private static final String DISCIPLINAS_EDIT = "/jsp/portal-admin/disciplinas-editar.jsp";
+
     private static final String ROTA_ALUNOS = "/admin?action=readAlunos";
     private static final String ROTA_PROFESSORES = "/admin?action=readProfessores";
+    private static final String ROTA_DISCIPLINAS = "/admin?action=readDisciplinas";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -101,6 +107,44 @@ public class AdminServlet extends HttpServlet {
                     destino = PROFESSORES_EDIT;
                 }
 
+                case "readDisciplinas" -> {
+                    try (DisciplinaDAO disciplinaDAO = new DisciplinaDAO()) {
+                        List<DisciplinaViewDTO> disciplinas = disciplinaDAO.listar();
+                        req.setAttribute("disciplinas", disciplinas);
+                    }
+                    destino = DISCIPLINAS;
+                }
+
+                case "addDisciplina" -> {
+                    try (ProfessorDAO professorDAO = new ProfessorDAO()) {
+                        List<ProfessorDTO> professores = professorDAO.listar();
+                        req.setAttribute("professores", professores);
+                    }
+                    destino = DISCIPLINAS_ADD;
+                }
+
+                case "editDisciplina" -> {
+                    String idParam = req.getParameter("id");
+
+                    if (idParam == null || idParam.isBlank()) {
+                        resp.sendRedirect(req.getContextPath() + ROTA_DISCIPLINAS);
+                        return;
+                    }
+
+                    Integer idDisciplina = Integer.parseInt(idParam);
+
+                    try (DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+                         ProfessorDAO professorDAO = new ProfessorDAO()) {
+                        Disciplina disciplina = disciplinaDAO.pesquisarPorId(idDisciplina);
+                        List<ProfessorDTO> professores = professorDAO.listar();
+
+                        req.setAttribute("disciplina", disciplina);
+                        req.setAttribute("professores", professores);
+                    }
+
+                    destino = DISCIPLINAS_EDIT;
+                }
+
                 default -> {
                     resp.sendRedirect(req.getContextPath() + ROTA_ALUNOS);
                     return;
@@ -135,6 +179,10 @@ public class AdminServlet extends HttpServlet {
                 case "createProfessor" -> destino = criarProfessor(req);
                 case "updateProfessor" -> destino = atualizarProfessor(req);
                 case "deleteProfessor" -> destino = deletarProfessor(req);
+
+                case "createDisciplina" -> destino = criarDisciplina(req);
+                case "updateDisciplina" -> destino = atualizarDisciplina(req);
+                case "deleteDisciplina" -> destino = deletarDisciplina(req);
 
                 default -> destino = ROTA_ALUNOS;
             }
@@ -174,15 +222,12 @@ public class AdminServlet extends HttpServlet {
         UUID idAluno = UUID.fromString(idParam);
 
         String nome = req.getParameter("nome");
+        nome = WordUtils.capitalize(nome);
         String email = req.getParameter("email");
-        String senha = req.getParameter("senha");
 
         try (AlunoDAO alunoDAO = new AlunoDAO()) {
             alunoDAO.atualizarNomeAluno(idAluno, nome);
             alunoDAO.atualizarEmailAluno(idAluno, email);
-            if(senha != null && !senha.isBlank()) {
-                alunoDAO.atualizarSenhaAluno(idAluno, senha);
-            }
         }
 
         return ROTA_ALUNOS;
@@ -206,22 +251,15 @@ public class AdminServlet extends HttpServlet {
 
     private String criarProfessor(HttpServletRequest req) throws SQLException {
         String nome = req.getParameter("nome");
+        nome = WordUtils.capitalize(nome);
         String username = req.getParameter("username");
         String email = req.getParameter("email");
         String senha = req.getParameter("senha");
-        String nomeDisciplina = req.getParameter("disciplina");
 
         Professor professor = new Professor(nome, username, email, senha);
 
         try (ProfessorDAO professorDAO = new ProfessorDAO()) {
             professorDAO.cadastrar(professor);
-
-
-            ProfessorDTO professorDTO = professorDAO.pesquisarPorEmail(email);
-            Disciplina disciplina = new Disciplina(nomeDisciplina, professorDTO.getId());
-
-            DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
-            disciplinaDAO.cadastrar(disciplina);
         }
 
         return ROTA_PROFESSORES;
@@ -237,6 +275,7 @@ public class AdminServlet extends HttpServlet {
         UUID id = UUID.fromString(idParam);
 
         String nome = req.getParameter("nome");
+        nome = WordUtils.capitalize(nome);
         String username = req.getParameter("username");
         String email = req.getParameter("email");
 
@@ -264,15 +303,75 @@ public class AdminServlet extends HttpServlet {
 
         UUID id = UUID.fromString(idParam);
 
-        Disciplina disciplina = new Disciplina();
-        DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
-
-        disciplinaDAO.deletarPorIdProfessor(id);
-
         try (ProfessorDAO professorDAO = new ProfessorDAO()) {
             professorDAO.deletar(id);
         }
 
         return ROTA_PROFESSORES;
+    }
+
+    private String criarDisciplina(HttpServletRequest req) throws SQLException {
+        String nome = req.getParameter("nome");
+        nome = WordUtils.capitalize(nome);
+        String professorIdParam = req.getParameter("idProfessor");
+
+        if (professorIdParam == null || professorIdParam.isBlank()) {
+            return ROTA_DISCIPLINAS;
+        }
+
+        UUID idProfessor = UUID.fromString(professorIdParam);
+        Disciplina disciplina = new Disciplina(nome, idProfessor);
+
+        try (DisciplinaDAO disciplinaDAO = new DisciplinaDAO()) {
+            disciplinaDAO.cadastrar(disciplina);
+        }
+
+        return ROTA_DISCIPLINAS;
+    }
+
+    private String atualizarDisciplina(HttpServletRequest req) throws SQLException {
+        String idParam = req.getParameter("id");
+        String nome = req.getParameter("nome");
+        nome = WordUtils.capitalize(nome);
+        String professorIdParam = req.getParameter("idProfessor");
+
+        if (idParam == null || idParam.isBlank()) {
+            return ROTA_DISCIPLINAS;
+        }
+
+        Integer idDisciplina = Integer.parseInt(idParam);
+
+        try (DisciplinaDAO disciplinaDAO = new DisciplinaDAO()) {
+            Disciplina original = disciplinaDAO.pesquisarPorId(idDisciplina);
+
+            if (original == null) {
+                return ROTA_DISCIPLINAS;
+            }
+
+            UUID idProfessor = professorIdParam == null || professorIdParam.isBlank()
+                    ? original.getIdProfessor()
+                    : UUID.fromString(professorIdParam);
+
+            Disciplina atualizada = new Disciplina(idDisciplina, nome, idProfessor);
+            disciplinaDAO.atualizar(original, atualizada);
+        }
+
+        return ROTA_DISCIPLINAS;
+    }
+
+    private String deletarDisciplina(HttpServletRequest req) throws SQLException {
+        String idParam = req.getParameter("id");
+
+        if (idParam == null || idParam.isBlank()) {
+            return ROTA_DISCIPLINAS;
+        }
+
+        Integer idDisciplina = Integer.parseInt(idParam);
+
+        try (DisciplinaDAO disciplinaDAO = new DisciplinaDAO()) {
+            disciplinaDAO.deletar(idDisciplina);
+        }
+
+        return ROTA_DISCIPLINAS;
     }
 }

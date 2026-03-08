@@ -54,7 +54,7 @@
                     <a class="page-text" href="#">Observações</a>
                 </li>
                 <li class="page-item can-hover">
-                    <a class="page-text" href="conta.jsp">Conta</a>
+                    <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-professor/conta.jsp">Conta</a>
                 </li>
             </ul>
         </nav>
@@ -160,18 +160,20 @@
                         </td>
                         <%if (mapNomeIdProfessor.get(observacao.getNomeDisciplina()) != null) {%>
                         <td class="action-box">
-                            <form action="${pageContext.request.contextPath}/observacoes?action=update" method="get">
+                            <form action="${pageContext.request.contextPath}/observacoes" method="get">
+                                <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="id_observacao" value=<%=observacao.getId()%>>
                                 <input type="hidden" name="id_aluno" value=<%=aluno.getIdAluno()%>>
                                 <button type="submit" id="editar">
                                     <img
                                             class="table-icon"
                                             src="${pageContext.request.contextPath}/assets/editar.svg"
-                                            alt="Deletar Icon"
+                                            alt="Editar Icon"
                                     />
                                 </button>
                             </form>
-                            <form action="${pageContext.request.contextPath}/observacoes?action=delete" method="post" onsubmit="confirmarDelete(event)">
+                            <form action="${pageContext.request.contextPath}/observacoes" method="post" onsubmit="confirmarDelete(event)">
+                                <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="usuario" value="professor">
                                 <input type="hidden" name="id_observacao" value=<%=observacao.getId()%>>
                                 <input type="hidden" name="id_aluno" value=<%=aluno.getIdAluno()%>>

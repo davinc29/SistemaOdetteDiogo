@@ -13,12 +13,17 @@
     List<ObservacaoViewDTO> observacoes = (List<ObservacaoViewDTO>) request.getAttribute("observacoes");
 
     //Nome 2L
-    String nomeInteiro = professor.getNome();
-    String[] partesNome = nomeInteiro.split(" ");
-    char letra1nome = partesNome[0].charAt(0);
-    char letra2nome = partesNome[1].charAt(0);
+    String nome = professor.getNome();
+    nome = (nome == null) ? "" : nome.trim();
 
-    String nome2L = "" + letra1nome + letra2nome;
+    String nome2L = "";
+
+    if (!nome.isEmpty()) {
+        String[] partesNome = nome.split("\\s+");
+        char letra1nome = partesNome[0].charAt(0);
+        char letra2nome = (partesNome.length > 1) ? partesNome[partesNome.length - 1].charAt(0) : partesNome[0].charAt(0);
+        nome2L = ("" + letra1nome + letra2nome).toUpperCase();
+    }
 
     // Pegando o dia da semana
     LocalDate hoje = LocalDate.now();
@@ -68,7 +73,7 @@
         <nav class="text-secondary">
           <ul class="">
             <li class="page-item active">
-              <a class="page-text" href="${pageContext.request.contextPath}/">Home</a>
+              <a class="page-text" href="#">Home</a>
             </li>
             <li class="page-item can-hover">
               <a class="page-text" href="${pageContext.request.contextPath}/alunos-professor?action=notas">Notas</a>
@@ -77,7 +82,7 @@
               <a class="page-text" href="${pageContext.request.contextPath}/alunos-professor?action=observacoes">Observações</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="${pageContext.request.contextPath}">Conta</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-professor/conta.jsp">Conta</a>
             </li>
           </ul>
         </nav>

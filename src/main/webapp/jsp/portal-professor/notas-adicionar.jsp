@@ -53,7 +53,7 @@
               <a class="page-text" href="${pageContext.request.contextPath}/alunos-professor?action=observacoes">Observações</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="conta.jsp">Conta</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-professor/conta.jsp">Conta</a>
             </li>
           </ul>
         </nav>
@@ -172,11 +172,12 @@
                                 <img
                                     class="table-icon"
                                     src="${pageContext.request.contextPath}/assets/editar.svg"
-                                    alt="Deletar Icon"
+                                    alt="Editar Icon"
                                 />
                             </button>
                         </form>
-                        <form action="${pageContext.request.contextPath}/boletim?action=delete" method="post" onsubmit="confirmarDelete(event)">
+                        <form action="${pageContext.request.contextPath}/boletim" method="post" onsubmit="confirmarDelete(event)">
+                            <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id_boletim" value=<%=boletim.getId()%>>
                             <input type="hidden" name="id_aluno" value=<%=aluno.getIdAluno()%>>
                             <button type="submit" class="action-btn">

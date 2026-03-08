@@ -16,7 +16,6 @@ import java.sql.SQLException;
 @WebServlet("/cadastro-aluno")
 public class CadastroAlunoServlet extends HttpServlet {
 
-    // Ajuste o caminho conforme onde você salvou seu JSP de cadastro
     private static final String PAGINA_CADASTRO = "/cadastro.jsp";
     private static final String PAGINA_LOGIN = "/index.jsp";
     private static final String PAGINA_ERRO = "/html/erro.html";
@@ -66,9 +65,8 @@ public class CadastroAlunoServlet extends HttpServlet {
 
                     switch (resultado) {
                         case 1 -> {
-                            // sucesso -> manda pro login
-                            destino = PAGINA_LOGIN;
-                            erro = false;
+                            resp.sendRedirect(req.getContextPath() + PAGINA_LOGIN);
+                            return;
                         }
                         case 2 -> throw new ExcecaoDeJSP("Matrícula não existe na pré-matrícula.");
                         case 3 -> throw new ExcecaoDeJSP("Matrícula já cadastrada.");
