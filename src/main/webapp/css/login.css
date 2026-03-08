@@ -1,7 +1,6 @@
 body{
     background-image: url(../assets/login-waves.svg);
     background-repeat: no-repeat;
-    background-attachment: fixed;
 }
 
 .login-container{
@@ -18,8 +17,6 @@ body{
 
 .image{
     height: 450px;
-    margin-top: 31px;
-    margin-left: 85px;
 }
 
 .title-box{
