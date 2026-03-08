@@ -62,7 +62,7 @@
       <div class="text-container container-md">
         <h2 class="fs-1 fw-bold">
           <span class="text-secondary">Bem-</span>Vindo ao <br />
-          <span class="text-secondary">Uni</span>code
+          <span class="text-secondary">Capelus</span>
         </h2>
         <div class="image">
           <img src="assets/login-image.svg" alt="Homem lendo um livro" />
