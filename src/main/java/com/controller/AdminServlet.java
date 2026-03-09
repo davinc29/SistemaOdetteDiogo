@@ -378,7 +378,7 @@ public class AdminServlet extends HttpServlet {
         String nome = (temp.isBlank() ? null : temp.trim());
 
         temp = req.getParameter("matricula");
-        String matricula = (temp.isBlank() ? null : temp.trim());
+        Integer matricula = (temp.isBlank() ? null : Integer.parseInt(temp.trim()));
 
         temp = req.getParameter("turmaAno");
         String turmaAno = (temp.isBlank() ? null : temp.trim());

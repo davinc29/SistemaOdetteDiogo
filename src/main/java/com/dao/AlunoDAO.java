@@ -202,7 +202,7 @@ public class AlunoDAO extends DAO {
     }
 
     //Listar Todos os Alunos
-    public List<AlunoViewDTO> listarAlunos(String nomeFiltro, String matriculaFiltro, String turmaAnoFiltro) throws SQLException {
+    public List<AlunoViewDTO> listarAlunos(String nomeFiltro, Integer matriculaFiltro, String turmaAnoFiltro) throws SQLException {
         StringBuilder sql = new StringBuilder("""
                 SELECT
                     a.id as id,
@@ -215,14 +215,15 @@ public class AlunoDAO extends DAO {
                 JOIN
                     pre_matricula p
                     ON p.matricula = a.matricula
+                WHERE
+                    1=1
                 """);
 
         List<Object> valores = new ArrayList<>();
 
         if (nomeFiltro != null) {
             sql.append("""
-                    WHERE
-                        a.nome = ?
+                       AND a.nome = ?
                     """);
             valores.add(nomeFiltro);
         }

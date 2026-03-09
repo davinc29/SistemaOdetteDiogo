@@ -57,7 +57,7 @@ public class AlunoProfessorServlet extends HttpServlet {
         String nome = (temp == null || temp.isBlank() ? null : temp.trim());
 
         temp = req.getParameter("matricula");
-        String matricula = (temp == null || temp.isBlank() ? null : temp.trim());
+        Integer matricula = (temp == null || temp.isBlank() ? null : Integer.parseInt(temp.trim()));
 
         temp = req.getParameter("turmaAno");
         String turmaAno = (temp == null || temp.isBlank() ? null : temp.trim());

@@ -94,9 +94,9 @@ public class BoletimDAO extends DAO{
         return boletim;
     }
 
-    public List<BoletimViewDTO> listarPorAluno(UUID idAluno) throws SQLException{
+    public List<BoletimViewDTO> listarPorAluno(UUID idAluno, Integer idBoletimFiltro, Double nota1Filtro, Double nota2Filtro, Double mediaFiltro) throws SQLException{
 
-        String sql = """
+        StringBuilder sql = new StringBuilder("""
                 SELECT
                     b.id as id_boletim,
                     a.matricula as matricula,
@@ -114,12 +114,41 @@ public class BoletimDAO extends DAO{
                     ON d.id = b.id_disciplina
                 WHERE
                     a.id = ?
-                """;
+                """);
 
         List<BoletimViewDTO> boletins = new ArrayList<>();
+        List<Object> valores = new ArrayList<>();
 
-        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        if (idBoletimFiltro != null) {
+            sql.append("""
+                    AND b.id = ?
+                    """);
+            valores.add(idBoletimFiltro);
+        }
+        if (nota1Filtro != null) {
+            sql.append("""
+                    AND b.nota1 = ?
+                    """);
+            valores.add(nota1Filtro);
+        }
+        if (nota2Filtro != null) {
+            sql.append("""
+                    AND b.nota2 = ?
+                    """);
+            valores.add(nota2Filtro);
+        }
+        if (mediaFiltro != null) {
+            sql.append("""
+                    AND b.media = ?
+                    """);
+            valores.add(mediaFiltro);
+        }
+
+        try(PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
             pstmt.setObject(1,idAluno);
+            for (int i = 0; i < valores.size(); i++){
+                pstmt.setObject(i+2, valores.get(i));
+            }
 
             ResultSet rs = pstmt.executeQuery();
 

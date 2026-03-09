@@ -56,7 +56,7 @@ public class BoletimServlet extends HttpServlet {
                         idAluno = idAluno.trim();
                         UUID idAlunoUuid = UUID.fromString(idAluno);
 
-                        boletins = listarPorAluno(idAlunoUuid);
+                        boletins = listarPorAluno(idAlunoUuid, req);
                         aluno = listarAlunoPorId(req);
                     }
 
@@ -133,7 +133,7 @@ public class BoletimServlet extends HttpServlet {
                         idAluno = idAluno.trim();
                         UUID idAlunoUuid = UUID.fromString(idAluno);
 
-                        boletins = listarPorAluno(idAlunoUuid);
+                        boletins = listarPorAluno(idAlunoUuid, req);
                         aluno = listarAlunoPorId(req);
                     }
 
@@ -234,10 +234,22 @@ public class BoletimServlet extends HttpServlet {
         }
     }
 
-    public List<BoletimViewDTO> listarPorAluno(UUID idAluno) throws SQLException, ClassNotFoundException{
+    public List<BoletimViewDTO> listarPorAluno(UUID idAluno, HttpServletRequest req) throws SQLException, ClassNotFoundException{
+        String temp = req.getParameter("id_boletim");
+        Integer idBoletim = (temp == null || temp.isBlank() ? null : Integer.parseInt(temp.trim()));
+
+        temp = req.getParameter("nota1");
+        Double nota1 = (temp == null || temp.isBlank() ? null : Double.parseDouble(temp.trim()));
+
+        temp = req.getParameter("nota2");
+        Double nota2 = (temp == null || temp.isBlank() ? null : Double.parseDouble(temp.trim()));
+
+        temp = req.getParameter("media");
+        Double media = (temp == null || temp.isBlank() ? null : Double.parseDouble(temp.trim()));
+
         try (BoletimDAO dao = new BoletimDAO()) {
 
-            return dao.listarPorAluno(idAluno);
+            return dao.listarPorAluno(idAluno, idBoletim, nota1, nota2, media);
         }
     }
 
