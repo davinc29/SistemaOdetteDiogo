@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
 <%@ page import="com.dto.ProfessorDTO" %>
 
 <%
-    ProfessorDTO professor = (ProfessorDTO) request.getAttribute("professor");
+    List<ProfessorDTO> professores = (List<ProfessorDTO>) request.getAttribute("professores");
 %>
 
 <!doctype html>
@@ -10,11 +11,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Capelus - Editar Professor</title>
+    <title>Capelus - Adicionar Disciplina</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
-    <script defer src="${pageContext.request.contextPath}/javascript/passwordRequirements.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-admin/professores-editar.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-admin/disciplinas-adicionar.css" />
+    <script src="${pageContext.request.contextPath}/mobile-navbar.js"></script>
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/Capelus-icon.ico" />
 </head>
 <body>
 <section class="d-sm-flex align-items-center vh-100 d-none home">
@@ -24,10 +26,10 @@
                 <li class="page-item can-hover">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readAlunos">Alunos</a>
                 </li>
-                <li class="page-item active">
+                <li class="page-item can-hover">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readProfessores">Professores</a>
                 </li>
-                <li class="page-item can-hover">
+                <li class="page-item active">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readDisciplinas">Disciplinas</a>
                 </li>
             </ul>
@@ -35,11 +37,20 @@
     </aside>
 
     <div class="w-100 m-5">
+        <header class="d-flex w-100 justify-content-between">
+            <div class="lh-1">
+                <p class="fs-5 fw-bold">Portal do Administrador</p>
+                <p class="fs-5 text-primary">
+                    <span class="fw-bold"><%= session.getAttribute("diaSemana") %></span>, <%= session.getAttribute("data") %>
+                </p>
+            </div>
+        </header>
+
         <main>
             <div class="aluno-card d-flex justify-content-between flex-column">
                 <div class="d-flex justify-content-between">
                     <div class="aluno-informacoes">
-                        <h2 class="aluno-nome fs-3">Editar professor</h2>
+                        <h2 class="aluno-nome fs-3">Nova disciplina</h2>
                     </div>
                 </div>
 
@@ -47,47 +58,40 @@
 
                 <div class="input-container">
                     <form action="${pageContext.request.contextPath}/admin" method="post">
-                        <input type="hidden" name="action" value="updateProfessor" />
-                        <input type="hidden" name="id" value="<%=professor.getId()%>" />
+                        <input type="hidden" name="action" value="createDisciplina" />
 
                         <div class="d-flex flex-column">
                             <div class="linha-cima d-flex">
                                 <div class="campo d-flex flex-column">
-                                    <label for="id-view">Id:</label>
-                                    <input type="text" id="id-view" value="<%=professor.getId()%>" disabled />
-                                </div>
-
-                                <div class="campo d-flex flex-column">
-                                    <label for="username">Username:</label>
-                                    <input type="text" id="username" name="username" value="<%=professor.getUsername()%>" required />
-                                </div>
-                            </div>
-
-                            <div class="linha-baixo d-flex mt-3">
-                                <div class="campo d-flex flex-column">
                                     <label for="nome">Nome:</label>
-                                    <input type="text" id="nome" name="nome" value="<%=professor.getNome()%>" required />
+                                    <input type="text" id="nome" name="nome" placeholder="Ex: Matemática" required />
                                 </div>
 
                                 <div class="campo d-flex flex-column">
-                                    <label for="email">Email:</label>
-                                    <input type="email" id="email" name="email" value="<%=professor.getEmail()%>" required />
-                                </div>
-
-                                <div class="campo d-flex flex-column">
-                                    <label for="senha">Senha:</label>
-                                    <input type="password" id="senha" class="validar-senha" name="senha" />
+                                    <label for="idProfessor">Professor:</label>
+                                    <select id="idProfessor" name="idProfessor" required>
+                                        <option value="">Selecione um professor</option>
+                                        <%
+                                            if (professores != null) {
+                                                for (ProfessorDTO professor : professores) {
+                                        %>
+                                        <option value="<%=professor.getId()%>"><%=professor.getNome()%> - <%=professor.getEmail()%></option>
+                                        <%
+                                                }
+                                            }
+                                        %>
+                                    </select>
                                 </div>
                             </div>
                         </div>
 
                         <div class="opcoes d-flex" style="margin-top: 60px">
                             <div class="save-container">
-                                <button class="save" type="submit">Salvar</button>
+                                <button class="save" type="submit">Criar</button>
                             </div>
 
                             <div class="return-button">
-                                <a href="${pageContext.request.contextPath}/admin?action=readProfessores">Cancelar</a>
+                                <a href="${pageContext.request.contextPath}/admin?action=readDisciplinas">Cancelar</a>
                             </div>
                         </div>
                     </form>
@@ -96,5 +100,7 @@
         </main>
     </div>
 </section>
+
+<section class="vh-100 w-100 d-lg-none"></section>
 </body>
 </html>

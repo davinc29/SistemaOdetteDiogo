@@ -18,6 +18,8 @@ public class Disciplina {
         this.idProfessor = idProfessor;
     }
 
+    public Disciplina() {}
+
     public Integer getIdDisciplina() {
         return idDisciplina;
     }

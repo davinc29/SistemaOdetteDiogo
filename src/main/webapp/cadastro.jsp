@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!doctype html>
 <html lang="pt-br">
   <head>
@@ -8,53 +10,60 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="Login.css" />
+    <link rel="stylesheet" href="css/login.css" />
     <link rel="icon" type="image/x-icon" href="assets/Capelus-icon.ico">
+      <script defer src="${pageContext.request.contextPath}/javascript/passwordRequirements.js"></script>
     <title>Cadastro</title>
   </head>
   <body>
     <!-- Layout Computer -->
     <section class="d-sm-flex align-items-center vh-100 d-none">
       <div class="login-container container-md">
-        <form action="cadastro-aluno" method="post">
-          <div class="mb-3">
-            <h1 class="fs-1 fw-bold text-secondary">Login</h1>
-            <p class="fs-5 fw-semibold text-secondary">
-              Preencha os dados abaixo:
-            </p>
-          </div>
+          <form action="cadastro-aluno" method="post">
+              <input type="hidden" name="action" value="cadastrar">
 
-          <div class="mb-3 d-flex flex-column gap-3 text-secondary">
-            <div class="d-flex flex-column">
-              <label for="username" class="form-label">Usuário</label>
-              <input type="text" class="form-control" id="username" />
-            </div>
-
-            <div class="mb-3 d-flex flex-column">
-              <label for="password" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" />
-            </div>
-
-            <div class="mb-3 d-flex flex-column">
-              <label for="password" class="form-label">Senha</label>
-              <input type="password" class="form-control" id="password" />
-            </div>
-
-            <div class="button-text-box d-flex flex-column text-center">
-              <button type="submit" class="btn btn-secondary opacity-75">
-                Entrar
-              </button>
-              <div class="cadastro-box d-flex justify-content-center">
-                <p>
-                  Já tem conta?
-                  <a href="index.jsp" class="text-decoration-none text-primary fw-bold"
-                    >Logar-se</a
-                  >
-                </p>
+              <div class="mb-3">
+                  <h1 class="fs-1 fw-bold text-secondary">Cadastro</h1>
+                  <p class="fs-5 fw-semibold text-secondary">
+                      Preencha os dados abaixo:
+                  </p>
               </div>
-            </div>
-          </div>
-        </form>
+
+              <div class="mb-3 d-flex flex-column gap-3 text-secondary">
+                  <div class="d-flex flex-column">
+                      <label for="username" class="form-label">Nome</label>
+                      <input type="text" class="form-control" id="username" name="nome" required />
+                  </div>
+
+                  <div class="d-flex flex-column">
+                      <label for="matricula" class="form-label">Matrícula</label>
+                      <input type="text" class="form-control" id="matricula" name="matricula" required />
+                  </div>
+
+                  <div class="mb-3 d-flex flex-column">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="email" name="email" required />
+                  </div>
+
+                  <div class="mb-3 d-flex flex-column">
+                      <label for="senha" class="form-label">Senha</label>
+                      <input type="password" class="form-control validar-senha" id="senha" name="senha" required />
+                  </div>
+
+                  <div class="button-text-box d-flex flex-column text-center">
+                      <button type="submit" class="btn btn-secondary opacity-75">
+                          Cadastrar
+                      </button>
+
+                      <div class="cadastro-box d-flex justify-content-center">
+                          <p>
+                              Já tem conta?
+                              <a href="index.jsp" class="text-decoration-none text-primary fw-bold">Logar-se</a>
+                          </p>
+                      </div>
+                  </div>
+              </div>
+          </form>
       </div>
 
       <div class="text-container container-md">

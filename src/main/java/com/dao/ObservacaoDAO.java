@@ -11,42 +11,98 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ObservacaoDAO extends DAO{
+public class ObservacaoDAO extends DAO {
 
     public ObservacaoDAO() throws SQLException {
         super();
     }
 
     public void cadastrar(Observacao observacao) throws SQLException {
-        String textoObsevacao = observacao.getTextoObservacao();
-        UUID idAluno = observacao.getIdAluno();
-        Integer idDisciplina = observacao.getIdDisciplina();
-
         String sql = """
                 INSERT INTO
                     observacao (texto_observacao, id_aluno, id_disciplina)
                 VALUES
-                    (?,?,?)
+                    (?, ?, ?)
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1,textoObsevacao);
-            pstmt.setObject(2,idAluno);
-            pstmt.setInt(3,idDisciplina);
+            pstmt.setString(1, observacao.getTextoObservacao());
+            pstmt.setObject(2, observacao.getIdAluno());
+            pstmt.setInt(3, observacao.getIdDisciplina());
 
-            pstmt.execute();
-
+            pstmt.executeUpdate();
             conn.commit();
-        } catch(SQLException e) {
+
+        } catch (SQLException e) {
             conn.rollback();
             throw e;
         }
     }
 
-    public Observacao pesquisarPorId(Integer id) throws SQLException{
+    public void atualizar(Observacao original, Observacao atualizado) throws SQLException {
+        Integer id = original.getId();
+        String texto = atualizado.getTextoObservacao();
+        UUID idAluno = atualizado.getIdAluno();
+        Integer idDisciplina = atualizado.getIdDisciplina();
+
+        if (Objects.equals(texto, original.getTextoObservacao())
+                && Objects.equals(idAluno, original.getIdAluno())
+                && Objects.equals(idDisciplina, original.getIdDisciplina())) {
+            return;
+        }
+
+        String sql = """
+                UPDATE
+                    observacao
+                SET
+                    texto_observacao = ?,
+                    id_aluno = ?,
+                    id_disciplina = ?
+                WHERE
+                    id = ?
+                """;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, texto);
+            pstmt.setObject(2, idAluno);
+            pstmt.setInt(3, idDisciplina);
+            pstmt.setInt(4, id);
+
+            pstmt.executeUpdate();
+            conn.commit();
+
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+    }
+
+    public void deletar(Integer idObservacao) throws SQLException {
+        String sql = """
+                DELETE FROM
+                    observacao
+                WHERE
+                    id = ?
+                """;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, idObservacao);
+            pstmt.executeUpdate();
+            conn.commit();
+
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+    }
+
+    public Observacao pesquisarPorId(Integer idObservacao) throws SQLException {
         String sql = """
                 SELECT
-                    *
+                    id,
+                    texto_observacao,
+                    id_aluno,
+                    id_disciplina
                 FROM
                     observacao
                 WHERE
@@ -55,204 +111,163 @@ public class ObservacaoDAO extends DAO{
 
         Observacao observacao = null;
 
-        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1,id);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, idObservacao);
 
-            ResultSet rs = pstmt.executeQuery();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Integer id = rs.getInt("id");
+                    String texto = rs.getString("texto_observacao");
+                    UUID idAluno = rs.getObject("id_aluno", UUID.class);
+                    Integer idDisciplina = rs.getInt("id_disciplina");
 
-            while (rs.next()) {
-                String textoObservacao = rs.getString("texto_observacao");
-
-                Object temp = rs.getObject("id_aluno");
-                UUID idAluno = UUID.fromString(String.valueOf(temp));
-
-                Integer idDisciplina = rs.getInt("id_disciplina");
-
-                observacao = new Observacao(id, textoObservacao, idAluno, idDisciplina);
+                    observacao = new Observacao(id, texto, idAluno, idDisciplina);
+                }
             }
+
+            conn.commit();
+            return observacao;
+
         } catch (SQLException e) {
             conn.rollback();
             throw e;
         }
-
-        conn.commit();
-        return observacao;
     }
 
-    public List<ObservacaoViewDTO> listarPorAluno(UUID idAluno) throws SQLException{
-
+    public List<ObservacaoViewDTO> listarPorProfessor(UUID idProfessor) throws SQLException {
         String sql = """
                 SELECT
-                    o.id as id,
-                    a.nome as nome_aluno,
-                    p2.turma_ano as turma_ano,
-                    d.nome as nome_disciplina,
-                    p.nome as nome_professor,
-                    o.texto_observacao as observacao
+                    o.id,
+                    a.nome AS nome_aluno,
+                    pm.turma_ano,
+                    d.nome AS nome_disciplina,
+                    p.nome AS nome_professor,
+                    o.texto_observacao AS observacao
                 FROM
                     observacao o
                 JOIN
                     aluno a
                     ON a.id = o.id_aluno
                 JOIN
-                    disciplina d
-                    ON d.id = o.id_disciplina
-                JOIN
-                    professor p
-                    ON p.id = d.id_professor
-                JOIN
-                    pre_matricula p2
-                    ON p2.matricula = a.matricula
-                WHERE
-                    a.id = ?
-                """;
-
-        List<ObservacaoViewDTO> observacoes = new ArrayList<>();
-
-        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setObject(1,idAluno);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                Integer id = rs.getInt("id");
-                String nomeAluno = rs.getString("nome_aluno");
-                String turmaAno = rs.getString("turma_ano");
-                String nomeProfessor = rs.getString("nome_professor");
-                String nomeDisciplina = rs.getString("nome_disciplina");
-                String observacao = rs.getString("observacao");
-
-                ObservacaoViewDTO observacaoView = new ObservacaoViewDTO(id, nomeAluno,turmaAno, nomeDisciplina, nomeProfessor, observacao);
-
-                observacoes.add(observacaoView);
-            }
-        } catch (SQLException e) {
-            conn.rollback();
-            throw e;
-        }
-
-        conn.commit();
-        return observacoes;
-    }
-
-    public List<ObservacaoViewDTO> listarPorProfessor(UUID idProfessor) throws SQLException{
-
-        String sql = """
-                SELECT
-                    o.id as id,
-                    a.nome as nome_aluno,
-                    p2.turma_ano as turma_ano,
-                    d.nome as nome_disciplina,
-                    p.nome as nome_professor,
-                    o.texto_observacao as observacao
-                FROM
-                    observacao o
-                JOIN
-                    aluno a
-                    ON a.id = o.id_aluno
+                    pre_matricula pm
+                    ON pm.matricula = a.matricula
                 JOIN
                     disciplina d
                     ON d.id = o.id_disciplina
                 JOIN
                     professor p
                     ON p.id = d.id_professor
-                JOIN
-                    pre_matricula p2
-                    ON p2.matricula = a.matricula
                 WHERE
                     p.id = ?
                 """;
 
         List<ObservacaoViewDTO> observacoes = new ArrayList<>();
 
-        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setObject(1,idProfessor);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, idProfessor);
 
-            ResultSet rs = pstmt.executeQuery();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Integer id = rs.getInt("id");
+                    String nomeAluno = rs.getString("nome_aluno");
+                    String turmaAno = rs.getString("turma_ano");
+                    String nomeDisciplina = rs.getString("nome_disciplina");
+                    String nomeProfessor = rs.getString("nome_professor");
+                    String observacao = rs.getString("observacao");
 
-            while (rs.next()) {
-                Integer id = rs.getInt("id");
-                String nomeAluno = rs.getString("nome_aluno");
-                String turmaAno = rs.getString("turma_ano");
-                String nomeProfessor = rs.getString("nome_professor");
-                String nomeDisciplina = rs.getString("nome_disciplina");
-                String observacao = rs.getString("observacao");
-
-                ObservacaoViewDTO observacaoView = new ObservacaoViewDTO(id, nomeAluno, turmaAno, nomeDisciplina, nomeProfessor, observacao);
-
-                observacoes.add(observacaoView);
+                    observacoes.add(new ObservacaoViewDTO(
+                            id,
+                            nomeAluno,
+                            turmaAno,
+                            nomeDisciplina,
+                            nomeProfessor,
+                            observacao
+                    ));
+                }
             }
-        } catch (SQLException e) {
-            conn.rollback();
-            throw e;
-        }
-
-        conn.commit();
-        return observacoes;
-    }
-
-    public void atualizar(Observacao original, Observacao atualizado) throws SQLException{
-        Integer id = original.getId();
-        String textoObservacao = atualizado.getTextoObservacao();
-
-        String temp = String.valueOf(atualizado.getIdAluno());
-        UUID idAluno = UUID.fromString(temp);
-
-        Integer idDisciplina = atualizado.getIdDisciplina();
-
-        StringBuilder sql = new StringBuilder("UPDATE observacao SET ");
-        List<Object> valores = new ArrayList<>();
-
-        if (!Objects.equals(textoObservacao, original.getTextoObservacao())) {
-            sql.append("texto_observacao = ?, ");
-            valores.add(textoObservacao);
-        }
-        if (!Objects.equals(idAluno, original.getIdAluno())) {
-            sql.append("id_aluno = ?, ");
-            valores.add(idAluno);
-        }
-        if (!Objects.equals(idDisciplina, original.getIdDisciplina())) {
-            sql.append("id_disciplina = ?, ");
-            valores.add(idDisciplina);
-        }
-
-        if (valores.isEmpty()) {
-            return;
-        }
-
-        sql.setLength(sql.length() - 2);
-        sql.append(" WHERE id = ?");
-        valores.add(id);
-
-        try(PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-            for (int i = 0; i < valores.size(); i++) {
-                pstmt.setObject(i + 1, valores.get(i));
-            }
-
-            pstmt.executeUpdate();
 
             conn.commit();
+            return observacoes;
+
         } catch (SQLException e) {
             conn.rollback();
             throw e;
         }
     }
 
-    public void deletar(Integer id) throws SQLException{
+    public List<ObservacaoViewDTO> listarPorAluno(UUID idAluno) throws SQLException {
+        return listarPorAluno(idAluno, null, null);
+    }
+
+    public List<ObservacaoViewDTO> listarPorAluno(UUID idAluno,
+                                                  String nomeDisciplina,
+                                                  String nomeProfessor) throws SQLException {
+
         String sql = """
-                DELETE FROM
-                    boletim
+                SELECT
+                    o.id,
+                    a.nome AS nome_aluno,
+                    pm.turma_ano,
+                    d.nome AS nome_disciplina,
+                    p.nome AS nome_professor,
+                    o.texto_observacao AS observacao
+                FROM
+                    observacao o
+                JOIN
+                    aluno a
+                    ON a.id = o.id_aluno
+                JOIN
+                    pre_matricula pm
+                    ON pm.matricula = a.matricula
+                JOIN
+                    disciplina d
+                    ON d.id = o.id_disciplina
+                JOIN
+                    professor p
+                    ON p.id = d.id_professor
                 WHERE
-                    id = ?
+                    o.id_aluno = ?
+                AND
+                    (CAST(? AS TEXT) IS NULL OR LOWER(d.nome) LIKE LOWER(CAST(? AS TEXT)))
+                AND
+                    (CAST(? AS TEXT) IS NULL OR LOWER(p.nome) LIKE LOWER(CAST(? AS TEXT)))
                 """;
 
-        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setObject(1,id);
+        List<ObservacaoViewDTO> observacoes = new ArrayList<>();
 
-            pstmt.executeUpdate();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, idAluno);
+
+            pstmt.setString(2, nomeDisciplina);
+            pstmt.setString(3, nomeDisciplina == null || nomeDisciplina.isBlank() ? null : "%" + nomeDisciplina + "%");
+
+            pstmt.setString(4, nomeProfessor);
+            pstmt.setString(5, nomeProfessor == null || nomeProfessor.isBlank() ? null : "%" + nomeProfessor + "%");
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Integer id = rs.getInt("id");
+                    String nomeAluno = rs.getString("nome_aluno");
+                    String turmaAno = rs.getString("turma_ano");
+                    String disciplina = rs.getString("nome_disciplina");
+                    String professor = rs.getString("nome_professor");
+                    String observacao = rs.getString("observacao");
+
+                    observacoes.add(new ObservacaoViewDTO(
+                            id,
+                            nomeAluno,
+                            turmaAno,
+                            disciplina,
+                            professor,
+                            observacao
+                    ));
+                }
+            }
 
             conn.commit();
-        } catch(SQLException e) {
+            return observacoes;
+
+        } catch (SQLException e) {
             conn.rollback();
             throw e;
         }
