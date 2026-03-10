@@ -2,8 +2,6 @@ package com.dao;
 
 import com.dto.DisciplinaViewDTO;
 import com.model.Disciplina;
-import com.model.Professor;
-import com.utils.SenhaUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,13 +9,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
-public class DisciplinaDAO extends DAO{
+public class DisciplinaDAO extends DAO {
 
     public DisciplinaDAO() throws SQLException {
         super();
     }
 
-    public void cadastrar(Disciplina disciplina) throws SQLException{
+    public void cadastrar(Disciplina disciplina) throws SQLException {
         String nome = disciplina.getNome();
         UUID idProfessor = disciplina.getIdProfessor();
 
@@ -28,12 +26,11 @@ public class DisciplinaDAO extends DAO{
                     (?,?)
                 """;
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)){
-            pstmt.setString(1,nome);
-            pstmt.setObject(2,idProfessor);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nome);
+            pstmt.setObject(2, idProfessor);
 
             pstmt.execute();
-
             conn.commit();
         } catch (SQLException e) {
             System.out.println("Erro no cadastro do disciplina!");
@@ -101,7 +98,7 @@ public class DisciplinaDAO extends DAO{
         try (PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
-            while(rs.next()) {
+            while (rs.next()) {
                 Integer id = rs.getInt("id");
                 String nomeDisciplina = rs.getString("nome_disciplina");
                 String nomeProfessor = rs.getString("nome_professor");
@@ -120,7 +117,7 @@ public class DisciplinaDAO extends DAO{
         return disciplinas;
     }
 
-    public void deletar(Integer id) throws SQLException{
+    public void deletar(Integer id) throws SQLException {
         String sql = """
                 DELETE FROM
                     disciplina
@@ -130,9 +127,7 @@ public class DisciplinaDAO extends DAO{
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
-
             pstmt.executeUpdate();
-
             conn.commit();
         } catch (SQLException e) {
             conn.rollback();
@@ -140,7 +135,7 @@ public class DisciplinaDAO extends DAO{
         }
     }
 
-    public void deletarPorIdProfessor(UUID id_prof) throws SQLException{
+    public void deletarPorIdProfessor(UUID id_prof) throws SQLException {
         String sql = """
                 DELETE FROM
                     disciplina
@@ -150,9 +145,7 @@ public class DisciplinaDAO extends DAO{
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setObject(1, id_prof);
-
             pstmt.executeUpdate();
-
             conn.commit();
         } catch (SQLException e) {
             conn.rollback();
@@ -160,7 +153,7 @@ public class DisciplinaDAO extends DAO{
         }
     }
 
-    public Disciplina pesquisarPorId(Integer id) throws SQLException{
+    public Disciplina pesquisarPorId(Integer id) throws SQLException {
         String sql = """
                 SELECT
                     id,
@@ -174,8 +167,8 @@ public class DisciplinaDAO extends DAO{
 
         Disciplina disciplina = null;
 
-        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1,id);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -196,7 +189,7 @@ public class DisciplinaDAO extends DAO{
         return disciplina;
     }
 
-    public Map<String, Integer> mapNomeId() throws SQLException{
+    public Map<String, Integer> mapNomeId() throws SQLException {
         String sql = """
                 SELECT
                     id,
@@ -208,7 +201,7 @@ public class DisciplinaDAO extends DAO{
         Map<String, Integer> mapNomeId = new HashMap<>();
 
         try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            while(rs.next()) {
+            while (rs.next()) {
                 String nome = rs.getString("nome");
                 Integer id = rs.getInt("id");
 
@@ -219,7 +212,7 @@ public class DisciplinaDAO extends DAO{
         return mapNomeId;
     }
 
-    public Map<String, Integer> mapNomeIdProfessor(UUID idProfessor) throws SQLException{
+    public Map<String, Integer> mapNomeIdProfessor(UUID idProfessor) throws SQLException {
         String sql = """
                 SELECT
                     d.id,
@@ -239,7 +232,7 @@ public class DisciplinaDAO extends DAO{
             pstmt.setObject(1, idProfessor);
 
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String nome = rs.getString("nome");
                 Integer id = rs.getInt("id");
 
@@ -248,5 +241,67 @@ public class DisciplinaDAO extends DAO{
         }
 
         return mapNomeId;
+    }
+
+    public List<DisciplinaViewDTO> listarDisciplinas(String nomeDisciplina, Integer idDisciplina, String nomeProfessor) throws SQLException {
+        StringBuilder sql = new StringBuilder("""
+                SELECT
+                    d.id as id,
+                    d.nome as nome_disciplina,
+                    p.nome as nome_professor,
+                    p.email as email_professor
+                FROM
+                    disciplina d
+                JOIN
+                    professor p
+                    ON p.id = d.id_professor
+                WHERE
+                    1=1
+                """);
+
+        List<Object> valores = new ArrayList<>();
+
+        if (nomeDisciplina != null) {
+            sql.append(" AND LOWER(d.nome) LIKE LOWER(?)");
+            valores.add("%" + nomeDisciplina + "%");
+        }
+
+        if (idDisciplina != null) {
+            sql.append(" AND d.id = ?");
+            valores.add(idDisciplina);
+        }
+
+        if (nomeProfessor != null) {
+            sql.append(" AND LOWER(p.nome) LIKE LOWER(?)");
+            valores.add("%" + nomeProfessor + "%");
+        }
+
+        sql.append(" ORDER BY d.id");
+
+        List<DisciplinaViewDTO> disciplinas = new ArrayList<>();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < valores.size(); i++) {
+                pstmt.setObject(i + 1, valores.get(i));
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Integer id = rs.getInt("id");
+                String nomeDisc = rs.getString("nome_disciplina");
+                String nomeProf = rs.getString("nome_professor");
+                String emailProf = rs.getString("email_professor");
+
+                disciplinas.add(new DisciplinaViewDTO(id, nomeDisc, nomeProf, emailProf));
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+
+        return disciplinas;
     }
 }

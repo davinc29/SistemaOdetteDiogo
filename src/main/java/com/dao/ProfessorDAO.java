@@ -285,4 +285,64 @@ public class ProfessorDAO extends DAO{
             throw err;
         }
     }
+
+    public List<ProfessorDTO> listarProfessores(String nome, String username, String email) throws SQLException {
+
+        StringBuilder sql = new StringBuilder("""
+        SELECT
+            id, nome, username, email
+        FROM
+            professor
+        WHERE
+            1=1
+    """);
+
+        List<Object> valores = new ArrayList<>();
+
+        if (nome != null) {
+            sql.append(" AND LOWER(nome) LIKE LOWER(?)");
+            valores.add("%" + nome + "%");
+        }
+
+        if (username != null) {
+            sql.append(" AND LOWER(username) LIKE LOWER(?)");
+            valores.add("%" + username + "%");
+        }
+
+        if (email != null) {
+            sql.append(" AND LOWER(email) LIKE LOWER(?)");
+            valores.add("%" + email + "%");
+        }
+
+        sql.append(" ORDER BY nome");
+
+        List<ProfessorDTO> professores = new ArrayList<>();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < valores.size(); i++) {
+                pstmt.setObject(i + 1, valores.get(i));
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                UUID id = rs.getObject("id", UUID.class);
+                String nomeProf = rs.getString("nome");
+                String user = rs.getString("username");
+                String mail = rs.getString("email");
+
+                professores.add(new ProfessorDTO(id, nomeProf, user, mail));
+            }
+
+            conn.commit();
+
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+
+        return professores;
+    }
+
 }
