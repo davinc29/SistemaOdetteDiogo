@@ -107,7 +107,7 @@
                     <div class="campo d-flex flex-column">
                     <label for="id_disciplina"
                     >Disciplina:</label>
-                    <select id="id_disciplina" name="id_disciplina" required>
+                    <select id="id_disciplina" name="id_disciplina" required class="select">
                         <% for (String disciplina : mapNomeIdProfessor.keySet()) { %>
                         <option value="<%= mapNomeIdProfessor.get(disciplina)%>">
                             <%= disciplina %>

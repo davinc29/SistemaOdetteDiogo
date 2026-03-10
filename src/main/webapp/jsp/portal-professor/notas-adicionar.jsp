@@ -109,10 +109,10 @@
             </div>
             <div class="linha-baixo d-flex mt-3 justify-content-between">
               <div class="d-flex lado-esquerdo">
-                <div class="filter-name" style="width: 46%;">
+                <div class="filter-name" style="width: 50%;">
                   <input type="text" name="media" placeholder="Buscar por média..." />
                 </div>
-                <div class="filter-name" style="width: 46%;">
+                <div class="filter-name ms-4" style="width: 50%;">
                     <input type="text" name="nome_disciplina" placeholder="Buscar por nome da disciplina..." />
                 </div>
                 <div class="filter-button ms-4">

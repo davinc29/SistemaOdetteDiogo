@@ -32,7 +32,7 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-professor/notas-adicionar.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-professor/observacoes-adicionar.css" />
     <script src="${pageContext.request.contextPath}/javascript/mobile-navbar.js" defer></script>
     <script src="${pageContext.request.contextPath}/javascript/delete.js" defer></script>
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/Capelus-icon.ico">
@@ -79,9 +79,6 @@
                         src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
                         alt="Mensagens Icon"
                 />
-                <div class="bg-primary box-name m-3">
-                    <p class="fs-4 fw-bold text-secondary">RE</p>
-                </div>
                 <div class="bg-primary box-name m-3">
                     <p class="fs-4 fw-bold text-secondary"><%=nome2L%></p>
                 </div>
@@ -167,7 +164,7 @@
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="id_observacao" value=<%=observacao.getId()%>>
                                 <input type="hidden" name="id_aluno" value=<%=aluno.getIdAluno()%>>
-                                <button type="submit" id="editar">
+                                <button type="submit" class="action-btn">
                                     <img
                                             class="table-icon"
                                             src="${pageContext.request.contextPath}/assets/editar.svg"

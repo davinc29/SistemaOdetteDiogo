@@ -28,7 +28,7 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-professor/notas-cadastro.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-professor/observacoes-cadastro.css" />
     <script src="${pageContext.request.contextPath}/javascript/mobile-navbar.js"></script>
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/Capelus-icon.ico">
 </head>
@@ -103,7 +103,7 @@
                             <div class="campo d-flex flex-column">
                                 <label for="id_disciplina"
                                 >Disciplina:</label>
-                                <select id="id_disciplina" name="id_disciplina" required>
+                                <select id="id_disciplina" name="id_disciplina" required class="select">
                                     <% for (String disciplina : mapNomeIdProfessor.keySet()) { %>
                                     <option value="<%= mapNomeIdProfessor.get(disciplina)%>">
                                         <%= disciplina %>
@@ -122,6 +122,7 @@
                                         cols="50"
                                         placeholder="Escreva sua observação aqui..."
                                         required
+                                        class="text-area"
                                 ></textarea>
                             </div>
                         </div>

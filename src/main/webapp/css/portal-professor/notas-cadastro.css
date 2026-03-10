@@ -84,6 +84,14 @@ ul{
     border-color: #CC2a41;
 }
 
+.select{
+    margin: auto;
+    width: 60%;
+    height: 50px;
+    border-radius: 10px;
+    border-color: #CC2a41;
+}
+
 /* Opções */
 .opcoes{
     width: 100%;

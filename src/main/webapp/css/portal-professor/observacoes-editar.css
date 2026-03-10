@@ -76,9 +76,10 @@ ul{
     text-align: center;
 }
 
-.campo textarea{
+.text-area{
     margin: auto;
-    width: 90%;
+    width: 100%;
+    height: 150px;
     border-radius: 10px;
     border-color: #CC2a41;
 }
