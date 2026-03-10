@@ -220,7 +220,7 @@
                         <%
                         } else {
                         %>
-                        <table class="w-100">
+                        <table class="tabela-notas w-100">
                             <tr>
                                 <th>Disciplina</th>
                                 <th>Nota 1</th>
@@ -235,10 +235,10 @@
                             %>
                             <tr>
                                 <td><p><%= b.getNomeDisciplina() %></p></td>
-                                <td><p><%= b.getNota1() %></p></td>
-                                <td><p><%= b.getNota2() %></p></td>
-                                <td><p><%= b.getMedia() %></p></td>
-                                <td><p><%= b.getSituacao() %></p></td>
+                                <td><p style="color:<%= b.getNota1() >= 7 ? "green" : "red" %>; font-weight:bold;"><%= b.getNota1() %></p></td>
+                                <td><p style="color:<%= b.getNota2() >= 7 ? "green" : "red" %>; font-weight:bold;"><%= b.getNota2() %></p></td>
+                                <td><p style="color:<%= b.getMedia() >= 7 ? "green" : "red" %>; font-weight:bold;"><%= b.getMedia() %></p></td>
+                                <td><p style="color:<%= b.getSituacao().equalsIgnoreCase("Aprovado") ? "green" : "red" %>; font-weight:bold;"><%= b.getSituacao() %></p></td>
                             </tr>
                             <%
                                     contadorBoletim++;
