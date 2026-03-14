@@ -3,6 +3,7 @@ package com.dao;
 import com.dto.ProfessorDTO;
 import com.model.Professor;
 import com.utils.SenhaUtils;
+import com.utils.StringUtils;
 
 import java.sql.*;
 import java.util.*;
@@ -87,19 +88,43 @@ public class ProfessorDAO extends DAO{
         }
     }
 
-    public List<ProfessorDTO> listar() throws SQLException {
-        String sql = """
+    public List<ProfessorDTO> listar(String nomeFiltro, String usernameFiltro, String emailFiltro) throws SQLException {
+        StringBuilder sql = new StringBuilder("""
                 SELECT
                     id, nome, username, email
                 FROM
                     professor
-                ORDER BY 
-                    nome
-                """;
+                WHERE
+                    1=1
+                """);
 
         List<ProfessorDTO> professores = new ArrayList<>();
+        List<Object> valores = new ArrayList<>();
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        if (nomeFiltro != null) {
+            sql.append("""
+                       AND upper(nome) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(nomeFiltro.toUpperCase()));
+        }
+        if (usernameFiltro != null) {
+            sql.append("""
+                    AND upper(username) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(usernameFiltro.toUpperCase()));
+        }
+        if (emailFiltro != null) {
+            sql.append("""
+                    AND upper(email) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(emailFiltro.toUpperCase()));
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < valores.size(); i++) {
+                pstmt.setObject(i+1, valores.get(i));
+            }
+
             try(ResultSet rs = pstmt.executeQuery()) {
                 while(rs.next()) {
                     UUID id = rs.getObject("id", UUID.class);

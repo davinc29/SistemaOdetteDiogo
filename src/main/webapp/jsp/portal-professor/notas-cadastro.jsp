@@ -7,7 +7,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    // Pegando dados diretos do banco
+  // Pegando dados diretos do banco
     ProfessorDTO professor = (ProfessorDTO) session.getAttribute("usuario");
     AlunoViewDTO aluno = (AlunoViewDTO) request.getAttribute("aluno");
     Map<String, Integer> mapNomeIdProfessor = (Map<String, Integer>) request.getAttribute("mapNomeIdProfessor");

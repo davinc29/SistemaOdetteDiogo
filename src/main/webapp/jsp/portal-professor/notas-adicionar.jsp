@@ -8,7 +8,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    // Pegando dados diretos do banco
+   // Pegando dados diretos do banco
     ProfessorDTO professor = (ProfessorDTO) session.getAttribute("usuario");
     AlunoViewDTO aluno = (AlunoViewDTO) request.getAttribute("aluno");
     List<BoletimViewDTO> boletins = (List<BoletimViewDTO>) request.getAttribute("boletins");
@@ -92,17 +92,17 @@
             <input type="hidden" name="id_aluno" value="<%=aluno.getIdAluno()%>">
             <div class="linha-cima d-flex">
               <div class="filter-name">
-                <input name="id_boletim" type="text" placeholder="Buscar por id..." />
+                <input name="id_boletim" type="number" placeholder="Buscar por id..." />
               </div>
               <div class="filter-name ms-4">
                 <input
-                  type="text" name="nota1"
+                  type="number" step="0.01" name="nota1"
                   placeholder="Buscar por nota do primeiro semestre..."
                 />
               </div>
               <div class="filter-name ms-4">
                 <input
-                  type="text" name="nota2"
+                  type="number" step="0.01" name="nota2"
                   placeholder="Buscar por nota do segundo semestre..."
                 />
               </div>
@@ -110,7 +110,7 @@
             <div class="linha-baixo d-flex mt-3 justify-content-between">
               <div class="d-flex lado-esquerdo">
                 <div class="filter-name" style="width: 46%;">
-                  <input type="text" name="media" placeholder="Buscar por média..." />
+                  <input type="number" step="0.01" name="media" placeholder="Buscar por média..." />
                 </div>
                 <div class="filter-name" style="width: 46%;">
                     <input type="text" name="nome_disciplina" placeholder="Buscar por nome da disciplina..." />

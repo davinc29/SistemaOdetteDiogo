@@ -50,6 +50,7 @@ public class BoletimServlet extends HttpServlet {
                 case "read" -> {
                     String idAluno = req.getParameter("id_aluno");
                     List<BoletimViewDTO> boletins = new ArrayList<>();
+
                     AlunoViewDTO aluno = null;
 
                     if (!idAluno.isEmpty()) {
@@ -60,9 +61,11 @@ public class BoletimServlet extends HttpServlet {
                         aluno = listarAlunoPorId(req);
                     }
 
+
                     req.setAttribute("mapNomeIdProfessor", mapNomeIdProfessor);
                     req.setAttribute("aluno", aluno);
                     req.setAttribute("boletins", boletins);
+
 
                     destino = PAGINA_PRINCIPAL_PROFESSOR;
                     erro = false;

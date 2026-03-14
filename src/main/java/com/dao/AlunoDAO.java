@@ -8,6 +8,7 @@ import com.utils.StringUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 public class AlunoDAO extends DAO {
@@ -203,7 +204,7 @@ public class AlunoDAO extends DAO {
     }
 
     //Listar Todos os Alunos
-    public List<AlunoViewDTO> listarAlunos(String nomeFiltro, Integer matriculaFiltro, String turmaAnoFiltro) throws SQLException {
+    public List<AlunoViewDTO> listarAlunos(String nomeFiltro, Integer matriculaFiltro, String emailFiltro, String turmaAnoFiltro) throws SQLException {
         StringBuilder sql = new StringBuilder("""
                 SELECT
                     a.id as id,
@@ -232,11 +233,17 @@ public class AlunoDAO extends DAO {
                     """);
             valores.add(matriculaFiltro);
         }
+        if (emailFiltro != null) {
+            sql.append("""
+                    AND upper(a.email) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(emailFiltro.toUpperCase()));
+        }
         if (turmaAnoFiltro != null) {
             sql.append("""
-                    AND p.turma_ano LIKE ?
+                    AND p.turma_ano = ?
                     """);
-            valores.add(StringUtils.formatarLike(turmaAnoFiltro.toUpperCase()));
+            valores.add(turmaAnoFiltro.toUpperCase());
         }
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
@@ -434,6 +441,32 @@ public class AlunoDAO extends DAO {
         } catch (SQLException e) {
             conn.rollback();
             throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> listarTurmas() throws SQLException{
+        String sql = """
+                SELECT
+                    DISTINCT turma_ano
+                FROM
+                    pre_matricula p
+                JOIN
+                    aluno a
+                    ON a.matricula = p.matricula
+                """;
+
+        List<String> turmas = new ArrayList<>();
+
+        try(Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                turmas.add(rs.getString("turma_ano"));
+            }
+
+            conn.commit();
+            return turmas;
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
         }
     }
 }

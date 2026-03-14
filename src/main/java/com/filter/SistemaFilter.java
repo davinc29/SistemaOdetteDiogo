@@ -34,6 +34,10 @@ public class SistemaFilter extends HttpFilter {
         // Obtém o caminho da requisição sem o contextPath
         String caminho = req.getRequestURI().substring(req.getContextPath().length());
 
+        resp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        resp.setHeader("Pragma", "no-cache");
+        resp.setDateHeader("Expires", 0);
+
         // Se a URL for pública, deixa passar sem verificar sessão
         if (URLS_PUBLICAS.contains(caminho)) {
             chain.doFilter(req, resp);

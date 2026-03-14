@@ -53,7 +53,9 @@ public class AdminServlet extends HttpServlet {
             switch (action) {
                 case "read", "readAlunos" -> {
                     List<AlunoViewDTO> alunos = listaAlunos(req);
+                    List<String> turmas = listarTurmas();
                     req.setAttribute("alunos", alunos);
+                    req.setAttribute("turmas", turmas);
                     destino = ALUNOS;
                 }
 
@@ -78,10 +80,8 @@ public class AdminServlet extends HttpServlet {
                 }
 
                 case "readProfessores" -> {
-                    try (ProfessorDAO professorDAO = new ProfessorDAO()) {
-                        List<ProfessorDTO> professores = professorDAO.listar();
-                        req.setAttribute("professores", professores);
-                    }
+                    List<ProfessorDTO> professores = listarProfessores(req);
+                    req.setAttribute("professores", professores);
                     destino = PROFESSORES;
                 }
 
@@ -106,18 +106,14 @@ public class AdminServlet extends HttpServlet {
                 }
 
                 case "readDisciplinas" -> {
-                    try (DisciplinaDAO disciplinaDAO = new DisciplinaDAO()) {
-                        List<DisciplinaViewDTO> disciplinas = disciplinaDAO.listar();
-                        req.setAttribute("disciplinas", disciplinas);
-                    }
+                    List<DisciplinaViewDTO> disciplinas = listarDisciplinas(req);
+                    req.setAttribute("disciplinas", disciplinas);
                     destino = DISCIPLINAS;
                 }
 
                 case "addDisciplina" -> {
-                    try (ProfessorDAO professorDAO = new ProfessorDAO()) {
-                        List<ProfessorDTO> professores = professorDAO.listar();
-                        req.setAttribute("professores", professores);
-                    }
+                    List<ProfessorDTO> professores = listarTodosProfessores();
+                    req.setAttribute("professores", professores);
                     destino = DISCIPLINAS_ADD;
                 }
 
@@ -131,15 +127,14 @@ public class AdminServlet extends HttpServlet {
 
                     Integer idDisciplina = Integer.parseInt(idParam);
 
-                    try (DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
-                         ProfessorDAO professorDAO = new ProfessorDAO()) {
+                    try (DisciplinaDAO disciplinaDAO = new DisciplinaDAO()) {
                         Disciplina disciplina = disciplinaDAO.pesquisarPorId(idDisciplina);
-                        List<ProfessorDTO> professores = professorDAO.listar();
 
                         req.setAttribute("disciplina", disciplina);
-                        req.setAttribute("professores", professores);
                     }
 
+                    List<ProfessorDTO> professores = listarTodosProfessores();
+                    req.setAttribute("professores", professores);
                     destino = DISCIPLINAS_EDIT;
                 }
 
@@ -375,16 +370,62 @@ public class AdminServlet extends HttpServlet {
 
     public List<AlunoViewDTO> listaAlunos(HttpServletRequest req) throws SQLException{
         String temp = req.getParameter("nome");
-        String nome = (temp.isBlank() ? null : temp.trim());
+        String nome = (temp == null || temp.isBlank() ? null : temp.trim());
 
         temp = req.getParameter("matricula");
-        Integer matricula = (temp.isBlank() ? null : Integer.parseInt(temp.trim()));
+        Integer matricula = (temp == null || temp.isBlank() ? null : Integer.parseInt(temp.trim()));
 
-        temp = req.getParameter("turmaAno");
-        String turmaAno = (temp.isBlank() ? null : temp.trim());
+        temp = req.getParameter("email");
+        String email = (temp == null || temp.isBlank() ? null : temp.trim());
+
+        temp = req.getParameter("turma_ano");
+        String turmaAno = (temp == null || temp.isBlank() ? null : temp.trim());
 
         try (AlunoDAO dao = new AlunoDAO()) {
-            return dao.listarAlunos(nome, matricula, turmaAno);
+            return dao.listarAlunos(nome, matricula, email, turmaAno);
+        }
+    }
+
+    public List<String> listarTurmas() throws SQLException{
+        try (AlunoDAO dao = new AlunoDAO()) {
+            return dao.listarTurmas();
+        }
+    }
+
+    public List<DisciplinaViewDTO> listarDisciplinas(HttpServletRequest req) throws SQLException
+    {
+        String temp = req.getParameter("nome");
+        String nomeDisciplina = (temp == null || temp.isBlank() ? null : temp.trim());
+
+        temp = req.getParameter("professor");
+        String nomeProfessor = (temp == null || temp.isBlank() ? null : temp.trim());
+
+        temp = req.getParameter("email_professor");
+        String emailProfessor = (temp == null || temp.isBlank() ? null : temp.trim());
+
+        try (DisciplinaDAO dao = new DisciplinaDAO()) {
+            return dao.listar(nomeDisciplina, nomeProfessor, emailProfessor);
+        }
+    }
+
+    public List<ProfessorDTO> listarProfessores(HttpServletRequest req) throws SQLException {
+        String temp = req.getParameter("nome");
+        String nome = (temp == null || temp.isBlank() ? null : temp.trim());
+
+        temp = req.getParameter("username");
+        String username = (temp == null || temp.isBlank() ? null : temp.trim());
+
+        temp = req.getParameter("email");
+        String email = (temp == null || temp.isBlank() ? null : temp.trim());
+
+        try (ProfessorDAO dao = new ProfessorDAO()) {
+            return dao.listar(nome, username, email);
+        }
+    }
+
+    public List<ProfessorDTO> listarTodosProfessores() throws SQLException {
+        try (ProfessorDAO dao = new ProfessorDAO()) {
+            return dao.listar(null, null, null);
         }
     }
 }

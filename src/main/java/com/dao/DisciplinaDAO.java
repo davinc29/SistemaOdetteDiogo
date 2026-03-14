@@ -4,7 +4,9 @@ import com.dto.DisciplinaViewDTO;
 import com.model.Disciplina;
 import com.model.Professor;
 import com.utils.SenhaUtils;
+import com.utils.StringUtils;
 
+import javax.xml.transform.Result;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -80,8 +82,8 @@ public class DisciplinaDAO extends DAO{
         }
     }
 
-    public List<DisciplinaViewDTO> listar() throws SQLException {
-        String sql = """
+    public List<DisciplinaViewDTO> listar(String nomeFiltro, String professorFiltro, String emailProfessorFiltro) throws SQLException {
+        StringBuilder sql = new StringBuilder("""
             SELECT
                 d.id as id,
                 d.nome as nome_disciplina,
@@ -92,14 +94,38 @@ public class DisciplinaDAO extends DAO{
             JOIN
                 professor p
                 ON p.id = d.id_professor
-            ORDER BY
-                d.id
-            """;
+            WHERE
+                1=1
+            """);
 
         List<DisciplinaViewDTO> disciplinas = new ArrayList<>();
+        List<Object> valores = new ArrayList<>();
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        if (nomeFiltro != null) {
+            sql.append("""
+                       AND upper(d.nome) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(nomeFiltro.toUpperCase()));
+        }
+        if (professorFiltro != null) {
+            sql.append("""
+                    AND upper(p.nome) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(professorFiltro.toUpperCase()));
+        }
+        if (emailProfessorFiltro != null) {
+            sql.append("""
+                    AND upper(p.email) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(emailProfessorFiltro.toUpperCase()));
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < valores.size(); i++) {
+                pstmt.setObject(i+1, valores.get(i));
+            }
+
+            ResultSet rs = pstmt.executeQuery();
 
             while(rs.next()) {
                 Integer id = rs.getInt("id");

@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(PAGINA_LOGIN).forward(req, resp);
+        resp.sendRedirect(PAGINA_LOGIN);
     }
 
     @Override
@@ -182,6 +182,7 @@ public class LoginServlet extends HttpServlet {
         // Finaliza a sessão do usuário
         if (session != null) {
             session.removeAttribute("usuario");
+            session.invalidate();
         }
     }
 }

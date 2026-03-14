@@ -9,7 +9,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    // Pegando dados diretos do banco
+   // Pegando dados diretos do banco
     ProfessorDTO professor = (ProfessorDTO) session.getAttribute("usuario");
     AlunoViewDTO aluno = (AlunoViewDTO) request.getAttribute("aluno");
     Boletim boletim = (Boletim) request.getAttribute("boletim");

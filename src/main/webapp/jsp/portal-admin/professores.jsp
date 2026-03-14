@@ -23,11 +23,6 @@
     session.setAttribute("diaSemana", diaSemana);
 
     List<ProfessorDTO> professores = (List<ProfessorDTO>) request.getAttribute("professores");
-
-    String idFiltro = request.getAttribute("idFiltro") != null ? request.getAttribute("idFiltro").toString() : "";
-    String usernameFiltro = request.getAttribute("usernameFiltro") != null ? request.getAttribute("usernameFiltro").toString() : "";
-    String nomeFiltro = request.getAttribute("nomeFiltro") != null ? request.getAttribute("nomeFiltro").toString() : "";
-    String emailFiltro = request.getAttribute("emailFiltro") != null ? request.getAttribute("emailFiltro").toString() : "";
 %>
 
 <!doctype html>
@@ -87,24 +82,17 @@
 
                 <div class="filter-box d-flex flex-column">
                     <div class="linha-um d-flex">
-                        <div class="filter-name">
-                            <input type="text" name="id" value="<%=idFiltro%>" placeholder="Buscar por id..." />
+                        <div class="filter-name ms-4">
+                            <input type="text" name="nome" placeholder="Buscar por nome..." />
                         </div>
                         <div class="filter-name ms-4">
-                            <input type="text" name="username" value="<%=usernameFiltro%>" placeholder="Buscar por username..." />
+                            <input type="text" name="username" placeholder="Buscar por username..." />
                         </div>
-                        <div class="filter-name ms-4">
-                            <input type="text" name="nome" value="<%=nomeFiltro%>" placeholder="Buscar por nome..." />
-                        </div>
-                    </div>
-
-                    <div class="linha-dois d-flex mt-3">
                         <div class="filter-name">
-                            <input type="text" name="email" value="<%=emailFiltro%>" placeholder="Buscar por email..." />
+                            <input type="text" name="email" placeholder="Buscar por email..." />
                         </div>
                     </div>
-
-                    <div class="linha-tres d-flex mt-3 justify-content-between">
+                    <div class="linha-dois d-flex mt-3 justify-content-between">
                         <div class="d-flex lado-esquerdo">
                             <div class="filter-button">
                                 <button type="submit">Aplicar Filtro</button>

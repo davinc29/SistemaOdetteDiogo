@@ -10,7 +10,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    // Pegando dados diretos do banco
+   // Pegando dados diretos do banco
     ProfessorDTO professor = (ProfessorDTO) session.getAttribute("usuario");
     AlunoViewDTO aluno = (AlunoViewDTO) request.getAttribute("aluno");
     List<ObservacaoViewDTO> observacoes = (List<ObservacaoViewDTO>) request.getAttribute("observacoes");
@@ -95,7 +95,7 @@
                     <input type="hidden" name="id_aluno" value="<%=aluno.getIdAluno()%>">
                     <div class="linha-cima d-flex">
                         <div class="filter-name">
-                            <input name="id_observacao" type="text" placeholder="Buscar por id..." />
+                            <input name="id_observacao" type="number" placeholder="Buscar por id..." />
                         </div>
                         <div class="filter-name ms-4">
                             <input
@@ -167,7 +167,7 @@
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="id_observacao" value=<%=observacao.getId()%>>
                                 <input type="hidden" name="id_aluno" value=<%=aluno.getIdAluno()%>>
-                                <button type="submit" id="editar">
+                                <button type="submit" class="action-btn">
                                     <img
                                             class="table-icon"
                                             src="${pageContext.request.contextPath}/assets/editar.svg"

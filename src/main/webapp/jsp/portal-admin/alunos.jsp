@@ -23,6 +23,7 @@
     session.setAttribute("diaSemana", diaSemana);
 
     List<AlunoViewDTO> alunos = (List<AlunoViewDTO>) request.getAttribute("alunos");
+    List<String> turmas = (List<String>) request.getAttribute("turmas");
 %>
 
 <!doctype html>
@@ -78,31 +79,35 @@
 
         <main>
             <div class="filter-box d-flex flex-column">
+                <form action="${pageContext.request.contextPath}/admin" method="get">
+                <input type="hidden" name="action" value="readAlunos">
                 <div class="linha-um d-flex">
-                    <div class="filter-name">
-                        <input type="text" name="id" placeholder="Buscar por id..." />
-                    </div>
                     <div class="filter-name ms-4">
-                        <input type="text" name="matricula" placeholder="Buscar por matrícula..." />
+                        <input type="number" name="matricula" placeholder="Buscar por matrícula..." />
                     </div>
                     <div class="filter-name ms-4">
                         <input type="text" name="nome" placeholder="Buscar por nome..." />
                     </div>
-                </div>
-
-                <div class="linha-dois d-flex mt-3">
                     <div class="filter-name">
                         <input type="text" name="email" placeholder="Buscar por email..." />
                     </div>
+                </div>
+
+                <div class="linha-dois d-flex mt-3">
                     <div class="filter-name ms-4">
-                        <input type="text" name="turma" placeholder="Buscar por turma..." />
+                        <select name="turma_ano" id="">
+                            <option value="" selected>Buscar por turma...</option>
+                            <%for (String turma : turmas) {%>
+                            <option value="<%=turma%>"><%=turma%></option>
+                            <%}%>
+                        </select>
                     </div>
                 </div>
 
                 <div class="linha-tres d-flex mt-3 justify-content-between">
                     <div class="d-flex lado-esquerdo">
                         <div class="filter-button">
-                            <button type="button">Aplicar Filtro</button>
+                            <button type="submit">Aplicar Filtro</button>
                         </div>
                     </div>
 
@@ -112,6 +117,7 @@
                         </div>
                     </div>
                 </div>
+              </form>
             </div>
 
             <div class="tabela-container">

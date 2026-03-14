@@ -7,7 +7,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    // Pegando dados diretos do banco
+   // Pegando dados diretos do banco
     ProfessorDTO professor = (ProfessorDTO) session.getAttribute("usuario");
     List<AlunoViewDTO> alunos = (List<AlunoViewDTO>) request.getAttribute("alunos");
 
@@ -99,7 +99,10 @@
                         <input name="nome" type="text" placeholder="Buscar por nome..." />
                     </div>
                     <div class="filter-name ms-4">
-                        <input name="matricula" type="text" placeholder="Buscar por matrícula..." />
+                        <input name="matricula" type="number" placeholder="Buscar por matrícula..." />
+                    </div>
+                    <div class="filter-name ms-4">
+                        <input name="email" type="number" placeholder="Buscar por email..." />
                     </div>
                     <div class="filter-name ms-4">
                         <input name="turmaAno" type="text" placeholder="Buscar por turma..." />
@@ -128,7 +131,7 @@
                                 <form action="${pageContext.request.contextPath}/observacoes?action=read" method="post">
                                     <input type="hidden" name="id_aluno" value=<%=aluno.getIdAluno()%>>
                                     <input type="hidden" name="usuario" value="professor">
-                                    <input type="submit" value="+">
+                                    <input type="submit" value="+" class="add-btn">
                                 </form>
                             </div>
                             <p class="text-primary">Adicionar Observação</p>
