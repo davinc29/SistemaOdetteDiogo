@@ -33,73 +33,65 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect(PAGINA_LOGIN);
+        logout(req);
+        resp.sendRedirect(req.getContextPath() + PAGINA_LOGIN);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String action = req.getParameter("action").trim();
-        HttpSession session = req.getSession(true);
-
         boolean erro = true;
         String destino = PAGINA_ERRO;
 
         try {
-            switch (action) {
-                case "login" -> {
-                    String email = req.getParameter("email").trim();
-                    String senha = req.getParameter("senha").trim();
+            String email = req.getParameter("email").trim();
+            String senha = req.getParameter("senha").trim();
 
-                    LoginDTO credenciais = new LoginDTO(email, senha);
+            LoginDTO credenciais = new LoginDTO(email, senha);
 
-                    // Login que retorna objeto de professor para futura exibição
-                    Integer num = login(credenciais);
+            // Login que retorna objeto de professor para futura exibição
+            Integer num = login(credenciais);
 
-                    switch (num) {
-                        case 0 -> {
-                            AdminDTO admin = encontrarAdmin(credenciais);
+            switch (num) {
+                case 0 -> {
+                    AdminDTO admin = encontrarAdmin(credenciais);
 
-                            if (admin == null) {
-                                throw ExcecaoDeJSP.falhaLogin();
-                            }
-
-                            session.setAttribute("usuario", admin);
-                            session.setAttribute("senha", senha);
-
-                            destino = "/admin?action=readAlunos";
-                        }
-
-                        case 1 -> {
-                            AlunoViewDTO aluno = encontrarAluno(credenciais);
-                            session.setAttribute("usuario", aluno);
-                            destino = AREA_RESTRITA_ALUNO;
-                            erro = false;
-                        }
-
-                        case 2 -> {
-                            ProfessorDTO professor = encontrarProfessor(credenciais);
-                            List<ObservacaoViewDTO> observacoes = listarPorProfessor(professor);
-                            List<String> notasPendentes = notasPendentes(professor);
-
-                            req.setAttribute("observacoes", observacoes);
-                            req.setAttribute("notasPendentes", notasPendentes);
-                            session.setAttribute("usuario", professor);
-
-                            destino = AREA_RESTRITA_PROFESSOR;
-                            erro = false;
-                        }
+                    if (admin == null) {
+                        throw ExcecaoDeJSP.falhaLogin();
                     }
+                    HttpSession session = req.getSession(true);
+
+                    session.setAttribute("usuario", admin);
+                    session.setAttribute("senha", senha);
+
+                    destino = "/admin?action=readAlunos";
+                    erro = false;
                 }
 
-                case "logout" -> {
-                    // Logout que encerra a session e redireciona para a página de login
-                    logout(req);
-                    doGet(req, resp);
-                    return;
+                case 1 -> {
+                    AlunoViewDTO aluno = encontrarAluno(credenciais);
+                    HttpSession session = req.getSession(true);
+
+                    session.setAttribute("usuario", aluno);
+                    destino = AREA_RESTRITA_ALUNO;
+                    erro = false;
                 }
 
-                default -> throw new RuntimeException("valor inválido para o parâmetro 'action': " + action);
+                case 2 -> {
+                    ProfessorDTO professor = encontrarProfessor(credenciais);
+                    HttpSession session = req.getSession(true);
+
+                    List<ObservacaoViewDTO> observacoes = listarPorProfessor(professor);
+                    List<String> notasPendentes = notasPendentes(professor);
+
+                    req.setAttribute("observacoes", observacoes);
+                    req.setAttribute("notasPendentes", notasPendentes);
+                    session.setAttribute("usuario", professor);
+
+                    destino = AREA_RESTRITA_PROFESSOR;
+                    erro = false;
+                }
             }
+
         }
         // Se houver alguma exceção de JSP (que acontece em execução e com interação do user), aciona o método doGet
         catch (ExcecaoDeJSP e) {
@@ -121,12 +113,12 @@ public class LoginServlet extends HttpServlet {
             System.err.println("Erro inesperado:");
             e.printStackTrace(System.err);
         }
-
         if (erro) {
             resp.sendRedirect(req.getContextPath() + destino);
         } else {
             req.getRequestDispatcher(destino).forward(req, resp);
         }
+
     }
 
     // === LOGIN ===
@@ -181,7 +173,6 @@ public class LoginServlet extends HttpServlet {
 
         // Finaliza a sessão do usuário
         if (session != null) {
-            session.removeAttribute("usuario");
             session.invalidate();
         }
     }

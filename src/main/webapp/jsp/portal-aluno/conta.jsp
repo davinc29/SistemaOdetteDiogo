@@ -96,7 +96,7 @@
 
             <div class="edit-container justify-content-between">
               <div class="edit-button">
-                <a href="${pageContext.request.contextPath}/sistema-filter?action=logout">Sair</a>
+                <a href="${pageContext.request.contextPath}/sistema-filter">Sair</a>
               </div>
 
               <div class="edit-button">

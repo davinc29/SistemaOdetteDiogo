@@ -26,7 +26,9 @@ public class SistemaFilter extends HttpFilter {
             "/jsp/recuperar-senha/solicitar.jsp",
             "/jsp/recuperar-senha/validar-codigo.jsp",
             "/jsp/recuperar-senha/redefinir-senha.jsp",
-            "/jsp/recuperar-senha/sucesso.jsp"
+            "/jsp/recuperar-senha/sucesso.jsp",
+            "/index.jsp",
+            "/cadastro.jsp"
     );
 
     @Override

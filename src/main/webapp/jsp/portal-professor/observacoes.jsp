@@ -10,6 +10,7 @@
    // Pegando dados diretos do banco
     ProfessorDTO professor = (ProfessorDTO) session.getAttribute("usuario");
     List<AlunoViewDTO> alunos = (List<AlunoViewDTO>) request.getAttribute("alunos");
+    List<String> turmas = (List<String>) request.getAttribute("turmas");
 
     List<AlunoViewDTO> alunos1 = new ArrayList<>();
     List<AlunoViewDTO> alunos2 = new ArrayList<>();
@@ -102,10 +103,15 @@
                         <input name="matricula" type="number" placeholder="Buscar por matrícula..." />
                     </div>
                     <div class="filter-name ms-4">
-                        <input name="email" type="number" placeholder="Buscar por email..." />
+                        <input name="email" type="text" placeholder="Buscar por email..." />
                     </div>
                     <div class="filter-name ms-4">
-                        <input name="turmaAno" type="text" placeholder="Buscar por turma..." />
+                        <select id="turmaAno" name="turmaAno">
+                            <option value="" selected>Buscar por turma...</option>
+                            <% for (String turma : turmas) { %>
+                            <option><%=turma%></option>
+                            <% } %>
+                        </select>
                     </div>
                     <div class="filter-button ms-4">
                         <button type="submit">Aplicar Filtro</button>

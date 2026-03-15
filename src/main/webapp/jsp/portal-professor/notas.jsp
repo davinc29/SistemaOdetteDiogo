@@ -102,7 +102,7 @@
                   <input name="matricula" type="number" placeholder="Buscar por matrícula..." />
                 </div>
                   <div class="filter-name ms-4">
-                      <input name="email" type="number" placeholder="Buscar por email..." />
+                      <input name="email" type="text" placeholder="Buscar por email..." />
                   </div>
                 <div class="filter-name ms-4">
                     <select id="turmaAno" name="turmaAno">

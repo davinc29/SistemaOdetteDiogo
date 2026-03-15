@@ -71,7 +71,7 @@
                 <img class="icon m-3" src="${pageContext.request.contextPath}/assets/notificao-icon.svg" alt="Notificações Icon" />
                 <img class="icon m-3" src="${pageContext.request.contextPath}/assets/mensagens-icon.svg" alt="Mensagens Icon" />
                 <div class="bg-primary box-name m-3 position-relative">
-                    <a href="${pageContext.request.contextPath}/index.jsp" id="logoutPopup" class="logout-popup">Logout</a>
+                    <a href="${pageContext.request.contextPath}/sistema-filter" id="logoutPopup" class="logout-popup">Logout</a>
                     <p class="fs-4 fw-bold text-secondary" id="botaoLogout" style="cursor:pointer;">ADM</p>
                 </div>
             </div>

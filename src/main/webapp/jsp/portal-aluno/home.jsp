@@ -46,10 +46,10 @@
 
     //Pegando Observações do Aluno
     ObservacaoDAO observacaoDAO = new ObservacaoDAO();
-    List<ObservacaoViewDTO> observacoes = observacaoDAO.listarPorAluno(aluno.getIdAluno());
+    List<ObservacaoViewDTO> observacoes = observacaoDAO.listarPorAluno(aluno.getIdAluno(),null,null,null,null);
 
     BoletimDAO boletimDAO = new BoletimDAO();
-    List<BoletimViewDTO> boletim = boletimDAO.listarPorAluno(aluno.getIdAluno());
+    List<BoletimViewDTO> boletim = boletimDAO.listarPorAluno(aluno.getIdAluno(),null,null,null,null,null);
 
     // Pegando o dia da semana
     LocalDate hoje = LocalDate.now();

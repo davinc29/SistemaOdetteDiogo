@@ -91,7 +91,7 @@ public class DisciplinaDAO extends DAO{
                 p.email as email_professor
             FROM
                 disciplina d
-            JOIN
+            LEFT JOIN
                 professor p
                 ON p.id = d.id_professor
             WHERE
