@@ -130,13 +130,13 @@
             <div class="bg-primary box-name m-3">
               <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
             </div>
-            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=session.getAttribute("nome")%></p>
+            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=aluno.getNome()%></p>
           </div>
         </header>
         <main>
           <div class="box-one d-flex justify-content-between mb-5">
             <div class="ms-5">
-              <h1 class="fs-1 fw-bold">Olá, <%=session.getAttribute("nome")%></h1>
+              <h1 class="fs-1 fw-bold">Olá, <%=aluno.getNome()%></h1>
               <p class="fs-3">
                 Pronto para começar seu dia com alguns<br />feedbacks?
               </p>
