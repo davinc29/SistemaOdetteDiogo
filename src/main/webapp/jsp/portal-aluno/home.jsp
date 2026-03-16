@@ -29,22 +29,24 @@
 
     //Nome 2L
     String nome = aluno.getNome();
-    String[] partesNome = nome.split(" ");
-    char letra1nome = partesNome[0].charAt(0);
-    char letra2nome = partesNome[1].charAt(0);
+    nome = (nome == null) ? "" : nome.trim();
 
-    String nome2L = "" + letra1nome + letra2nome;
+    String nome2L = "";
+
+    if (!nome.isEmpty()) {
+        String[] partesNome = nome.split("\\s+");
+        char letra1nome = partesNome[0].charAt(0);
+        char letra2nome = (partesNome.length > 1) ? partesNome[partesNome.length - 1].charAt(0) : partesNome[0].charAt(0);
+        nome2L = ("" + letra1nome + letra2nome).toUpperCase();
+    }
 
     session.setAttribute("nome2L", nome2L);
     session.setAttribute("nome", nome);
 
 
-    //Pegando Observações do Aluno
-    ObservacaoDAO observacaoDAO = new ObservacaoDAO();
-    List<ObservacaoViewDTO> observacoes = observacaoDAO.listarPorAluno(aluno.getIdAluno());
-
-    BoletimDAO boletimDAO = new BoletimDAO();
-    List<BoletimViewDTO> boletim = boletimDAO.listarPorAluno(aluno.getIdAluno());
+    //Pegando dados do aluno direto do banco de dados
+    List<ObservacaoViewDTO> observacoes = (List<ObservacaoViewDTO>) request.getAttribute("observacoes");
+    List<BoletimViewDTO> boletim = (List<BoletimViewDTO>) request.getAttribute("boletim");
 
     // Pegando o dia da semana
     LocalDate hoje = LocalDate.now();
@@ -78,10 +80,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Capelus - Home</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-aluno/home.css" />
     <script src="${pageContext.request.contextPath}/mobile-navbar.js"></script>
@@ -94,13 +93,13 @@
         <nav class="text-secondary">
           <ul class="">
             <li class="page-item active">
-              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/home.html">Home</a>
+              <a class="page-text" href="#">Home</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/boletim.jsp">Boletim</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/boletim?usuario=aluno">Boletim</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/observacoes.jsp">Observações</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/observacoes?usuario=aluno">Observações</a>
             </li>
             <li class="page-item can-hover">
               <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/conta.jsp">Conta</a>
@@ -118,26 +117,16 @@
             </p>
           </div>
           <div class="d-flex">
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-              alt="Notificações Icon"
-            />
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-              alt="Mensagens Icon"
-            />
             <div class="bg-primary box-name m-3">
               <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
             </div>
-            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=session.getAttribute("nome")%></p>
+            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=aluno.getNome()%></p>
           </div>
         </header>
         <main>
           <div class="box-one d-flex justify-content-between mb-5">
             <div class="ms-5">
-              <h1 class="fs-1 fw-bold">Olá, <%=session.getAttribute("nome")%></h1>
+              <h1 class="fs-1 fw-bold">Olá, <%=aluno.getNome()%></h1>
               <p class="fs-3">
                 Pronto para começar seu dia com alguns<br />feedbacks?
               </p>
@@ -149,126 +138,126 @@
             />
           </div>
 
-          <div class="box-container d-flex justify-content-around">
-              <div class="box-two">
-                  <h2 class="fs-4 fw-bold text-center">Observações Gerais</h2>
-                  <div class="turma-container d-flex">
-                      <%
-                          if (observacoes != null && !observacoes.isEmpty()) {
-                              int limite = Math.min(observacoes.size(), 4);
-                      %>
-                      <!-- COLUNA ESQUERDA -->
-                      <div class="coluna-esquerda">
-                          <%
-                              for (int i = 0; i < limite; i++) {
-                                  if (i % 2 == 0) {
-                                      ObservacaoViewDTO obs = observacoes.get(i);
-                          %>
-                          <div class="turma-box">
-                              <h3 class="correction-text">
-                                  <%= obs.getNomeProfessor() %> - <%= obs.getNomeDisciplina() %>
-                              </h3>
-                              <p class="correction-text">
-                                  <%= obs.getObservacao() %>
-                              </p>
-                          </div>
-                          <%
-                                  }
-                              }
-                          %>
-                      </div>
-                      <!-- COLUNA DIREITA -->
-                      <div class="coluna-direita">
-                          <%
-                              for (int i = 0; i < limite; i++) {
-                                  if (i % 2 != 0) {
-                                      ObservacaoViewDTO obs = observacoes.get(i);
-                          %>
-                          <div class="turma-box">
-                              <h3 class="correction-text">
-                                  <%= obs.getNomeProfessor() %> - <%= obs.getNomeDisciplina() %>
-                              </h3>
-                              <p class="correction-text">
-                                  <%= obs.getObservacao() %>
-                              </p>
-                          </div>
-                          <%
-                                  }
-                              }
-                          %>
-                      </div>
-                      <%
-                      } else {
-                      %>
-                      <p class="text-center">Nenhuma observação encontrada.</p>
-                      <%
-                          }
-                      %>
-                  </div>
-                  <div class="d-flex justify-content-end me-4">
-                      <a
-                              href="${pageContext.request.contextPath}/jsp/portal-aluno/observacoes.jsp"
-                              class="text-decoration-none"
-                              style="color: black"
-                      >
-                          Ver mais >
-                      </a>
-                  </div>
-              </div>
+            <div class="box-container d-flex justify-content-around">
+                <div class="box-two">
+                    <h2 class="fs-4 fw-bold text-center">Minhas Observações</h2>
+                    <%
+                        if (observacoes == null || observacoes.isEmpty()) {
+                    %>
+                    <p class="text-center mt-4">Nenhuma observação encontrada.</p>
+                    <%
+                    } else {
+                    %>
+                    <div class="turma-container d-flex">
+                        <div class="coluna-esquerda">
+                            <%
+                                int contador = 0;
+                                for (ObservacaoViewDTO observacao : observacoes) {
+                                    if (contador > 1) break;
+                            %>
+                            <div class="turma-box">
+                                <h2 class="correction-text"><%=observacao.getNomeDisciplina()%></h2>
+                                <h3 class="correction-text"><%=observacao.getNomeAluno()%> / <%=observacao.getTurmaAno()%></h3>
+                                <p class="correction-text"><%=observacao.getObservacao()%></p>
+                            </div>
+                            <%
+                                    contador++;
+                                }
+                            %>
+                        </div>
 
-              <div class="box-column w-50 ms-4">
-                  <div class="box-three">
-                      <h2 class="fs-4 fw-bold text-center">
-                          Boletim
-                      </h2>
-                      <div class="d-flex tabela-container">
-                          <table class="tabela-notas">
-                              <tr>
-                                  <th>Disciplina</th>
-                                  <th>Nota 1</th>
-                                  <th>Nota 2</th>
-                                  <th>Média</th>
-                                  <th>Situação</th>
-                              </tr>
-                              <%
-                                  if (boletim != null && !boletim.isEmpty()) {
-                                      int limite = Math.min(boletim.size(), 2);
-                                      for (int i = 0; i < limite; i++) {
-                                          BoletimViewDTO b = boletim.get(i);
-                              %>
-                              <tr>
-                                  <td><p><%= b.getNomeDisciplina() %></p></td>
-                                  <td><p><%= b.getNota1() %></p></td>
-                                  <td><p><%= b.getNota2() %></p></td>
-                                  <td><p><%= b.getMedia() %></p></td>
-                                  <td><p><%= b.getSituacao() %></p></td>
-                              </tr>
-                              <%
-                                  }
-                              } else {
-                              %>
-                              <tr>
-                                  <td colspan="5" class="text-center">
-                                      Nenhuma nota encontrada.
-                                  </td>
-                              </tr>
-                              <%
-                                  }
-                              %>
-                          </table>
-                      </div>
-                      <div class="d-flex justify-content-end me-4">
-                          <a
-                                  href="boletim.jsp"
-                                  class="text-decoration-none"
-                                  style="color: black"
-                          >
-                              Ver mais >
-                          </a>
-                      </div>
-                  </div>
-              </div>
-          </div>
+                        <div class="coluna-direita">
+                            <%
+                                contador = 0;
+                                for (ObservacaoViewDTO observacao : observacoes) {
+                                    if (contador <= 1) {
+                                        contador++;
+                                        continue;
+                                    }
+                                    if (contador > 3) break;
+                            %>
+                            <div class="turma-box">
+                                <h2 class="correction-text"><%=observacao.getNomeDisciplina()%></h2>
+                                <h3 class="correction-text"><%=observacao.getNomeAluno()%> - <%=observacao.getTurmaAno()%></h3>
+                                <p class="correction-text"><%=observacao.getObservacao()%></p>
+                            </div>
+                            <%
+                                    contador++;
+                                }
+                            %>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end me-4">
+                        <a href="${pageContext.request.contextPath}/observacoes?usuario=aluno"
+                           class="text-decoration-none ver-mais">Ver mais ></a>
+                    </div>
+                    <%
+                        }
+                    %>
+                </div>
+
+                <div class="box-column w-50 ms-4">
+                    <div class="box-three">
+                        <h2 class="fs-4 fw-bold text-center mb-4">Meu Boletim</h2>
+                        <%
+                            if (boletim == null || boletim.isEmpty()) {
+                        %>
+                        <p class="text-center mt-4">Nenhuma nota encontrada.</p>
+                        <%
+                        } else {
+                        %>
+                        <table class="w-100">
+                            <tr>
+                                <th>Disciplina</th>
+                                <th>Nota 1</th>
+                                <th>Nota 2</th>
+                                <th>Média</th>
+                                <th style="width: 18%">Status</th>
+                            </tr>
+                            <%
+                                int contadorBoletim = 0;
+                                for (BoletimViewDTO b : boletim) {
+                                    if (contadorBoletim > 2) break;
+                            %>
+                            <tr>
+                                <td><p><%= b.getNomeDisciplina() %></p></td>
+                                <td><p><%= b.getNota1() %></p></td>
+                                <td><p><%=(b.getStatus().equalsIgnoreCase("PROCESSANDO") ? "-" : b.getNota2())%></p></td>
+                                <td><p><%= b.getMedia() %></p></td>
+                                <%
+                                    String cor;
+                                    String status = b.getStatus().toUpperCase();
+
+                                    if (status.equals("APROVADO")) {
+                                        cor = "green";
+                                    } else if (status.equals("REPROVADO")) {
+                                        cor = "red";
+                                    } else {
+                                        cor = "#FF8C00";
+                                    }
+                                %>
+                                <td>
+                                    <p style="color:<%=cor%>">
+                                    <%= b.getStatus() %>
+                                </td>
+                            </tr>
+                            <%
+                                    contadorBoletim++;
+                                }
+                            %>
+                        </table>
+
+                        <div class="d-flex justify-content-end me-4">
+                            <a href="${pageContext.request.contextPath}/boletim?usuario=aluno"
+                               class="text-decoration-none ver-mais">Ver mais ></a>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div>
+                </div>
+            </div>
         </main>
       </div>
     </section>

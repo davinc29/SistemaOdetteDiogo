@@ -18,7 +18,7 @@ public class AlunoServlet extends HttpServlet {
 
     // Páginas / destinos
     private static final String PAGINA_LOGIN = "/jsp/login.jsp";
-    private static final String AREA_RESTRITA_ALUNO = "/portal-aluno/index.jsp";
+    private static final String AREA_RESTRITA_ALUNO = "/jsp/portal-aluno/home.jsp";
     private static final String PAGINA_ERRO = "/html/erro.html";
 
     @Override
@@ -93,45 +93,27 @@ public class AlunoServlet extends HttpServlet {
         AlunoCadastrarDTO alunoCadastrarDTO = new AlunoCadastrarDTO(nome, null, email, senha);
 
         AlunoDAO alunoDAO = new AlunoDAO();
-        alunoDAO.cadastrarAluno();
+        alunoDAO.cadastrarAluno(alunoCadastrarDTO);
 
         // mesmo destino do original: volta para login
         req.setAttribute("destinoFinal", PAGINA_LOGIN);
     }
 
     private void atualizar(HttpServletRequest req) throws SQLException {
-        // Igual ao seu atualizar: usa session, confere email/senha e atualiza.
         HttpSession session = req.getSession();
 
-        String emailSalvoAluno = (String) session.getAttribute("emailAluno");
-        String senhaSalvaAluno = (String) session.getAttribute("senhaAluno");
+        String email = req.getParameter("email").trim();
 
-        String emailDigitadoAluno = req.getParameter("email").trim();
-        String senhaDigitadaAluno = req.getParameter("senha").trim();
+        String senhaAtual = req.getParameter("senha_atual");
+        senhaAtual = (senhaAtual.isBlank() ? null : senhaAtual.trim());
 
-        String emailNovoAluno = req.getParameter("email").trim();
-        String senhaNovaAluno = req.getParameter("senha").trim();
+        String novaSenha = req.getParameter("nova_senha");
+        novaSenha = (novaSenha.isBlank() ? null : novaSenha.trim());
 
-        UUID idAluno = (UUID) session.getAttribute("idAluno");
-
-        AlunoDAO alunoDAO = new AlunoDAO();
-
-        if (emailDigitadoAluno.equals(emailSalvoAluno)) {
-            alunoDAO.atualizarEmailAluno(idAluno, emailNovoAluno);
-        } else {
-            throw new RuntimeException("Email ou senha incorretos para atualização.");
+        try (AlunoDAO dao = new AlunoDAO()) {
+            dao.atualizarSenhaAlunoAluno(email, senhaAtual, novaSenha);
         }
 
-        if (senhaDigitadaAluno.equals(senhaSalvaAluno)) {
-            alunoDAO.atualizarSenhaAluno(idAluno, senhaNovaAluno);
-        } else {
-            throw new RuntimeException("Email ou senha incorretos para atualização.");
-        }
-
-        session.setAttribute("emailAluno", emailNovoAluno);
-        session.setAttribute("senhaAluno", senhaNovaAluno);
-
-        // mesmo destino do original: área restrita do aluno
         req.setAttribute("destinoFinal", AREA_RESTRITA_ALUNO);
     }
 }

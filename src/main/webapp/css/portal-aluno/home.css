@@ -37,7 +37,6 @@ ul{
     border-color: white;
 }
 
-
 header{
     margin-bottom: 50px;
 }
@@ -71,7 +70,7 @@ header{
 .teacher{
     position: absolute;
     margin-bottom: 61px;
-    margin-left: 600px;
+    margin-left: 700px;
 }
 
 .box-container{
@@ -94,7 +93,7 @@ header{
     background-color: white;
     border-radius: 30px;
     box-shadow: 5px 5px 8px #aaaaaa;
-    padding: 5px;
+    padding: 30px;
     align-content: center;
 }
 
@@ -108,10 +107,13 @@ header{
 
 .turma-box{
     width: 230px;
-    background-color: pink;
+    background-color: white;
     padding: 10px;
     border-radius: 15px;
     margin-bottom: 15px;
+    height: 85px;
+    overflow-y: auto;
+    box-shadow: 2.5px 2.5px 4px #aaaaaa;
 }
 
 .coluna-direita{
@@ -150,6 +152,14 @@ header{
     border-bottom-width: 1px;
     border-color: #aaaaaa;
     align-items: center;
+}
+
+.ver-mais{
+    color: black;
+}
+
+.ver-mais:hover{
+    color: #3b3b3b;
 }
 
 @media (max-width: 999px) {

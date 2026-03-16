@@ -2,14 +2,14 @@ package com.dao;
 
 import com.dto.AlunoCadastrarDTO;
 import com.dto.AlunoViewDTO;
+import com.utils.SenhaUtils;
+import com.utils.StringUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.sql.Statement;
+import java.util.*;
 
 public class AlunoDAO extends DAO {
 
@@ -18,22 +18,19 @@ public class AlunoDAO extends DAO {
     }
 
     //Cadastrar aluno
-    public int cadastrarAluno() throws SQLException {
-
-        AlunoCadastrarDTO aluno = new AlunoCadastrarDTO();
+    public int cadastrarAluno(AlunoCadastrarDTO aluno) throws SQLException {
 
         String nome = aluno.getNome();
         Integer matricula = aluno.getMatricula();
         String email = aluno.getEmail();
-        String senha = aluno.getSenha();
+        String senha = SenhaUtils.hashear(aluno.getSenha());
 
-
-        String sql = """
-                INSERT INTO
-                    aluno (nome, matricula, senha, email)
-                VALUES
-                    (?,?,?,?,?)
-                """;
+       String sql = """
+            INSERT INTO
+                aluno (nome, matricula, senha, email)
+            VALUES
+                (?,?,?,?)
+            """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, nome);
@@ -41,18 +38,13 @@ public class AlunoDAO extends DAO {
             pstmt.setString(3, senha);
             pstmt.setString(4, email);
 
-
             int verificacao = pstmt.executeUpdate();
 
             if (verificacao > 0) {
                 conn.commit();
-                // Se a inserção foi bem-sucedida, commit e retorna 1
-
                 return 1;
             } else {
                 conn.rollback();
-                // Se a inserção falhou, rollback e retorna 0
-
                 return 0;
             }
 
@@ -60,22 +52,16 @@ public class AlunoDAO extends DAO {
 
             String state = e.getSQLState();
 
-            if ("23503".equals(state)) {
+            if ("23503".equals(state)) { // FK (ex: matrícula não existe na pré-matrícula)
                 conn.rollback();
-                // Erro 2: Matricula não existe na Pré-matricula
-
                 return 2;
 
-            } else if ("23505".equals(state)) {
+            } else if ("23505".equals(state)) { // unique
                 conn.rollback();
-                // Erro 3: Matricula já existe na tabela Aluno
-
                 return 3;
 
             } else {
                 conn.rollback();
-                // Para outros erros, apenas retorna 0
-
                 return 0;
             }
         }
@@ -154,7 +140,10 @@ public class AlunoDAO extends DAO {
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, novaSenha);
+
+            String senhaHash = SenhaUtils.hashear(novaSenha);
+
+            pstmt.setString(1, senhaHash);
             pstmt.setObject(2, idAluno);
 
             int validadr = pstmt.executeUpdate();
@@ -176,9 +165,47 @@ public class AlunoDAO extends DAO {
         }
     }
 
-    //Listar Todos os Alunos
-    public List<AlunoViewDTO> listarAlunos() throws SQLException {
+    public void atualizarSenhaAlunoAluno(String email, String senhaAtual, String senhaNova) throws SQLException{
         String sql = """
+                SELECT
+                    senha
+                FROM
+                    aluno
+                WHERE
+                    email = ?
+                """;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String senha = rs.getString("senha");
+
+                if (SenhaUtils.comparar(senhaAtual, senha)) {
+                    String update = "UPDATE aluno SET senha = ? WHERE email = ?";
+                    String senhaHash = SenhaUtils.hashear(senhaNova);
+
+                    try (PreparedStatement pstmt2 = conn.prepareStatement(update)) {
+                        pstmt2.setString(1, senhaHash);
+                        pstmt2.setString(2, email);
+                        pstmt2.executeUpdate();
+                        conn.commit();
+                    } catch (SQLException e) {
+                        conn.rollback();
+                        throw e;
+                    }
+                }
+            }
+        } catch (SQLException err) {
+            conn.rollback();
+            throw err;
+        }
+    }
+
+    //Listar Todos os Alunos
+    public List<AlunoViewDTO> listarAlunos(String nomeFiltro, Integer matriculaFiltro, String emailFiltro, String turmaAnoFiltro) throws SQLException {
+        StringBuilder sql = new StringBuilder("""
                 SELECT
                     a.id as id,
                     a.nome as nome,
@@ -186,13 +213,43 @@ public class AlunoDAO extends DAO {
                     a.email as email,
                     p.turma_ano as turma_ano
                 FROM
-                    aluno
+                    aluno a
                 JOIN
                     pre_matricula p
-                    ON p.matricula = a.matricula
-                """;
+                    ON p.matricula = a.matricula WHERE 1=1
+                """);
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        List<Object> valores = new ArrayList<>();
+
+        if (nomeFiltro != null) {
+            sql.append("""
+                       AND upper(a.nome) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(nomeFiltro.toUpperCase()));
+        }
+        if (matriculaFiltro != null) {
+            sql.append("""
+                    AND a.matricula = ?
+                    """);
+            valores.add(matriculaFiltro);
+        }
+        if (emailFiltro != null) {
+            sql.append("""
+                    AND upper(a.email) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(emailFiltro.toUpperCase()));
+        }
+        if (turmaAnoFiltro != null) {
+            sql.append("""
+                    AND p.turma_ano = ?
+                    """);
+            valores.add(turmaAnoFiltro.toUpperCase());
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < valores.size(); i++){
+                pstmt.setObject(i+1, valores.get(i));
+            }
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -207,6 +264,11 @@ public class AlunoDAO extends DAO {
 
                 AlunoViewDTO aluno = new AlunoViewDTO(idAluno, nome, matricula, email, turmaAno);
                 alunos.add(aluno);
+
+
+
+
+
             }
 
             conn.commit();
@@ -382,52 +444,26 @@ public class AlunoDAO extends DAO {
         }
     }
 
-    public List<AlunoViewDTO> listarAlunosPorProfessor(UUID idProfessor) throws SQLException{
+    public List<String> listarTurmas() throws SQLException{
         String sql = """
-                SELECT DISTINCT
-                    a.id as id,
-                    a.nome as nome,
-                    a.matricula as matricula,
-                    a.email as email,
-                    p2.turma_ano as turma_ano
+                SELECT
+                    DISTINCT turma_ano
                 FROM
+                    pre_matricula p
+                JOIN
                     aluno a
-                JOIN
-                    boletim b
-                    ON a.id = b.id_aluno
-                JOIN
-                    disciplina d
-                    ON d.id = b.id_disciplina
-                JOIN
-                    professor p
-                    ON p.id = d.id_professor
-                JOIN
-                    pre_matricula as p2
-                    ON p2.matricula = a.matricula
-                WHERE
-                    p.id = ?;
+                    ON a.matricula = p.matricula
                 """;
 
-        List<AlunoViewDTO> alunos = new ArrayList<>();
+        List<String> turmas = new ArrayList<>();
 
-        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setObject(1,idProfessor);
-
-            ResultSet rs = pstmt.executeQuery();
-
+        try(Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                UUID idAluno = rs.getObject("id", java.util.UUID.class);
-                String nome = rs.getString("nome");
-                Integer matricula = rs.getInt("matricula");
-                String email = rs.getString("email");
-                String turmaAno = rs.getString("turma_ano");
-
-                AlunoViewDTO aluno = new AlunoViewDTO(idAluno, nome, matricula, email, turmaAno);
-                alunos.add(aluno);
+                turmas.add(rs.getString("turma_ano"));
             }
 
             conn.commit();
-            return alunos;
+            return turmas;
         } catch (SQLException e) {
             conn.rollback();
             throw e;

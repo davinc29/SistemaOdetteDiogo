@@ -7,8 +7,7 @@
 <%
     AlunoViewDTO aluno = (AlunoViewDTO) session.getAttribute("usuario");
 
-    ObservacaoDAO observacaoDAO = new ObservacaoDAO();
-    List<ObservacaoViewDTO> observacoes = observacaoDAO.listarPorAluno(aluno.getIdAluno());
+    List<ObservacaoViewDTO> observacoes = (List<ObservacaoViewDTO>) request.getAttribute("observacoes");
 %>
 
 <!doctype html>
@@ -33,16 +32,16 @@
         <nav class="text-secondary">
           <ul class="">
             <li class="page-item can-hover">
-              <a class="page-text" href="home.jsp">Home</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/home?usuario=aluno">Home</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="boletim.jsp">Boletim</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/boletim?usuario=aluno">Boletim</a>
             </li>
             <li class="page-item active">
-              <a class="page-text" href="observacoes.html">Observações</a>
+              <a class="page-text" href="#">Observações</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="conta.jsp">Conta</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-aluno/conta.jsp">Conta</a>
             </li>
           </ul>
         </nav>
@@ -57,38 +56,30 @@
             </p>
           </div>
           <div class="d-flex">
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-              alt="Notificações Icon"
-            />
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-              alt="Mensagens Icon"
-            />
             <div class="bg-primary box-name m-3">
               <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
             </div>
-            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=session.getAttribute("nome")%></p>
+            <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=aluno.getNome()%></p>
           </div>
         </header>
         <main>
           <div class="filter-box d-flex flex-column">
+              <form action="${pageContext.request.contextPath}/observacoes?usuario=aluno">
+              <input type="hidden" name="usuario" value="aluno">
             <div class="linha-cima d-flex">
               <div class="filter-name">
-                <input type="text" placeholder="Buscar por professor..." />
+                <input name="nome_professor" type="text" placeholder="Buscar por professor..." />
               </div>
               <div class="filter-name ms-4">
                 <input
-                  type="text"
+                  type="text" name="nome_disciplina"
                   placeholder="Buscar por disciplina..."
                 />
               </div>
               <div class="filter-name ms-4">
                 <input
-                  type="text"
-                  placeholder="Buscar por observação..."
+                  type="text" name="texto_observacao"
+                  placeholder="Buscar por texto da observação..."
                 />
               </div>
             </div>

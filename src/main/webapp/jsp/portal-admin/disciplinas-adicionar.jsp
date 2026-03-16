@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.dto.AlunoViewDTO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.dto.ProfessorDTO" %>
 
 <%
-    AlunoViewDTO aluno = (AlunoViewDTO) request.getAttribute("aluno");
+    List<ProfessorDTO> professores = (List<ProfessorDTO>) request.getAttribute("professores");
 %>
 
 <!doctype html>
@@ -10,23 +11,25 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Capelus - Editar Aluno</title>
+    <title>Capelus - Adicionar Disciplina</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-admin/alunos-editar.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-admin/disciplinas-adicionar.css" />
+    <script src="${pageContext.request.contextPath}/mobile-navbar.js"></script>
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/Capelus-icon.ico" />
 </head>
 <body>
 <section class="d-sm-flex align-items-center vh-100 d-none home">
     <aside class="bg-primary sidebar">
         <nav class="text-secondary">
             <ul>
-                <li class="page-item active">
+                <li class="page-item can-hover">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readAlunos">Alunos</a>
                 </li>
                 <li class="page-item can-hover">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readProfessores">Professores</a>
                 </li>
-                <li class="page-item can-hover">
+                <li class="page-item active">
                     <a class="page-text" href="${pageContext.request.contextPath}/admin?action=readDisciplinas">Disciplinas</a>
                 </li>
             </ul>
@@ -47,7 +50,7 @@
             <div class="aluno-card d-flex justify-content-between flex-column">
                 <div class="d-flex justify-content-between">
                     <div class="aluno-informacoes">
-                        <h2 class="aluno-nome fs-3">Editar aluno</h2>
+                        <h2 class="aluno-nome fs-3">Nova disciplina</h2>
                     </div>
                 </div>
 
@@ -55,38 +58,40 @@
 
                 <div class="input-container">
                     <form action="${pageContext.request.contextPath}/admin" method="post">
-                        <input type="hidden" name="action" value="updateAluno" />
-                        <input type="hidden" name="id" value="<%=aluno.getIdAluno()%>" />
+                        <input type="hidden" name="action" value="createDisciplina" />
 
                         <div class="d-flex flex-column">
                             <div class="linha-cima d-flex">
                                 <div class="campo d-flex flex-column">
-                                    <label for="matricula-view">Matrícula:</label>
-                                    <input type="text" id="matricula-view" value="<%=aluno.getMatricula()%>" disabled />
-                                </div>
-
-                                <div class="campo d-flex flex-column">
                                     <label for="nome">Nome:</label>
-                                    <input type="text" id="nome" name="nome" value="<%=aluno.getNome()%>" required />
+                                    <input type="text" id="nome" name="nome" placeholder="Ex: Matemática" required />
                                 </div>
-                            </div>
-
-                            <div class="linha-baixo d-flex mt-3">
 
                                 <div class="campo d-flex flex-column">
-                                    <label for="email">Email:</label>
-                                    <input type="email" id="email" name="email" value="<%=aluno.getEmail()%>" required />
+                                    <label for="idProfessor">Professor:</label>
+                                    <select id="idProfessor" name="idProfessor" required>
+                                        <option value="">Selecione um professor</option>
+                                        <%
+                                            if (professores != null) {
+                                                for (ProfessorDTO professor : professores) {
+                                        %>
+                                        <option value="<%=professor.getId()%>"><%=professor.getNome()%> - <%=professor.getEmail()%></option>
+                                        <%
+                                                }
+                                            }
+                                        %>
+                                    </select>
                                 </div>
                             </div>
                         </div>
 
                         <div class="opcoes d-flex" style="margin-top: 60px">
                             <div class="save-container">
-                                <button class="save" type="submit">Salvar</button>
+                                <button class="save" type="submit">Criar</button>
                             </div>
 
                             <div class="return-button">
-                                <a href="${pageContext.request.contextPath}/admin?action=readAlunos">Cancelar</a>
+                                <a href="${pageContext.request.contextPath}/admin?action=readDisciplinas">Cancelar</a>
                             </div>
                         </div>
                     </form>
@@ -95,5 +100,7 @@
         </main>
     </div>
 </section>
+
+<section class="vh-100 w-100 d-lg-none"></section>
 </body>
 </html>

@@ -5,33 +5,19 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="com.dto.AlunoViewDTO" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    // Pegando dados diretos do banco
+   // Pegando dados diretos do banco
     ProfessorDTO professor = (ProfessorDTO) session.getAttribute("usuario");
     AlunoViewDTO aluno = (AlunoViewDTO) request.getAttribute("aluno");
     List<BoletimViewDTO> boletins = (List<BoletimViewDTO>) request.getAttribute("boletins");
+    Map<String, Integer> mapNomeIdProfessor = (Map<String, Integer>) request.getAttribute("mapNomeIdProfessor");
 
-    // Pegando o dia da semana
-    LocalDate hoje = LocalDate.now();
-    Locale brasil = new Locale("pt","BR");
-    DateTimeFormatter formatador = DateTimeFormatter.ofPattern("EEEE", brasil);
-    String diaSemana = hoje.format(formatador);
-    diaSemana = diaSemana.substring(0, 1).toUpperCase() + diaSemana.substring(1);
-
-    // Pegando o dia de hoje
-    Integer diaNum = hoje.getDayOfMonth();
-
-    // Pegando o mês do ano
-    List<String> meses = List.of("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez");
-    String mes = meses.get(hoje.getMonthValue()-1);
-
-    // Pegando o ano
-    Integer ano = hoje.getYear();
-
-    // Data retornada
-    String data = String.format("%d %s %d", diaNum, mes, ano);
-
+    // Pegando dia da semana e data
+    String data = (String) session.getAttribute("data");
+    String diaSemana = (String) session.getAttribute("diaSemana");
+    String nome2L = (String) session.getAttribute("nome2L");
 
 %>
 <!doctype html>
@@ -61,13 +47,13 @@
               <a class="page-text" href="${pageContext.request.contextPath}/home?usuario=professor">Home</a>
             </li>
             <li class="page-item active">
-              <a class="page-text" href="notas.jsp">Notas</a>
+              <a class="page-text" href="#">Notas</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="observacoes.jsp">Observações</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/alunos-professor?action=observacoes">Observações</a>
             </li>
             <li class="page-item can-hover">
-              <a class="page-text" href="conta.jsp">Conta</a>
+              <a class="page-text" href="${pageContext.request.contextPath}/jsp/portal-professor/conta.jsp">Conta</a>
             </li>
           </ul>
         </nav>
@@ -82,48 +68,41 @@
             </p>
           </div>
           <div class="d-flex">
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-              alt="Notificações Icon"
-            />
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-              alt="Mensagens Icon"
-            />
-            <div class="bg-primary box-name m-3">
-              <p class="fs-4 fw-bold text-secondary">RE</p>
-            </div>
+              <div class="bg-primary box-name m-3">
+                  <p class="fs-4 fw-bold text-secondary"><%=nome2L%></p>
+              </div>
             <p class="m-3 mt-4 fs-5 fw-bold text-primary"><%=professor.getNome()%></p>
           </div>
         </header>
         <main>
           <div class="filter-box d-flex flex-column">
+          <form action="${pageContext.request.contextPath}/boletim">
+            <input type="hidden" name="action" value="read">
+            <input type="hidden" name="id_aluno" value="<%=aluno.getIdAluno()%>">
             <div class="linha-cima d-flex">
               <div class="filter-name">
-                <input type="text" placeholder="Buscar por id..." />
-              </div>
-              <div class="filter-name ms-4">
                 <input
-                  type="text"
+                  type="number" step="0.01" name="nota1"
                   placeholder="Buscar por nota do primeiro semestre..."
                 />
               </div>
               <div class="filter-name ms-4">
                 <input
-                  type="text"
+                  type="number" step="0.01" name="nota2"
                   placeholder="Buscar por nota do segundo semestre..."
                 />
               </div>
+                <div class="filter-name ms-4">
+                    <input type="number" step="0.01" name="media" placeholder="Buscar por média..." />
+                </div>
             </div>
             <div class="linha-baixo d-flex mt-3 justify-content-between">
               <div class="d-flex lado-esquerdo">
-                <div class="filter-name" style="width: 46%;">
-                  <input type="text" placeholder="Buscar por média..." />
+                <div class="filter-name">
+                    <input type="text" name="nome_disciplina" placeholder="Buscar por nome da disciplina..." />
                 </div>
                 <div class="filter-button ms-4">
-                  <button>Aplicar Filtro</button>
+                  <button type="submit">Aplicar Filtro</button>
                 </div>
               </div>
 
@@ -132,29 +111,27 @@
                   <a href="${pageContext.request.contextPath}/boletim?action=create&id_aluno=<%=aluno.getIdAluno()%>&id_professor=<%=professor.getId()%>">+ Adicionar</a>
                 </div>
                 <div class="return-button ms-4">
-                  <a href="${pageContext.request.contextPath}/alunos-notas">< Voltar</a>
+                  <a href="${pageContext.request.contextPath}/alunos-professor?action=notas">< Voltar</a>
                 </div>
               </div>
             </div>
+          </form>
           </div>
 
           <div class="tabela-container">
             <table class="tabela-notas">
               <tr>
-                <th>Id</th>
                 <th>Nome</th>
                 <th>Matrícula</th>
                 <th>Turma</th>
-                <th>Disciplina</th>
-                <th>Primeiro Semestre</th>
-                <th>Segundo Semestre</th>
+                <th class="disciplina">Disciplina</th>
+                <th class="coluna-menor">Primeiro Semestre</th>
+                <th class="coluna-menor">Segundo Semestre</th>
                 <th>Média</th>
+                <th>Status</th>
               </tr>
                 <%for (BoletimViewDTO boletim : boletins) {%>
                 <tr>
-                    <td>
-                        <p><%=boletim.getId()%></p>
-                    </td>
                     <td>
                         <p><%=aluno.getNome()%></p>
                     </td>
@@ -171,26 +148,43 @@
                         <p><%=boletim.getNota1()%></p>
                     </td>
                     <td>
-                        <p><%=boletim.getNota2()%></p>
+                        <p><%=(boletim.getStatus().equalsIgnoreCase("PROCESSANDO") ? "-" : boletim.getNota2())%></p>
                     </td>
                     <td>
                         <p><%=boletim.getMedia()%></p>
                     </td>
+                    <%
+                        String cor;
+                        String status = boletim.getStatus().toUpperCase();
+
+                        if (status.equals("APROVADO")) {
+                            cor = "green";
+                        } else if (status.equals("REPROVADO")) {
+                            cor = "red";
+                        } else {
+                            cor = "#FF8C00";
+                        }
+                    %>
+                    <td>
+                        <p style="color:<%=cor%>">
+                                <%= boletim.getStatus() %>
+                    </td>
+                    <%if (mapNomeIdProfessor.get(boletim.getNomeDisciplina()) != null) {%>
                     <td class="action-box">
                         <form action="${pageContext.request.contextPath}/boletim" method="get">
                             <input type="hidden" name="action" value="update">
                             <input type="hidden" name="id_boletim" value=<%=boletim.getId()%>>
                             <input type="hidden" name="id_aluno" value=<%=aluno.getIdAluno()%>>
-                            <button type="submit" id="editar">
+                            <button type="submit" id="editar" class="action-btn">
                                 <img
                                     class="table-icon"
                                     src="${pageContext.request.contextPath}/assets/editar.svg"
-                                    alt="Deletar Icon"
+                                    alt="Editar Icon"
                                 />
                             </button>
                         </form>
-                        <form action="${pageContext.request.contextPath}/boletim?action=delete" method="post" onsubmit="confirmarDelete(event)">
-                            <input type="hidden" name="usuario" value="professor">
+                        <form action="${pageContext.request.contextPath}/boletim" method="post" onsubmit="confirmarDelete(event)">
+                            <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id_boletim" value=<%=boletim.getId()%>>
                             <input type="hidden" name="id_aluno" value=<%=aluno.getIdAluno()%>>
                             <button type="submit" class="action-btn">
@@ -202,6 +196,7 @@
                             </button>
                         </form>
                     </td>
+                    <%}%>
                 </tr>
                 <%}%>
             </table>

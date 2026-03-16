@@ -135,3 +135,23 @@ ul{
     font-size: 30px;
     margin: auto;
 }
+
+.botao-adicionar:hover{
+    background-color: #e93d57;
+    cursor: pointer;
+}
+
+.add-btn{
+    background-color: transparent;
+    color: white;
+    border-style: none;
+}
+
+.select{
+    margin: auto;
+    height: 50px;
+    border-radius: 30px;
+    border-color: #CC2a41;
+    padding: 5px;
+    width: 100%;
+}

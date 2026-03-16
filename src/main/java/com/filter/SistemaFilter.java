@@ -26,13 +26,19 @@ public class SistemaFilter extends HttpFilter {
             "/jsp/recuperar-senha/solicitar.jsp",
             "/jsp/recuperar-senha/validar-codigo.jsp",
             "/jsp/recuperar-senha/redefinir-senha.jsp",
-            "/jsp/recuperar-senha/sucesso.jsp"
+            "/jsp/recuperar-senha/sucesso.jsp",
+            "/index.jsp",
+            "/cadastro.jsp"
     );
 
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
         // Obtém o caminho da requisição sem o contextPath
         String caminho = req.getRequestURI().substring(req.getContextPath().length());
+
+        resp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        resp.setHeader("Pragma", "no-cache");
+        resp.setDateHeader("Expires", 0);
 
         // Se a URL for pública, deixa passar sem verificar sessão
         if (URLS_PUBLICAS.contains(caminho)) {

@@ -71,7 +71,7 @@ header{
 .teacher{
     position: absolute;
     margin-bottom: 61px;
-    margin-left: 520px;
+    margin-left: 700px;
 }
 
 .box-container{
@@ -113,10 +113,13 @@ header{
 
 .turma-box{
     width: 230px;
-    background-color: pink;
+    background-color: white;
     padding: 10px;
     border-radius: 15px;
     margin-bottom: 15px;
+    height: 85px;
+    overflow-y: auto;
+    box-shadow: 2.5px 2.5px 4px #aaaaaa;
 }
 
 .coluna-direita{
@@ -144,6 +147,14 @@ header{
     height: 2px;
     background-color: black;
     margin: 8px;
+}
+
+.ver-mais{
+    color: black;
+}
+
+.ver-mais:hover{
+    color: #3b3b3b;
 }
 
 @media (max-width: 999px) {

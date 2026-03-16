@@ -4,7 +4,9 @@ import com.dto.DisciplinaViewDTO;
 import com.model.Disciplina;
 import com.model.Professor;
 import com.utils.SenhaUtils;
+import com.utils.StringUtils;
 
+import javax.xml.transform.Result;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,11 +44,10 @@ public class DisciplinaDAO extends DAO{
         }
     }
 
-    public void atualizar(Disciplina original, Disciplina atualizado) throws SQLException{
-        // Dados originais
+    public void atualizar(Disciplina original, Disciplina atualizado) throws SQLException {
         Integer idDisciplina = original.getIdDisciplina();
         String nome = atualizado.getNome();
-        UUID idProfessor = original.getIdProfessor();
+        UUID idProfessor = atualizado.getIdProfessor();
 
         StringBuilder sql = new StringBuilder("UPDATE disciplina SET");
         List<Object> valores = new ArrayList<>();
@@ -65,17 +66,15 @@ public class DisciplinaDAO extends DAO{
         }
 
         sql.setLength(sql.length() - 2);
-
         sql.append(" WHERE id = ?");
         valores.add(idDisciplina);
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
             for (int i = 0; i < valores.size(); i++) {
-                pstmt.setObject(i+1, valores.get(i));
+                pstmt.setObject(i + 1, valores.get(i));
             }
 
             pstmt.executeUpdate();
-
             conn.commit();
         } catch (SQLException e) {
             conn.rollback();
@@ -83,36 +82,67 @@ public class DisciplinaDAO extends DAO{
         }
     }
 
-    public List<DisciplinaViewDTO> listar() throws SQLException {
-        String sql = """
-                SELECT
-                    d.id as id,
-                    d.nome as nome_disciplina,
-                    p.nome as nome_professor,
-                    p.email as email_professor
-                FROM
-                    disciplina
-                """;
+    public List<DisciplinaViewDTO> listar(String nomeFiltro, String professorFiltro, String emailProfessorFiltro) throws SQLException {
+        StringBuilder sql = new StringBuilder("""
+            SELECT
+                d.id as id,
+                d.nome as nome_disciplina,
+                p.nome as nome_professor,
+                p.email as email_professor
+            FROM
+                disciplina d
+            LEFT JOIN
+                professor p
+                ON p.id = d.id_professor
+            WHERE
+                1=1
+            """);
 
         List<DisciplinaViewDTO> disciplinas = new ArrayList<>();
+        List<Object> valores = new ArrayList<>();
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            try(ResultSet rs = pstmt.executeQuery()) {
-                while(rs.next()) {
-                    Integer id = rs.getInt("id");
-                    String nomeDisciplina = rs.getString("nome_disciplina");
-                    String nomeProfessor = rs.getString("nome_professor");
-                    String emailProfessor = rs.getString("email_professor");
-
-                    DisciplinaViewDTO disciplina = new DisciplinaViewDTO(id, nomeDisciplina, nomeProfessor, emailProfessor);
-                    disciplinas.add(disciplina);
-                }
-
-                conn.commit();
-            }
+        if (nomeFiltro != null) {
+            sql.append("""
+                       AND upper(d.nome) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(nomeFiltro.toUpperCase()));
+        }
+        if (professorFiltro != null) {
+            sql.append("""
+                    AND upper(p.nome) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(professorFiltro.toUpperCase()));
+        }
+        if (emailProfessorFiltro != null) {
+            sql.append("""
+                    AND upper(p.email) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(emailProfessorFiltro.toUpperCase()));
         }
 
-        conn.rollback();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < valores.size(); i++) {
+                pstmt.setObject(i+1, valores.get(i));
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+                Integer id = rs.getInt("id");
+                String nomeDisciplina = rs.getString("nome_disciplina");
+                String nomeProfessor = rs.getString("nome_professor");
+                String emailProfessor = rs.getString("email_professor");
+
+                DisciplinaViewDTO disciplina = new DisciplinaViewDTO(id, nomeDisciplina, nomeProfessor, emailProfessor);
+                disciplinas.add(disciplina);
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+
         return disciplinas;
     }
 
@@ -126,6 +156,26 @@ public class DisciplinaDAO extends DAO{
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
+
+            pstmt.executeUpdate();
+
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+    }
+
+    public void deletarPorIdProfessor(UUID id_prof) throws SQLException{
+        String sql = """
+                DELETE FROM
+                    disciplina
+                WHERE
+                    id_professor = ?
+                """;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, id_prof);
 
             pstmt.executeUpdate();
 

@@ -2,14 +2,12 @@ package com.dao;
 
 import com.dto.BoletimViewDTO;
 import com.model.Boletim;
+import com.utils.StringUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class BoletimDAO extends DAO{
 
@@ -31,8 +29,18 @@ public class BoletimDAO extends DAO{
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setDouble(1,nota1);
-            pstmt.setDouble(2,nota2);
+            if (nota1 == null) {
+                pstmt.setObject(1,null);
+            } else {
+                pstmt.setDouble(1,nota1);
+            }
+
+            if (nota2 == null) {
+                pstmt.setObject(2,null);
+            } else {
+                pstmt.setDouble(1,nota2);
+            }
+
             pstmt.setObject(3,idAluno);
             pstmt.setInt(4,idDisciplina);
 
@@ -51,6 +59,7 @@ public class BoletimDAO extends DAO{
                     nota1,
                     nota2,
                     media,
+                    status,
                     id_aluno,
                     id_disciplina
                 FROM
@@ -70,10 +79,11 @@ public class BoletimDAO extends DAO{
                 Double nota1 = rs.getDouble("nota1");
                 Double nota2 = rs.getDouble("nota2");
                 Double media = rs.getDouble("media");
+                String status = rs.getString("status");
                 UUID idAluno = rs.getObject("id_aluno", UUID.class);
                 Integer idDisciplina = rs.getInt("id_disciplina");
 
-                boletim = new Boletim(id, nota1, nota2, media, idAluno, idDisciplina);
+                boletim = new Boletim(id, nota1, nota2, media, status, idAluno, idDisciplina);
             }
         } catch (SQLException e) {
             conn.rollback();
@@ -84,16 +94,17 @@ public class BoletimDAO extends DAO{
         return boletim;
     }
 
-    public List<BoletimViewDTO> listarPorAluno(UUID idAluno) throws SQLException{
+    public List<BoletimViewDTO> listarPorAluno(UUID idAluno, Integer idBoletimFiltro, Double nota1Filtro, Double nota2Filtro, Double mediaFiltro, String nomeDisciplinaFiltro, String statusFiltro) throws SQLException{
 
-        String sql = """
+        StringBuilder sql = new StringBuilder("""
                 SELECT
                     b.id as id_boletim,
                     a.matricula as matricula,
                     d.nome as nome_disciplina,
                     b.nota1 as nota1,
                     b.nota2 as nota2,
-                    b.media as media
+                    b.media as media,
+                    b.status
                 FROM
                     boletim b
                 JOIN
@@ -104,12 +115,58 @@ public class BoletimDAO extends DAO{
                     ON d.id = b.id_disciplina
                 WHERE
                     a.id = ?
-                """;
+                """);
 
         List<BoletimViewDTO> boletins = new ArrayList<>();
+        List<Object> valores = new ArrayList<>();
 
-        try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        if (idBoletimFiltro != null) {
+            sql.append("""
+                    AND b.id = ?
+                    """);
+            valores.add(idBoletimFiltro);
+        }
+        if (nota1Filtro != null) {
+            sql.append("""
+                    AND b.nota1 = ?
+                    """);
+            valores.add(nota1Filtro);
+        }
+        if (nota2Filtro != null) {
+            sql.append("""
+                    AND b.nota2 = ?
+                    """);
+            valores.add(nota2Filtro);
+        }
+        if (mediaFiltro != null) {
+            sql.append("""
+                    AND b.media = ?
+                    """);
+            valores.add(mediaFiltro);
+        }
+        if (nomeDisciplinaFiltro != null) {
+            sql.append("""
+                    AND upper(d.nome) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(nomeDisciplinaFiltro.toUpperCase()));
+        }
+        if (statusFiltro != null) {
+            sql.append("""
+                    AND upper(b.status) LIKE ?
+                    """);
+            valores.add(StringUtils.formatarLike(statusFiltro.toUpperCase()));
+        }
+
+        sql.append("""
+                ORDER BY
+                    b.media
+                """);
+
+        try(PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
             pstmt.setObject(1,idAluno);
+            for (int i = 0; i < valores.size(); i++){
+                pstmt.setObject(i+2, valores.get(i));
+            }
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -120,18 +177,9 @@ public class BoletimDAO extends DAO{
                 Double nota1 = rs.getDouble("nota1");
                 Double nota2 = rs.getDouble("nota2");
                 Double media = rs.getDouble("media");
+                String status = rs.getString("status");
 
-                String situacao;
-                if (media.isNaN()) {
-                    situacao = null;
-                } else if (media >= 7) {
-                    situacao = "Aprovado";
-                }
-                else {
-                    situacao = "Reprovado";
-                }
-
-                BoletimViewDTO boletim = new BoletimViewDTO(idBoletim, matricula, nomeDisciplina, nota1, nota2, media, situacao);
+                BoletimViewDTO boletim = new BoletimViewDTO(idBoletim, matricula, nomeDisciplina, nota1, nota2, media, status);
 
                 boletins.add(boletim);
             }
@@ -148,7 +196,6 @@ public class BoletimDAO extends DAO{
         Integer id = original.getId();
         Double nota1 = atualizado.getNota1();
         Double nota2 = atualizado.getNota2();
-        Double media = atualizado.getMedia();
 
         StringBuilder sql = new StringBuilder("UPDATE boletim SET ");
         List<Object> valores = new ArrayList<>();
@@ -208,7 +255,8 @@ public class BoletimDAO extends DAO{
         String sql = """
                 SELECT
                     d.nome as nome_disciplina,
-                    p2.turma_ano as turma_ano
+                    p2.turma_ano as turma_ano,
+                    a.nome as nome_aluno
                 FROM
                     disciplina d
                 JOIN
@@ -226,6 +274,8 @@ public class BoletimDAO extends DAO{
                 WHERE
                     p.id = ? AND
                     (b.nota1 is null or b.nota2 is null)
+                ORDER BY
+                    d.nome
                 """;
 
         List<String> notasPendentes = new ArrayList<>();
@@ -237,8 +287,9 @@ public class BoletimDAO extends DAO{
                 while (rs.next()) {
                     String nomeDisciplina = rs.getString("nome_disciplina");
                     String turmaAno = rs.getString("turma_ano");
+                    String nomeAluno = rs.getString("nome_aluno");
 
-                    notasPendentes.add(String.format("%s - Turma: %s", nomeDisciplina, turmaAno));
+                    notasPendentes.add(String.format("%s\nAluno: %s", nomeDisciplina, turmaAno, nomeAluno));
                 }
             }
         }

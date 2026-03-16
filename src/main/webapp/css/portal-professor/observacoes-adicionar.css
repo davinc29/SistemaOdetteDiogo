@@ -28,7 +28,7 @@ ul{
 .page-item{
     padding: 10px;
     padding-left: 25px;
-    padding-right: 67px;
+    padding-right: 70px;
     margin-bottom: 10px;
 }
 
@@ -67,12 +67,8 @@ ul{
     border-color: #CC2a41;
 }
 
-.filter-button{
-    width: 10%;
-}
-
 .filter-button button{
-    width: 100%;
+    width: 150%;
     padding: 10px;
     border-radius: 30px;
     background-color: #CC2a41;
@@ -88,7 +84,7 @@ ul{
 /* Botão de Adicionar */
 
 .add-button{
-    width: 10%;
+    width: 30%;
     padding: 10px;
     border-radius: 30px;
     background-color: #CC2a41;
@@ -110,7 +106,7 @@ ul{
 
 /* Botão de Voltar */
 .return-button{
-    width: 10%;
+    width: 30%;
     padding: 10px;
     border-radius: 30px;
     background-color: #CC2a41;
@@ -130,6 +126,16 @@ ul{
     color: white;
 }
 
+/* Botões */
+.lado-esquerdo{
+    width: 50%;
+}
+
+.lado-direito{
+    width: 50%;
+    justify-content: right;
+}
+
 /* Tabelas */
 .tabela-container{
     overflow-y: auto;
@@ -141,20 +147,37 @@ ul{
     box-shadow: 5px 5px 8px #aaaaaa;
 }
 
-.tabela-observacoes{
+.tabela-notas{
     width: 100%;
     font-size: 20px;
 }
 
-.tabela-observacoes th{
+.table-icon{
+    width: 20px;
+    margin-left: 10px;
+}
+
+.tabela-notas th{
     padding-bottom: 20px;
 }
 
-.tabela-observacoes tr{
+.tabela-notas tr{
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-color: #aaaaaa;
     align-items: center;
+}
+
+.matricula{
+    width: 10%;
+}
+
+.disciplina{
+    width: 22%;
+}
+
+.professor{
+    width: 20%
 }
 
 .tabela-observacoes tr{
@@ -168,7 +191,7 @@ ul{
 
 .action-btn{
     background-color: transparent;
-    border-style: none;
+    border: none;
 }
 
 .table-icon{
