@@ -32,7 +32,7 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-professor/notas-adicionar.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-professor/observacoes-adicionar.css" />
     <script src="${pageContext.request.contextPath}/javascript/mobile-navbar.js" defer></script>
     <script src="${pageContext.request.contextPath}/javascript/delete.js" defer></script>
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/Capelus-icon.ico">
@@ -69,16 +69,6 @@
                 </p>
             </div>
             <div class="d-flex">
-                <img
-                        class="icon m-3"
-                        src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-                        alt="Notificações Icon"
-                />
-                <img
-                        class="icon m-3"
-                        src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-                        alt="Mensagens Icon"
-                />
                 <div class="bg-primary box-name m-3">
                     <p class="fs-4 fw-bold text-secondary"><%=nome2L%></p>
                 </div>
@@ -91,13 +81,7 @@
                     <input type="hidden" name="action" value="read">
                     <input type="hidden" name="id_aluno" value="<%=aluno.getIdAluno()%>">
                     <div class="linha-cima d-flex">
-                        <div class="filter-name ms-4">
-                            <input
-                                    type="text" name="id_observacao"
-                                    placeholder="Buscar por id..."
-                            />
-                        </div>
-                        <div class="filter-name ms-4">
+                        <div class="filter-name">
                             <input
                                     type="text" name="nome_disciplina"
                                     placeholder="Buscar por nome da disciplina..."
@@ -109,13 +93,13 @@
                                     placeholder="Buscar por nome do professor..."
                             />
                         </div>
-                    </div>
-                    <div class="linha-baixo d-flex mt-3 justify-content-between">
-                        <div class="filter-name" style="width: 46%;">
+                        <div class="filter-name ms-4">
                             <input type="text" name="texto_observacao" placeholder="Buscar por texto da observação..." />
                         </div>
+                    </div>
+                    <div class="linha-baixo d-flex mt-3 justify-content-between">
                         <div class="d-flex lado-esquerdo">
-                            <div class="filter-button ms-4">
+                            <div class="filter-button">
                                 <button type="submit">Aplicar Filtro</button>
                             </div>
                         </div>
@@ -135,10 +119,10 @@
                 <table class="tabela-notas">
                     <tr>
                         <th>Nome</th>
-                        <th>Matrícula</th>
+                        <th class="matricula">Matrícula</th>
                         <th>Turma</th>
-                        <th>Disciplina</th>
-                        <th>Professor</th>
+                        <th class="disciplina">Disciplina</th>
+                        <th class="professor">Professor</th>
                         <th>Observação</th>
                     </tr>
                     <%for (ObservacaoViewDTO observacao : observacoes) {%>

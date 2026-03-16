@@ -67,8 +67,6 @@
             </div>
 
             <div class="d-flex">
-                <img class="icon m-3" src="${pageContext.request.contextPath}/assets/notificao-icon.svg" alt="Notificações Icon" />
-                <img class="icon m-3" src="${pageContext.request.contextPath}/assets/mensagens-icon.svg" alt="Mensagens Icon" />
                 <div class="bg-primary box-name m-3 position-relative">
                     <a href="${pageContext.request.contextPath}/index.jsp" id="logoutPopup" class="logout-popup">Logout</a>
                     <p class="fs-4 fw-bold text-secondary" id="botaoLogout" style="cursor:pointer;">ADM</p>
@@ -82,13 +80,13 @@
 
                 <div class="filter-box d-flex flex-column">
                     <div class="linha-um d-flex">
-                        <div class="filter-name ms-4">
-                            <input type="text" name="nome" placeholder="Buscar por nome..." />
+                        <div class="filter-name">
+                            <input type="text" name="nome" placeholder="Buscar por disciplina..." />
                         </div>
                         <div class="filter-name ms-4">
                             <input type="text" name="professor" placeholder="Buscar por professor..." />
                         </div>
-                        <div class="filter-name">
+                        <div class="filter-name ms-4">
                             <input type="text" name="email_professor" placeholder="Buscar por email do professor..." />
                         </div>
                     </div>
@@ -111,7 +109,7 @@
             <div class="tabela-container">
                 <table class="tabela-notas">
                     <tr>
-                        <th>Disciplina</th>
+                        <th style="width: 40%">Disciplina</th>
                         <th>Professor</th>
                         <th>Email Professor</th>
                         <th>Ações</th>

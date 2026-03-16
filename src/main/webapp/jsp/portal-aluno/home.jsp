@@ -117,16 +117,6 @@
             </p>
           </div>
           <div class="d-flex">
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-              alt="Notificações Icon"
-            />
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-              alt="Mensagens Icon"
-            />
             <div class="bg-primary box-name m-3">
               <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
             </div>
@@ -200,7 +190,7 @@
 
                     <div class="d-flex justify-content-end me-4">
                         <a href="${pageContext.request.contextPath}/observacoes?usuario=aluno"
-                           class="text-decoration-none" style="color:black">Ver mais ></a>
+                           class="text-decoration-none ver-mais">Ver mais ></a>
                     </div>
                     <%
                         }
@@ -223,7 +213,7 @@
                                 <th>Nota 1</th>
                                 <th>Nota 2</th>
                                 <th>Média</th>
-                                <th>Status</th>
+                                <th style="width: 18%">Status</th>
                             </tr>
                             <%
                                 int contadorBoletim = 0;
@@ -260,7 +250,7 @@
 
                         <div class="d-flex justify-content-end me-4">
                             <a href="${pageContext.request.contextPath}/boletim?usuario=aluno"
-                               class="text-decoration-none" style="color:black">Ver mais ></a>
+                               class="text-decoration-none ver-mais">Ver mais ></a>
                         </div>
                         <%
                             }

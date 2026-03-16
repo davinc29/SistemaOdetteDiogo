@@ -32,7 +32,6 @@
     />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-professor/notas-adicionar.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-admin/disciplinas.css" />
     <script src="${pageContext.request.contextPath}/javascript/mobile-navbar.js" defer></script>
     <script src="${pageContext.request.contextPath}/javascript/delete.js" defer></script>
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/Capelus-icon.ico">
@@ -69,16 +68,6 @@
             </p>
           </div>
           <div class="d-flex">
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-              alt="Notificações Icon"
-            />
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-              alt="Mensagens Icon"
-            />
               <div class="bg-primary box-name m-3">
                   <p class="fs-4 fw-bold text-secondary"><%=nome2L%></p>
               </div>
@@ -91,7 +80,7 @@
             <input type="hidden" name="action" value="read">
             <input type="hidden" name="id_aluno" value="<%=aluno.getIdAluno()%>">
             <div class="linha-cima d-flex">
-              <div class="filter-name ms-4">
+              <div class="filter-name">
                 <input
                   type="number" step="0.01" name="nota1"
                   placeholder="Buscar por nota do primeiro semestre..."
@@ -103,13 +92,13 @@
                   placeholder="Buscar por nota do segundo semestre..."
                 />
               </div>
-              <div class="filter-name" style="width: 46%;">
-                  <input type="number" step="0.01" name="media" placeholder="Buscar por média..." />
-              </div>
+                <div class="filter-name ms-4">
+                    <input type="number" step="0.01" name="media" placeholder="Buscar por média..." />
+                </div>
             </div>
             <div class="linha-baixo d-flex mt-3 justify-content-between">
               <div class="d-flex lado-esquerdo">
-                <div class="filter-name" style="width: 46%;">
+                <div class="filter-name">
                     <input type="text" name="nome_disciplina" placeholder="Buscar por nome da disciplina..." />
                 </div>
                 <div class="filter-button ms-4">
@@ -135,9 +124,9 @@
                 <th>Nome</th>
                 <th>Matrícula</th>
                 <th>Turma</th>
-                <th>Disciplina</th>
-                <th>Primeiro Semestre</th>
-                <th>Segundo Semestre</th>
+                <th class="disciplina">Disciplina</th>
+                <th class="coluna-menor">Primeiro Semestre</th>
+                <th class="coluna-menor">Segundo Semestre</th>
                 <th>Média</th>
                 <th>Status</th>
               </tr>

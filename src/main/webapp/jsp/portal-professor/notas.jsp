@@ -75,16 +75,6 @@
             </p>
           </div>
           <div class="d-flex">
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-              alt="Notificações Icon"
-            />
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-              alt="Mensagens Icon"
-            />
               <div class="bg-primary box-name m-3">
                   <p class="fs-4 fw-bold text-secondary"><%=nome2L%></p>
               </div>
@@ -105,7 +95,7 @@
                       <input name="email" type="text" placeholder="Buscar por email..." />
                   </div>
                 <div class="filter-name ms-4">
-                    <select id="turmaAno" name="turmaAno">
+                    <select id="turmaAno" name="turmaAno" class="select">
                         <option value="" selected>Buscar por turma...</option>
                         <% for (String turma : turmas) { %>
                         <option><%=turma%></option>

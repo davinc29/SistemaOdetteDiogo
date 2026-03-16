@@ -97,16 +97,6 @@
             </p>
           </div>
           <div class="d-flex">
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-              alt="Notificações Icon"
-            />
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-              alt="Mensagens Icon"
-            />
               <div class="bg-primary box-name m-3">
                   <p class="fs-4 fw-bold text-secondary"><%=nome2L%></p>
               </div>
@@ -170,7 +160,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end me-4">
-                  <a href="${pageContext.request.contextPath}/alunos-professor?action=observacoes" class="text-decoration-none" style="color: black">Ver mais ></a>
+                  <a href="${pageContext.request.contextPath}/alunos-professor?action=observacoes" class="text-decoration-none ver-mais">Ver mais ></a>
                 </div>
             </div>
 
@@ -197,7 +187,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end me-4">
-                  <a href="${pageContext.request.contextPath}/alunos-professor?action=notas" class="text-decoration-none" style="color: black">Ver mais ></a>
+                  <a href="${pageContext.request.contextPath}/alunos-professor?action=notas" class="text-decoration-none ver-mais">Ver mais ></a>
                 </div>
 
               </div>

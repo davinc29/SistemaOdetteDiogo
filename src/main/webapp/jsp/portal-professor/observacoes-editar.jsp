@@ -32,7 +32,7 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-professor/notas-editar.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-professor/observacoes-editar.css" />
     <script src="${pageContext.request.contextPath}/javascript/mobile-navbar.js"></script>
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/Capelus-icon.ico">
 </head>
@@ -67,16 +67,6 @@
                 </p>
             </div>
             <div class="d-flex">
-                <img
-                        class="icon m-3"
-                        src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-                        alt="Notificações Icon"
-                />
-                <img
-                        class="icon m-3"
-                        src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-                        alt="Mensagens Icon"
-                />
                 <div class="bg-primary box-name m-3">
                     <p class="fs-4 fw-bold text-secondary"><%=nome2L%></p>
                 </div>
@@ -117,6 +107,7 @@
                                         cols="50"
                                         placeholder="Escreva sua observação aqui..."
                                         required
+                                        class="text-area"
                                 ><%=observacao.getTextoObservacao()%></textarea>
                             </div>
                         </div>

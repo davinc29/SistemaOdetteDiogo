@@ -63,16 +63,6 @@
             </p>
           </div>
           <div class="d-flex">
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-              alt="Notificações Icon"
-            />
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-              alt="Mensagens Icon"
-            />
               <div class="bg-primary box-name m-3">
                   <p class="fs-4 fw-bold text-secondary"><%=nome2L%></p>
               </div>
@@ -107,7 +97,7 @@
                     <div class="campo d-flex flex-column">
                     <label for="id_disciplina"
                     >Disciplina:</label>
-                    <select id="id_disciplina" name="id_disciplina" required>
+                    <select id="id_disciplina" name="id_disciplina" required class="select">
                         <% for (String disciplina : mapNomeIdProfessor.keySet()) { %>
                         <option value="<%= mapNomeIdProfessor.get(disciplina)%>">
                             <%= disciplina %>

@@ -68,8 +68,6 @@
             </div>
 
             <div class="d-flex">
-                <img class="icon m-3" src="${pageContext.request.contextPath}/assets/notificao-icon.svg" alt="Notificações Icon" />
-                <img class="icon m-3" src="${pageContext.request.contextPath}/assets/mensagens-icon.svg" alt="Mensagens Icon" />
                 <div class="bg-primary box-name m-3 position-relative">
                     <a href="${pageContext.request.contextPath}/sistema-filter" id="logoutPopup" class="logout-popup">Logout</a>
                     <p class="fs-4 fw-bold text-secondary" id="botaoLogout" style="cursor:pointer;">ADM</p>
@@ -82,31 +80,29 @@
                 <form action="${pageContext.request.contextPath}/admin" method="get">
                 <input type="hidden" name="action" value="readAlunos">
                 <div class="linha-um d-flex">
-                    <div class="filter-name ms-4">
+                    <div class="filter-name">
                         <input type="number" name="matricula" placeholder="Buscar por matrícula..." />
                     </div>
                     <div class="filter-name ms-4">
                         <input type="text" name="nome" placeholder="Buscar por nome..." />
                     </div>
-                    <div class="filter-name">
+                    <div class="filter-name ms-4">
                         <input type="text" name="email" placeholder="Buscar por email..." />
                     </div>
                 </div>
 
-                <div class="linha-dois d-flex mt-3">
-                    <div class="filter-name ms-4">
-                        <select name="turma_ano" id="">
-                            <option value="" selected>Buscar por turma...</option>
-                            <%for (String turma : turmas) {%>
-                            <option value="<%=turma%>"><%=turma%></option>
-                            <%}%>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="linha-tres d-flex mt-3 justify-content-between">
+                <div class="linha-dois d-flex mt-3 justify-content-between">
                     <div class="d-flex lado-esquerdo">
-                        <div class="filter-button">
+                        <div class="filter-name">
+                            <select name="turma_ano" id="" class="select">
+                                <option value="" selected>Buscar por turma...</option>
+                                <%for (String turma : turmas) {%>
+                                <option value="<%=turma%>"><%=turma%></option>
+                                <%}%>
+                            </select>
+                        </div>
+
+                        <div class="filter-button ms-4">
                             <button type="submit">Aplicar Filtro</button>
                         </div>
                     </div>

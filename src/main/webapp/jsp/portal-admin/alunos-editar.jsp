@@ -64,13 +64,14 @@
                                     <label for="matricula-view">Matrícula:</label>
                                     <input type="text" id="matricula-view" value="<%=aluno.getMatricula()%>" disabled />
                                 </div>
-                            </div>
 
-                            <div class="linha-baixo d-flex mt-3">
                                 <div class="campo d-flex flex-column">
                                     <label for="nome">Nome:</label>
                                     <input type="text" id="nome" name="nome" value="<%=aluno.getNome()%>" required />
                                 </div>
+                            </div>
+
+                            <div class="linha-baixo d-flex mt-3">
 
                                 <div class="campo d-flex flex-column">
                                     <label for="email">Email:</label>

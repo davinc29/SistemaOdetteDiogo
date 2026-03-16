@@ -54,16 +54,6 @@
                 </p>
             </div>
             <div class="d-flex">
-                <img
-                        class="icon m-3"
-                        src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-                        alt="Notificações Icon"
-                />
-                <img
-                        class="icon m-3"
-                        src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-                        alt="Mensagens Icon"
-                />
                 <div class="bg-primary box-name m-3">
                     <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
                 </div>
@@ -90,7 +80,7 @@
                             <label for="senha-id">Senha atual:</label>
                             <input type="password" id="senhaAtual" class="senha-id" name="senha_atual" required/>
                         </div>
-                        <div class="senha d-flex flex-column">
+                        <div class="senha d-flex flex-column mb-4">
                             <label for="senha-id">Nova senha:</label>
                             <input type="password" id="novaSenha" class="senha-id validar-senha" name="nova_senha" required />
                         </div>
@@ -102,7 +92,7 @@
                         </div>
                     </div>
 
-                    <div class="edit-container">
+                    <div class="edit-container mt-4">
                         <button type="submit" class="edit-button">Salvar</button>
                         <div class="edit-button">
                             <a href="${pageContext.request.contextPath}/jsp/portal-professor/conta.jsp">Cancelar</a>

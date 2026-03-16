@@ -1,34 +1,20 @@
 body {
-    background-image: url(../assets/login-waves.svg);
+    background-image: url(../assets/login-fundo.svg);
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    background-size: contain;
-    background-position: left center;
-    background-color: white;
+    background-attachment: fixed;
+    min-height: 100vh;
+    margin: 0;
 }
 
-.login-container,
-.text-container,
-.button-text-box {
+.login-container{
     width: 100%;
     max-width: 500px;
     margin: auto;
-}
-
-.text-container{
-    text-align: left;
-    margin-top: 10%;
-    margin-right: 15%;
-    position: relative;
-}
-
-h2{
-    -webkit-text-stroke: 0.5px white;
-}
-
-.image img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 30px 100px 30px 100px;
+    border-radius: 30px;
 }
 
 .title-box {
@@ -40,17 +26,8 @@ h2{
     text-align: center;
 }
 
-.image {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
-}
-
-.image img {
-    width: 520px;
-    height: auto;
-    display: block;
+a:hover {
+    color: #A32234 !important;
 }
 
 @media (max-width: 767px) {

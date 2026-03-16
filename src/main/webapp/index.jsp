@@ -22,7 +22,7 @@
       <div class="login-container container-md">
         <form action="${pageContext.request.contextPath}/sistema-filter" method="post">
           <div class="mb-3">
-            <h1 class="fs-1 fw-bold text-secondary"><a href="" style="text-decoration: none; color: white;">Login</a></h1>
+            <h1 class="fs-1 fw-bold text-secondary">Login</h1>
             <p class="fs-5 fw-semibold text-secondary">
               Preencha os dados abaixo:
             </p>
@@ -58,13 +58,6 @@
           </div>
         </form>
       </div>
-
-      <div class="text-container">
-        <h2 class="fs-1 fw-bold">
-          Bem-Vindo ao <br />
-          Capelus
-        </h2>
-      </div>
     </section>
 
     <!-- Layout Mobile -->
@@ -88,9 +81,5 @@
         </button>
       </div>
     </section>
-
-    <div class="image">
-      <img src="${pageContext.request.contextPath}/assets/login-image.svg" alt="Homem lendo um livro" />
-    </div>
   </body>
 </html>

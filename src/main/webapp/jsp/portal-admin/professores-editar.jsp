@@ -56,14 +56,14 @@
                                     <label for="username">Username:</label>
                                     <input type="text" id="username" name="username" value="<%=professor.getUsername()%>" required />
                                 </div>
-                            </div>
 
-                            <div class="linha-baixo d-flex mt-3">
                                 <div class="campo d-flex flex-column">
                                     <label for="nome">Nome:</label>
                                     <input type="text" id="nome" name="nome" value="<%=professor.getNome()%>" required />
                                 </div>
+                            </div>
 
+                            <div class="linha-baixo d-flex mt-3">
                                 <div class="campo d-flex flex-column">
                                     <label for="email">Email:</label>
                                     <input type="email" id="email" name="email" value="<%=professor.getEmail()%>" required />

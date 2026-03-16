@@ -168,6 +168,14 @@ ul{
     align-items: center;
 }
 
+.disciplina{
+    width: 23%;
+}
+
+.coluna-menor{
+    width: 10%;
+}
+
 .action-btn{
     background-color: transparent;
     border: none;

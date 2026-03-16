@@ -56,16 +56,6 @@
             </p>
           </div>
           <div class="d-flex">
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/notificao-icon.svg"
-              alt="Notificações Icon"
-            />
-            <img
-              class="icon m-3"
-              src="${pageContext.request.contextPath}/assets/mensagens-icon.svg"
-              alt="Mensagens Icon"
-            />
             <div class="bg-primary box-name m-3">
               <p class="fs-4 fw-bold text-secondary"><%=session.getAttribute("nome2L")%></p>
             </div>
@@ -78,7 +68,7 @@
               <input type="hidden" name="usuario" value="aluno">
               <input type="hidden" name="id_aluno" value="<%=aluno.getIdAluno()%>">
                   <div class="linha-cima d-flex">
-                      <div class="filter-name ms-4">
+                      <div class="filter-name">
                           <input
                                   type="number" step="0.01" name="nota1"
                                   placeholder="Buscar por nota do primeiro semestre..."
@@ -90,7 +80,7 @@
                                   placeholder="Buscar por nota do segundo semestre..."
                           />
                       </div>
-                      <div class="filter-name" style="width: 46%;">
+                      <div class="filter-name ms-4">
                           <input type="number" step="0.01" name="media" placeholder="Buscar por média..." />
                       </div>
                   </div>
@@ -110,9 +100,9 @@
             <div class="tabela-container">
                 <table class="tabela-notas">
                     <tr>
-                        <th style="text-align:left;">Disciplina</th>
-                        <th style="text-align:center;">Primeiro Semestre</th>
-                        <th style="text-align:center;">Segundo Semestre</th>
+                        <th style="text-align:left; width: 30%;">Disciplina</th>
+                        <th style="text-align:center; width: 20%;">Primeiro Semestre</th>
+                        <th style="text-align:center; width: 20%;">Segundo Semestre</th>
                         <th style="text-align:center;">Média</th>
                         <th style="text-align:center;">Status</th>
                     </tr>
@@ -157,7 +147,7 @@
                                 cor = "#FF8C00";
                             }
                         %>
-                        <td>
+                        <td style="text-align:center;">
                             <p style="color:<%=cor%>">
                                     <%= b.getStatus() %>
                         </td>

@@ -70,10 +70,11 @@ ul{
 .notas-container{
     display: flex;
     justify-content: space-around;
+    margin: auto;
 }
 
 .campo{
-    width: 45%;
+    width: 50%;
     text-align: center;
 }
 

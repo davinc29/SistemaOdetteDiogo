@@ -40,7 +40,7 @@
                       <input type="text" class="form-control" id="matricula" name="matricula" required />
                   </div>
 
-                  <div class="mb-3 d-flex flex-column">
+                  <div class="d-flex flex-column">
                       <label for="email" class="form-label">Email</label>
                       <input type="email" class="form-control" id="email" name="email" required />
                   </div>
@@ -64,16 +64,6 @@
                   </div>
               </div>
           </form>
-      </div>
-
-      <div class="text-container container-md">
-        <h2 class="fs-1 fw-bold">
-          <span class="text-secondary">Bem-</span>Vindo ao <br />
-          <span class="text-secondary">portal d</span>o estudante
-        </h2>
-        <div class="image">
-          <img src="assets/login-image.svg" alt="Homem lendo um livro" />
-        </div>
       </div>
     </section>
 
