@@ -308,11 +308,7 @@ public class AdminServlet extends HttpServlet {
         nome = WordUtils.capitalize(nome);
         String professorIdParam = req.getParameter("idProfessor");
 
-        if (professorIdParam == null || professorIdParam.isBlank()) {
-            return ROTA_DISCIPLINAS;
-        }
-
-        UUID idProfessor = UUID.fromString(professorIdParam);
+        UUID idProfessor = (professorIdParam == null || professorIdParam.isBlank() ? null : UUID.fromString(professorIdParam));
         Disciplina disciplina = new Disciplina(nome, idProfessor);
 
         try (DisciplinaDAO disciplinaDAO = new DisciplinaDAO()) {
